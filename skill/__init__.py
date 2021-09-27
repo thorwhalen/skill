@@ -16,7 +16,7 @@ for snippet in snippets_of_funcs(m, max_code_lines=4, max_doc_lines=30):
 To get random exercises:
 
 ```python
-from skill.skill import Exercises
+from skill import Exercises
 import more_itertools.more as m
 e = Exercises(m)
 
