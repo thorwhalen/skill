@@ -1,4 +1,3 @@
-docs/*
 wads_configs.json
 data/wads_configs.json
 wads/data/wads_configs.json
@@ -12,6 +11,12 @@ __pycache__/
 .DS_Store
 # C extensions
 *.so
+
+# TLS certificates
+## Ignore all PEM files anywhere
+*.pem
+## Also ignore any certs directory
+certs/
 
 # Distribution / packaging
 .Python
@@ -73,6 +78,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/*
 
 # PyBuilder
 target/
