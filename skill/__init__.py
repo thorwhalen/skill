@@ -22,7 +22,7 @@ Plugin registries::
 """
 
 from skill.search import search
-from skill.install import install, uninstall
+from skill.install import install, uninstall, link_skills
 from skill.create import create, scaffold, validate
 from skill.base import Skill, SkillMeta, SkillInfo
 from skill.stores import LocalSkillStore

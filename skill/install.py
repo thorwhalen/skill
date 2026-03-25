@@ -12,6 +12,7 @@ from skill.translate import translators
 from skill.util import find_project_root
 from skill.config import load_config
 from skill.registry import Registry
+from skill.create import _validate_skill
 
 
 # ---------------------------------------------------------------------------
@@ -326,6 +327,180 @@ def uninstall(
             removed[target_name] = dest
 
     return removed
+
+
+# ---------------------------------------------------------------------------
+# Link skills from a source directory
+# ---------------------------------------------------------------------------
+
+_SKILL_MARKER = 'SKILL.md'
+
+
+def _has_skills(directory: Path) -> bool:
+    """Return True if ``directory`` contains at least one skill subdirectory."""
+    if not directory.is_dir():
+        return False
+    return any(
+        child.is_dir() and (child / _SKILL_MARKER).exists()
+        for child in directory.iterdir()
+    )
+
+
+def _resolve_skills_source(source: Path) -> Path:
+    """Find the actual skills directory given a path that might be a project root.
+
+    Resolution order:
+
+    1. If ``source`` itself contains skill subdirectories, use it directly.
+    2. If ``source/.claude/skills`` exists and contains skills, use that.
+    3. If ``source/{pkg}/data/skills`` exists for some package ``pkg`` (detected
+       via ``pyproject.toml``), use that.
+    4. Fall back to ``source`` as-is (will yield nothing if no skills found).
+    """
+    # 1. Direct: source already contains skill subdirs
+    if _has_skills(source):
+        return source
+
+    # 2. .claude/skills convention
+    claude_skills = source / '.claude' / 'skills'
+    if _has_skills(claude_skills):
+        return claude_skills
+
+    # 3. {pkg}/data/skills convention (Python projects)
+    pyproject = source / 'pyproject.toml'
+    if pyproject.exists():
+        # Infer package name from the directory name (common convention)
+        pkg_name = source.name.replace('-', '_')
+        pkg_skills = source / pkg_name / 'data' / 'skills'
+        if _has_skills(pkg_skills):
+            return pkg_skills
+
+    return source
+
+
+def _iter_skill_dirs(source: Path):
+    """Yield ``(name, path)`` for each skill directory found under ``source``.
+
+    A skill directory is any immediate subdirectory containing a ``SKILL.md``.
+    """
+    if not source.is_dir():
+        raise NotADirectoryError(f"Not a directory: {source}")
+    for child in sorted(source.iterdir()):
+        if child.is_dir() and (child / _SKILL_MARKER).exists():
+            yield child.name, child
+
+
+# ---------------------------------------------------------------------------
+# Target validation
+# ---------------------------------------------------------------------------
+
+def _known_target_parents() -> set[Path]:
+    """Return the set of resolved parent directories for all known agent targets.
+
+    For example, ``~/.claude/skills`` for claude-code global,
+    ``.cursor/rules`` for cursor project, etc.
+    """
+    parents = set()
+    home = str(Path.home())
+    for target in AGENT_TARGETS.values():
+        if target.global_path is not None:
+            # Format with a dummy name, then take the parent
+            p = Path(target.global_path.format(home=home, name='_dummy'))
+            parents.add(p.parent)
+    return parents
+
+
+def _is_recognized_target(target_path: Path) -> bool:
+    """Check whether ``target_path`` is a recognized skills target directory.
+
+    Recognized if:
+    - It matches a known agent target parent directory (e.g. ~/.claude/skills).
+    - It already contains at least one skill subdirectory (existing skills dir).
+    - It is empty or does not yet exist (fresh target — allow it).
+    """
+    resolved = target_path.resolve()
+
+    # Known agent target directories
+    if resolved in _known_target_parents():
+        return True
+
+    # Doesn't exist yet or is empty — safe to create into
+    if not resolved.exists():
+        return True
+    if resolved.is_dir() and not any(resolved.iterdir()):
+        return True
+
+    # Already contains skills — it's a skills directory
+    if _has_skills(resolved):
+        return True
+
+    return False
+
+
+def link_skills(
+    source: str,
+    *,
+    target: str = '',
+    copy: bool = False,
+    force: bool = False,
+) -> dict[str, Path]:
+    """Symlink (or copy) every skill found under ``source`` into ``target``.
+
+    ``source`` can be a skills directory directly, a project root (will look
+    for ``.claude/skills/`` or ``{pkg}/data/skills/``), or any directory
+    containing skill subdirectories (each with a ``SKILL.md``).
+
+    Each candidate skill is validated before linking. Skills with validation
+    errors are skipped and a warning is emitted.
+
+    The ``target`` directory is checked against known agent target directories.
+    If it doesn't match a recognized target, a ``ValueError`` is raised (unless
+    it's empty or already contains skills).
+
+    Returns a dict mapping skill names to their installed paths.
+
+    Parameters
+    ----------
+    source : str
+        A skills directory, or a project root containing skills.
+    target : str
+        Destination directory. Defaults to ``~/.claude/skills``.
+    copy : bool
+        If True, copy instead of symlink.
+    force : bool
+        If True, overwrite existing files/links at the destination.
+    """
+    source_path = _resolve_skills_source(Path(source).resolve())
+    if target:
+        target_path = Path(target).expanduser().resolve()
+    else:
+        target_path = Path.home() / '.claude' / 'skills'
+
+    if not _is_recognized_target(target_path):
+        raise ValueError(
+            f"Target directory {target_path} is not a recognized skills "
+            f"target. Known targets: "
+            f"{', '.join(str(p) for p in sorted(_known_target_parents()))}. "
+            f"The target must be a known agent skills directory, an empty "
+            f"directory, or a directory already containing skills."
+        )
+
+    installed = {}
+    for name, skill_dir in _iter_skill_dirs(source_path):
+        skill = Skill.from_path(skill_dir)
+        issues = _validate_skill(skill)
+        if issues:
+            warnings.warn(
+                f"Skipping invalid skill {name!r} at {skill_dir}: "
+                + '; '.join(issues),
+                stacklevel=2,
+            )
+            continue
+        dest = target_path / name
+        _create_link(skill_dir, dest, copy=copy, force=force)
+        installed[name] = dest
+
+    return installed
 
 
 def _remove_section(path: Path, skill_name: str) -> None:

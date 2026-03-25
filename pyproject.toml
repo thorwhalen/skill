@@ -18,6 +18,7 @@ dependencies = [
     "platformdirs",
     "dol",
     "argh",
+    "argcomplete",
     "pyyaml",
     "tomli; python_version < '3.11'",
 ]
