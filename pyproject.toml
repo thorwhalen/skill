@@ -27,7 +27,7 @@ dependencies = [
 text = "mit"
 
 [project.urls]
-Homepage = ""
+Homepage = "https://github.com/thorwhalen/skill"
 
 [project.scripts]
 skill = "skill.__main__:main"
