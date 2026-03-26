@@ -224,3 +224,7 @@ class SkillInfo:
     url: str | None = None
     owner: str | None = None
     installed: bool = False
+
+    def __str__(self) -> str:
+        marker = '✓' if self.installed else ' '
+        return f"{marker} {self.canonical_key}  {self.description}  ({self.source})"
