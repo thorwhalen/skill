@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.ai &mdash; skill 0.1.0 documentation</title>
+  <title>skill.ai &mdash; skill 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -52,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends.html">skill.backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends/github.html">skill.backends.github</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/base.html">skill.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/cli_format.html">skill.cli_format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/completion.html">skill.completion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/config.html">skill.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/create.html">skill.create</a></li>
@@ -138,22 +139,28 @@
     <span class="c1"># Try aisuite first (supports provider:model convention)</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">_try_aisuite</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_chat_aisuite</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_chat_aisuite</span><span class="p">(</span>
+            <span class="n">client</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span>
+        <span class="p">)</span>
 
     <span class="c1"># Try direct anthropic SDK</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">_try_anthropic</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Strip provider prefix if present</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">model_id</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">model_id</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
         <span class="n">model_id</span> <span class="o">=</span> <span class="n">model_id</span> <span class="ow">or</span> <span class="n">model</span>
-        <span class="k">return</span> <span class="n">_chat_anthropic</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model_id</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_chat_anthropic</span><span class="p">(</span>
+            <span class="n">client</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model_id</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span>
+        <span class="p">)</span>
 
     <span class="c1"># Try direct openai SDK</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">_try_openai</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">model_id</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">model_id</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
         <span class="n">model_id</span> <span class="o">=</span> <span class="n">model_id</span> <span class="ow">or</span> <span class="n">model</span>
-        <span class="k">return</span> <span class="n">_chat_openai</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model_id</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_chat_openai</span><span class="p">(</span>
+            <span class="n">client</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model_id</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span>
+        <span class="p">)</span>
 
     <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
         <span class="s2">&quot;No AI provider found. Install one of:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -168,9 +175,11 @@
 <span class="c1"># Provider loaders (lazy, return None on failure)</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_try_aisuite</span><span class="p">():</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">aisuite</span>
+
         <span class="k">return</span> <span class="n">aisuite</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">None</span>
@@ -179,6 +188,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_try_anthropic</span><span class="p">():</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">anthropic</span>
+
         <span class="k">return</span> <span class="n">anthropic</span><span class="o">.</span><span class="n">Anthropic</span><span class="p">()</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">None</span>
@@ -187,6 +197,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_try_openai</span><span class="p">():</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">openai</span>
+
         <span class="k">return</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">()</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">None</span>
@@ -196,11 +207,12 @@
 <span class="c1"># Provider-specific chat implementations</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
+
 <span class="k">def</span><span class="w"> </span><span class="nf">_chat_aisuite</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">temperature</span><span class="p">):</span>
     <span class="n">messages</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">system</span><span class="p">:</span>
-        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;system&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="n">system</span><span class="p">})</span>
-    <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">})</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">system</span><span class="p">})</span>
+    <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">})</span>
     <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
         <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
@@ -213,11 +225,11 @@
     <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
         <span class="n">max_tokens</span><span class="o">=</span><span class="mi">4096</span><span class="p">,</span>
-        <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">}],</span>
         <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">system</span><span class="p">:</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;system&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">system</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;system&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">system</span>
     <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">resp</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
 
@@ -225,8 +237,8 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_chat_openai</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">temperature</span><span class="p">):</span>
     <span class="n">messages</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">system</span><span class="p">:</span>
-        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;system&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="n">system</span><span class="p">})</span>
-    <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">})</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">system</span><span class="p">})</span>
+    <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">})</span>
     <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
         <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>

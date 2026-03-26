@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; skill 0.1.0 documentation</title>
+  <title>Index &mdash; skill 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/documentation_options.js?v=a58bc63e"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -52,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/skill/backends.html">skill.backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/skill/backends/github.html">skill.backends.github</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/skill/base.html">skill.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/skill/cli_format.html">skill.cli_format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/skill/completion.html">skill.completion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/skill/config.html">skill.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/skill/create.html">skill.create</a></li>
@@ -138,14 +139,18 @@
 </li>
       <li><a href="module_docs/skill/ai.html#skill.ai.chat">chat() (in module skill.ai)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/skill/config.html#skill.config.config_dir">config_dir() (in module skill.config)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/skill/config.html#skill.config.config_path">config_path() (in module skill.config)</a>
 </li>
-      <li><a href="module_docs/skill/create.html#skill.create.create">create() (in module skill.create)</a>
+      <li><a href="module_docs/skill/__main__.html#skill.__main__.create">create() (in module skill.__main__)</a>
+
+      <ul>
+        <li><a href="module_docs/skill/create.html#skill.create.create">(in module skill.create)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -166,10 +171,18 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/skill/util.html#skill.util.find_project_root">find_project_root() (in module skill.util)</a>
 </li>
-      <li><a href="module_docs/skill/translate.html#skill.translate.from_mdc">from_mdc() (in module skill.translate)</a>
+      <li><a href="module_docs/skill/cli_format.html#skill.cli_format.format_path_dict">format_path_dict() (in module skill.cli_format)</a>
+</li>
+      <li><a href="module_docs/skill/cli_format.html#skill.cli_format.format_skill">format_skill() (in module skill.cli_format)</a>
+</li>
+      <li><a href="module_docs/skill/cli_format.html#skill.cli_format.format_skill_info">format_skill_info() (in module skill.cli_format)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/skill/cli_format.html#skill.cli_format.format_skill_info_table">format_skill_info_table() (in module skill.cli_format)</a>
+</li>
+      <li><a href="module_docs/skill/translate.html#skill.translate.from_mdc">from_mdc() (in module skill.translate)</a>
+</li>
       <li><a href="module_docs/skill/base.html#skill.base.Skill.from_path">from_path() (skill.base.Skill class method)</a>
 </li>
       <li><a href="module_docs/skill/base.html#skill.base.Skill.from_string">from_string() (skill.base.Skill class method)</a>
@@ -192,12 +205,16 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/skill/install.html#skill.install.install">install() (in module skill.install)</a>
+      <li><a href="module_docs/skill/__main__.html#skill.__main__.install">install() (in module skill.__main__)</a>
+
+      <ul>
+        <li><a href="module_docs/skill/install.html#skill.install.install">(in module skill.install)</a>
 </li>
-      <li><a href="module_docs/skill/completion.html#skill.completion.install_completion">install_completion() (in module skill.completion)</a>
-</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/skill/completion.html#skill.completion.install_completion">install_completion() (in module skill.completion)</a>
+</li>
       <li><a href="module_docs/skill/ai.html#skill.ai.is_ai_available">is_ai_available() (in module skill.ai)</a>
 </li>
       <li><a href="module_docs/skill/completion.html#skill.completion.is_completion_registered">is_completion_registered() (in module skill.completion)</a>
@@ -208,8 +225,12 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/skill/install.html#skill.install.link_skills">link_skills() (in module skill.install)</a>
+      <li><a href="module_docs/skill/__main__.html#skill.__main__.link_skills">link_skills() (in module skill.__main__)</a>
+
+      <ul>
+        <li><a href="module_docs/skill/install.html#skill.install.link_skills">(in module skill.install)</a>
 </li>
+      </ul></li>
       <li><a href="module_docs/skill/stores.html#skill.stores.LocalSkillStore.list_info">list_info() (skill.stores.LocalSkillStore method)</a>
 </li>
       <li><a href="module_docs/skill/backends/github.html#skill.backends.github.GitHubSkillSource.list_repo_skills">list_repo_skills() (skill.backends.github.GitHubSkillSource method)</a>
@@ -217,7 +238,11 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/skill.html#skill.list_skills">list_skills() (in module skill)</a>
+
+      <ul>
+        <li><a href="module_docs/skill/__main__.html#skill.__main__.list_skills">(in module skill.__main__)</a>
 </li>
+      </ul></li>
       <li><a href="module_docs/skill/config.html#skill.config.load_config">load_config() (in module skill.config)</a>
 </li>
       <li><a href="module_docs/skill/backends.html#skill.backends.LocalDirSource">LocalDirSource (class in skill.backends)</a>
@@ -247,6 +272,8 @@
         <li><a href="module_docs/skill/backends/github.html#module-skill.backends.github">skill.backends.github</a>
 </li>
         <li><a href="module_docs/skill/base.html#module-skill.base">skill.base</a>
+</li>
+        <li><a href="module_docs/skill/cli_format.html#module-skill.cli_format">skill.cli_format</a>
 </li>
         <li><a href="module_docs/skill/completion.html#module-skill.completion">skill.completion</a>
 </li>
@@ -317,16 +344,22 @@
 </li>
       <li><a href="module_docs/skill/create.html#skill.create.scaffold">scaffold() (in module skill.create)</a>
 </li>
-      <li><a href="module_docs/skill/search.html#skill.search.search">search() (in module skill.search)</a>
+      <li><a href="module_docs/skill/__main__.html#skill.__main__.search">search() (in module skill.__main__)</a>
 
       <ul>
+        <li><a href="module_docs/skill/search.html#skill.search.search">(in module skill.search)</a>
+</li>
         <li><a href="module_docs/skill/backends/github.html#skill.backends.github.GitHubSkillSource.search">(skill.backends.github.GitHubSkillSource method)</a>
 </li>
         <li><a href="module_docs/skill/backends.html#skill.backends.LocalDirSource.search">(skill.backends.LocalDirSource method)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/skill.html#skill.show">show() (in module skill)</a>
+
+      <ul>
+        <li><a href="module_docs/skill/__main__.html#skill.__main__.show">(in module skill.__main__)</a>
 </li>
+      </ul></li>
       <li>
     skill
 
@@ -372,14 +405,21 @@
 </li>
       </ul></li>
       <li>
+    skill.cli_format
+
+      <ul>
+        <li><a href="module_docs/skill/cli_format.html#module-skill.cli_format">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
     skill.completion
 
       <ul>
         <li><a href="module_docs/skill/completion.html#module-skill.completion">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     skill.config
 
@@ -472,8 +512,12 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/skill/install.html#skill.install.uninstall">uninstall() (in module skill.install)</a>
+      <li><a href="module_docs/skill/__main__.html#skill.__main__.uninstall">uninstall() (in module skill.__main__)</a>
+
+      <ul>
+        <li><a href="module_docs/skill/install.html#skill.install.uninstall">(in module skill.install)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 

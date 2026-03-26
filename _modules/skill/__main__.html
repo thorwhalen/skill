@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skill.__main__ &mdash; skill 0.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            skill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill.html">skill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/__main__.html">skill.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/ai.html">skill.ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends.html">skill.backends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends/github.html">skill.backends.github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/base.html">skill.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/cli_format.html">skill.cli_format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/completion.html">skill.completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/config.html">skill.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/create.html">skill.create</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/install.html">skill.install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/registry.html">skill.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/search.html">skill.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/stores.html">skill.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/translate.html">skill.translate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/util.html">skill.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">skill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../skill.html">skill</a></li>
+      <li class="breadcrumb-item active">skill.__main__</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for skill.__main__</h1><div class="highlight"><pre>
+<span></span><span class="c1"># PYTHON_ARGCOMPLETE_OK</span>
+<span class="sd">&quot;&quot;&quot;CLI entry point for the skill package.</span>
+
+<span class="sd">Usage::</span>
+
+<span class="sd">    python -m skill search &quot;react best practices&quot;</span>
+<span class="sd">    python -m skill create my-skill --description &quot;My custom skill&quot;</span>
+<span class="sd">    python -m skill validate ./my-skill/</span>
+<span class="sd">    python -m skill list</span>
+<span class="sd">    python -m skill link-skills /path/to/project</span>
+<span class="sd">    python -m skill install-completion</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">argh</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill</span><span class="w"> </span><span class="kn">import</span> <span class="n">search</span> <span class="k">as</span> <span class="n">_search</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill</span><span class="w"> </span><span class="kn">import</span> <span class="n">install</span> <span class="k">as</span> <span class="n">_install</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill</span><span class="w"> </span><span class="kn">import</span> <span class="n">uninstall</span> <span class="k">as</span> <span class="n">_uninstall</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill</span><span class="w"> </span><span class="kn">import</span> <span class="n">create</span> <span class="k">as</span> <span class="n">_create</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_skills</span> <span class="k">as</span> <span class="n">_list_skills</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill</span><span class="w"> </span><span class="kn">import</span> <span class="n">show</span> <span class="k">as</span> <span class="n">_show</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill</span><span class="w"> </span><span class="kn">import</span> <span class="n">link_skills</span> <span class="k">as</span> <span class="n">_link_skills</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.completion</span><span class="w"> </span><span class="kn">import</span> <span class="n">install_completion</span><span class="p">,</span> <span class="n">maybe_hint_completion</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.cli_format</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">format_skill_info_table</span><span class="p">,</span>
+    <span class="n">format_skill</span><span class="p">,</span>
+    <span class="n">format_path_dict</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># CLI wrappers — call the real function, then format for terminal output</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="search">
+<a class="viewcode-back" href="../../module_docs/skill/__main__.html#skill.__main__.search">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span>
+    <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">max_results</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">local_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">backends</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Search for skills across local index and remote backends.&quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">_search</span><span class="p">(</span>
+        <span class="n">query</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="n">max_results</span><span class="p">,</span> <span class="n">local_only</span><span class="o">=</span><span class="n">local_only</span><span class="p">,</span> <span class="n">backends</span><span class="o">=</span><span class="n">backends</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">format_skill_info_table</span><span class="p">(</span><span class="n">results</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="list_skills">
+<a class="viewcode-back" href="../../module_docs/skill/__main__.html#skill.__main__.list_skills">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_skills</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">agent_target</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">scope</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List locally installed skills.&quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">_list_skills</span><span class="p">(</span><span class="n">agent_target</span><span class="o">=</span><span class="n">agent_target</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">scope</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">format_skill_info_table</span><span class="p">(</span><span class="n">results</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="show">
+<a class="viewcode-back" href="../../module_docs/skill/__main__.html#skill.__main__.show">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read and display a skill by its canonical key.&quot;&quot;&quot;</span>
+    <span class="n">skill</span> <span class="o">=</span> <span class="n">_show</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">format_skill</span><span class="p">(</span><span class="n">skill</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="install">
+<a class="viewcode-back" href="../../module_docs/skill/__main__.html#skill.__main__.install">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">install</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">agent_targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">scope</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;project&#39;</span><span class="p">,</span>
+    <span class="n">copy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">project_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Install a skill into one or more agent target directories.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_install</span><span class="p">(</span>
+        <span class="n">key</span><span class="p">,</span>
+        <span class="n">agent_targets</span><span class="o">=</span><span class="n">agent_targets</span><span class="p">,</span>
+        <span class="n">scope</span><span class="o">=</span><span class="n">scope</span><span class="p">,</span>
+        <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span>
+        <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
+        <span class="n">project_dir</span><span class="o">=</span><span class="n">project_dir</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">format_path_dict</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;Installed&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="uninstall">
+<a class="viewcode-back" href="../../module_docs/skill/__main__.html#skill.__main__.uninstall">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">uninstall</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">agent_targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">scope</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;project&#39;</span><span class="p">,</span>
+    <span class="n">project_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Uninstall a skill from agent target directories.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_uninstall</span><span class="p">(</span>
+        <span class="n">key</span><span class="p">,</span>
+        <span class="n">agent_targets</span><span class="o">=</span><span class="n">agent_targets</span><span class="p">,</span>
+        <span class="n">scope</span><span class="o">=</span><span class="n">scope</span><span class="p">,</span>
+        <span class="n">project_dir</span><span class="o">=</span><span class="n">project_dir</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">format_path_dict</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;Removed&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create">
+<a class="viewcode-back" href="../../module_docs/skill/__main__.html#skill.__main__.create">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">body</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">owner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;_local&#39;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new skill locally.&quot;&quot;&quot;</span>
+    <span class="n">skill</span> <span class="o">=</span> <span class="n">_create</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="n">owner</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">format_skill</span><span class="p">(</span><span class="n">skill</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="link_skills">
+<a class="viewcode-back" href="../../module_docs/skill/__main__.html#skill.__main__.link_skills">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">link_skills</span><span class="p">(</span>
+    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">target</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">copy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Link skills from a directory into agent target directories.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_link_skills</span><span class="p">(</span>
+        <span class="n">source</span><span class="p">,</span>
+        <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
+        <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span>
+        <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">format_path_dict</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="s1">&#39;Linked&#39;</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">maybe_hint_completion</span><span class="p">()</span>
+    <span class="n">argh</span><span class="o">.</span><span class="n">dispatch_commands</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">search</span><span class="p">,</span>
+            <span class="n">install</span><span class="p">,</span>
+            <span class="n">uninstall</span><span class="p">,</span>
+            <span class="n">create</span><span class="p">,</span>
+            <span class="n">list_skills</span><span class="p">,</span>
+            <span class="n">validate</span><span class="p">,</span>
+            <span class="n">show</span><span class="p">,</span>
+            <span class="n">link_skills</span><span class="p">,</span>
+            <span class="n">install_completion</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

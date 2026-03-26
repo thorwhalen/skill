@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.translate &mdash; skill 0.1.0 documentation</title>
+  <title>skill.translate &mdash; skill 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -52,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends.html">skill.backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends/github.html">skill.backends.github</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/base.html">skill.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/cli_format.html">skill.cli_format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/completion.html">skill.completion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/config.html">skill.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/create.html">skill.create</a></li>
@@ -102,13 +103,14 @@
 <span class="c1"># Translator registry</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
-<span class="n">translators</span><span class="p">:</span> <span class="n">Registry</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Skill</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">(</span><span class="s1">&#39;translators&#39;</span><span class="p">)</span>
+<span class="n">translators</span><span class="p">:</span> <span class="n">Registry</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Skill</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">(</span><span class="s2">&quot;translators&quot;</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot;Registry of format translators (Skill -&gt; target format string).&quot;&quot;&quot;</span>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
 <span class="c1"># SKILL.md -&gt; Cursor .mdc</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
+
 
 <div class="viewcode-block" id="to_mdc">
 <a class="viewcode-back" href="../../module_docs/skill/translate.html#skill.translate.to_mdc">[docs]</a>
@@ -128,9 +130,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">lost</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">allowed_tools</span><span class="p">:</span>
-        <span class="n">lost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;allowed-tools&#39;</span><span class="p">)</span>
+        <span class="n">lost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;allowed-tools&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">license</span><span class="p">:</span>
-        <span class="n">lost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;license&#39;</span><span class="p">)</span>
+        <span class="n">lost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;license&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
         <span class="n">lost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;bundled resources (</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">resources</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">lost</span><span class="p">:</span>
@@ -140,22 +142,22 @@
         <span class="p">)</span>
 
     <span class="c1"># Build .mdc frontmatter</span>
-    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;---&#39;</span><span class="p">]</span>
-    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;description: </span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;---&quot;</span><span class="p">]</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;description: </span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="c1"># Check for cursor-specific metadata</span>
-    <span class="n">globs</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cursor.globs&#39;</span><span class="p">)</span>
+    <span class="n">globs</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cursor.globs&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">globs</span><span class="p">:</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;globs: </span><span class="si">{</span><span class="n">globs</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="n">always_apply</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cursor.alwaysApply&#39;</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">)</span>
-    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;alwaysApply: </span><span class="si">{</span><span class="n">always_apply</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;---&#39;</span><span class="p">)</span>
-    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;globs: </span><span class="si">{</span><span class="n">globs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">always_apply</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cursor.alwaysApply&quot;</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;alwaysApply: </span><span class="si">{</span><span class="n">always_apply</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
     <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
-    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
 
 
 
-<span class="n">translators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;mdc&#39;</span><span class="p">,</span> <span class="n">to_mdc</span><span class="p">)</span>
+<span class="n">translators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;mdc&quot;</span><span class="p">,</span> <span class="n">to_mdc</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="from_mdc">
@@ -172,16 +174,16 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">raw_meta</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">parse_frontmatter</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">if</span> <span class="s1">&#39;globs&#39;</span> <span class="ow">in</span> <span class="n">raw_meta</span><span class="p">:</span>
-        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;cursor.globs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">raw_meta</span><span class="p">[</span><span class="s1">&#39;globs&#39;</span><span class="p">])</span>
-    <span class="k">if</span> <span class="s1">&#39;alwaysApply&#39;</span> <span class="ow">in</span> <span class="n">raw_meta</span><span class="p">:</span>
-        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;cursor.alwaysApply&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">raw_meta</span><span class="p">[</span><span class="s1">&#39;alwaysApply&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="s2">&quot;globs&quot;</span> <span class="ow">in</span> <span class="n">raw_meta</span><span class="p">:</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;cursor.globs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">raw_meta</span><span class="p">[</span><span class="s2">&quot;globs&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="s2">&quot;alwaysApply&quot;</span> <span class="ow">in</span> <span class="n">raw_meta</span><span class="p">:</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;cursor.alwaysApply&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">raw_meta</span><span class="p">[</span><span class="s2">&quot;alwaysApply&quot;</span><span class="p">])</span>
 
     <span class="c1"># Derive name from description (first few words, slugified)</span>
-    <span class="n">desc</span> <span class="o">=</span> <span class="n">raw_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">desc</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">3</span><span class="p">])</span> <span class="ow">or</span> <span class="s1">&#39;imported-rule&#39;</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">raw_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">desc</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">3</span><span class="p">])</span> <span class="ow">or</span> <span class="s2">&quot;imported-rule&quot;</span>
     <span class="c1"># Clean name to valid chars</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isalnum</span><span class="p">()</span> <span class="ow">or</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span> <span class="k">else</span> <span class="s1">&#39;-&#39;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isalnum</span><span class="p">()</span> <span class="ow">or</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span> <span class="k">else</span> <span class="s2">&quot;-&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
 
     <span class="n">meta</span> <span class="o">=</span> <span class="n">SkillMeta</span><span class="p">(</span>
         <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
@@ -195,6 +197,7 @@
 <span class="c1"># ---------------------------------------------------------------------------</span>
 <span class="c1"># SKILL.md -&gt; Copilot instructions</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
+
 
 <div class="viewcode-block" id="to_copilot_instructions">
 <a class="viewcode-back" href="../../module_docs/skill/translate.html#skill.translate.to_copilot_instructions">[docs]</a>
@@ -215,7 +218,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">lost</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">allowed_tools</span><span class="p">:</span>
-        <span class="n">lost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;allowed-tools&#39;</span><span class="p">)</span>
+        <span class="n">lost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;allowed-tools&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
         <span class="n">lost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;bundled resources (</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">resources</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">lost</span><span class="p">:</span>
@@ -224,20 +227,21 @@
             <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;## </span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
-    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt; </span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;## </span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&gt; </span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
     <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
-    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
 
 
 
-<span class="n">translators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;copilot_md&#39;</span><span class="p">,</span> <span class="n">to_copilot_instructions</span><span class="p">)</span>
+<span class="n">translators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;copilot_md&quot;</span><span class="p">,</span> <span class="n">to_copilot_instructions</span><span class="p">)</span>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
 <span class="c1"># Dispatcher</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
+
 
 <div class="viewcode-block" id="translate">
 <a class="viewcode-back" href="../../module_docs/skill/translate.html#skill.translate.translate">[docs]</a>
@@ -251,10 +255,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">translator</span> <span class="o">=</span> <span class="n">translators</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">target_format</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">translator</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">available</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">translators</span><span class="p">))</span>
+        <span class="n">available</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">translators</span><span class="p">))</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Unknown target format: </span><span class="si">{</span><span class="n">target_format</span><span class="si">!r}</span><span class="s2">. &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Available: </span><span class="si">{</span><span class="n">available</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Unknown target format: </span><span class="si">{</span><span class="n">target_format</span><span class="si">!r}</span><span class="s2">. Available: </span><span class="si">{</span><span class="n">available</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="n">translator</span><span class="p">(</span><span class="n">skill</span><span class="p">)</span></div>
 

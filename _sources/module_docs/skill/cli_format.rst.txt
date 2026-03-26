@@ -1,0 +1,4 @@
+skill.cli_format
+================
+.. automodule:: skill.cli_format
+   :members:

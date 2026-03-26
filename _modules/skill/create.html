@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.create &mdash; skill 0.1.0 documentation</title>
+  <title>skill.create &mdash; skill 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -52,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends.html">skill.backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends/github.html">skill.backends.github</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/base.html">skill.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/cli_format.html">skill.cli_format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/completion.html">skill.completion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/config.html">skill.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/create.html">skill.create</a></li>
@@ -104,7 +105,7 @@
 <span class="c1"># Validator registry</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
-<span class="n">validators</span><span class="p">:</span> <span class="n">Registry</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Skill</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">(</span><span class="s1">&#39;validators&#39;</span><span class="p">)</span>
+<span class="n">validators</span><span class="p">:</span> <span class="n">Registry</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Skill</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">(</span><span class="s2">&quot;validators&quot;</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot;Registry of validation rules. Each validator is a ``(Skill) -&gt; list[str]``</span>
 <span class="sd">callable that returns a list of issue strings (empty = pass).&quot;&quot;&quot;</span>
 
@@ -124,7 +125,7 @@
     <span class="k">return</span> <span class="n">issues</span>
 
 
-<span class="n">validators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;required_fields&#39;</span><span class="p">,</span> <span class="n">_validate_required_fields</span><span class="p">)</span>
+<span class="n">validators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;required_fields&quot;</span><span class="p">,</span> <span class="n">_validate_required_fields</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_validate_body</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -135,11 +136,11 @@
 <span class="sd">    [&#39;Skill body is empty&#39;]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">skill</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
-        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;Skill body is empty&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;Skill body is empty&quot;</span><span class="p">]</span>
     <span class="k">return</span> <span class="p">[]</span>
 
 
-<span class="n">validators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">,</span> <span class="n">_validate_body</span><span class="p">)</span>
+<span class="n">validators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">,</span> <span class="n">_validate_body</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_validate_name_format</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -159,7 +160,7 @@
     <span class="k">return</span> <span class="p">[]</span>
 
 
-<span class="n">validators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;name_format&#39;</span><span class="p">,</span> <span class="n">_validate_name_format</span><span class="p">)</span>
+<span class="n">validators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;name_format&quot;</span><span class="p">,</span> <span class="n">_validate_name_format</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_validate_lengths</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -179,7 +180,7 @@
     <span class="k">return</span> <span class="n">issues</span>
 
 
-<span class="n">validators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;lengths&#39;</span><span class="p">,</span> <span class="n">_validate_lengths</span><span class="p">)</span>
+<span class="n">validators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;lengths&quot;</span><span class="p">,</span> <span class="n">_validate_lengths</span><span class="p">)</span>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
@@ -205,14 +206,15 @@
 <span class="c1"># Public API</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
+
 <div class="viewcode-block" id="create">
 <a class="viewcode-back" href="../../module_docs/skill/create.html#skill.create.create">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-    <span class="n">body</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-    <span class="n">owner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;_local&#39;</span><span class="p">,</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">body</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">owner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_local&quot;</span><span class="p">,</span>
     <span class="n">store</span><span class="p">:</span> <span class="n">LocalSkillStore</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Skill</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new skill and store it locally.</span>
@@ -255,13 +257,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="n">name</span>
-    <span class="n">desc</span> <span class="o">=</span> <span class="n">description</span> <span class="ow">or</span> <span class="sa">f</span><span class="s1">&#39;A skill for </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">description</span> <span class="ow">or</span> <span class="sa">f</span><span class="s2">&quot;A skill for </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="n">body</span> <span class="o">=</span> <span class="n">_TEMPLATE_BODY</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">desc</span><span class="p">)</span>
     <span class="n">skill</span> <span class="o">=</span> <span class="n">Skill</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="n">SkillMeta</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">desc</span><span class="p">),</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">)</span>
     <span class="n">skill</span><span class="o">.</span><span class="n">write_to</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="c1"># Create optional resource subdirectories</span>
-    <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;scripts&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;references&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;scripts&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;references&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">path</span></div>
 
 
@@ -289,7 +291,7 @@
     <span class="c1"># Resolve path or key to a Skill</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path_or_key</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-        <span class="n">skill_md</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;SKILL.md&#39;</span>
+        <span class="n">skill_md</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;SKILL.md&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">skill_md</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Missing SKILL.md in </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
         <span class="n">skill</span> <span class="o">=</span> <span class="n">Skill</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -323,7 +325,8 @@
 <span class="sd">    False</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
-    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[a-z0-9]+(-[a-z0-9]+)*$&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[a-z0-9]+(-[a-z0-9]+)*$&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
 </pre></div>
 
            </div>

@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.backends.github &mdash; skill 0.1.0 documentation</title>
+  <title>skill.backends.github &mdash; skill 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/documentation_options.js?v=a58bc63e"></script>
       <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -52,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/skill/backends.html">skill.backends</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/skill/backends/github.html">skill.backends.github</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/skill/base.html">skill.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/skill/cli_format.html">skill.cli_format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/skill/completion.html">skill.completion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/skill/config.html">skill.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/skill/create.html">skill.create</a></li>
@@ -102,16 +103,16 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">skill.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Skill</span><span class="p">,</span> <span class="n">SkillInfo</span><span class="p">,</span> <span class="n">parse_skill_md</span>
 
 
-<span class="n">_GITHUB_API</span> <span class="o">=</span> <span class="s1">&#39;https://api.github.com&#39;</span>
+<span class="n">_GITHUB_API</span> <span class="o">=</span> <span class="s2">&quot;https://api.github.com&quot;</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_default_http_get</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform an HTTP GET, returning parsed JSON or raw text.&quot;&quot;&quot;</span>
     <span class="n">req</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span> <span class="ow">or</span> <span class="p">{})</span>
     <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="k">as</span> <span class="n">resp</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-        <span class="n">content_type</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s1">&#39;json&#39;</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">content_type</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;json&quot;</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">data</span>
 
@@ -131,7 +132,7 @@
 <span class="sd">    True</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;github&#39;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;github&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -139,20 +140,20 @@
         <span class="n">token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">http_get</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_token</span> <span class="o">=</span> <span class="n">token</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;GITHUB_TOKEN&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token</span> <span class="o">=</span> <span class="n">token</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GITHUB_TOKEN&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_http_get</span> <span class="o">=</span> <span class="n">http_get</span> <span class="ow">or</span> <span class="n">_default_http_get</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-        <span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/vnd.github.v3+json&#39;</span><span class="p">}</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.github.v3+json&quot;</span><span class="p">}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_token</span><span class="p">:</span>
-            <span class="n">h</span><span class="p">[</span><span class="s1">&#39;Authorization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;token </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_token</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">h</span><span class="p">[</span><span class="s2">&quot;Authorization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;token </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_token</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">h</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_http_get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">())</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_raw_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">repo</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ref</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;HEAD&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;https://raw.githubusercontent.com/</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">repo</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">ref</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_raw_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">repo</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ref</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;HEAD&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;https://raw.githubusercontent.com/</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">repo</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">ref</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span>
 
 <div class="viewcode-block" id="GitHubSkillSource.search">
 <a class="viewcode-back" href="../../../module_docs/skill/backends/github.html#skill.backends.github.GitHubSkillSource.search">[docs]</a>
@@ -161,28 +162,28 @@
 
 <span class="sd">        Uses the Code Search API: ``filename:SKILL.md {query}``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">q</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s1"> filename:SKILL.md&#39;</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">_GITHUB_API</span><span class="si">}</span><span class="s1">/search/code?q=</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s1">&amp;per_page=</span><span class="si">{</span><span class="n">max_results</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2"> filename:SKILL.md&quot;</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_GITHUB_API</span><span class="si">}</span><span class="s2">/search/code?q=</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">&amp;per_page=</span><span class="si">{</span><span class="n">max_results</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;items&#39;</span><span class="p">,</span> <span class="p">[]):</span>
-            <span class="n">repo</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;repository&#39;</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="n">owner</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;owner&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;login&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="n">repo_name</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;items&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">repo</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;repository&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">owner</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;owner&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;login&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">repo_name</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
             <span class="c1"># Derive skill name from the path</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
             <span class="n">skill_name</span> <span class="o">=</span> <span class="n">_skill_name_from_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">or</span> <span class="n">repo_name</span>
-            <span class="n">key</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">SkillInfo</span><span class="p">(</span>
                     <span class="n">canonical_key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
                     <span class="n">name</span><span class="o">=</span><span class="n">skill_name</span><span class="p">,</span>
-                    <span class="n">description</span><span class="o">=</span><span class="n">repo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-                    <span class="n">source</span><span class="o">=</span><span class="s1">&#39;github&#39;</span><span class="p">,</span>
-                    <span class="n">url</span><span class="o">=</span><span class="n">repo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;html_url&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                    <span class="n">description</span><span class="o">=</span><span class="n">repo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="n">source</span><span class="o">=</span><span class="s2">&quot;github&quot;</span><span class="p">,</span>
+                    <span class="n">url</span><span class="o">=</span><span class="n">repo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;html_url&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
                     <span class="n">owner</span><span class="o">=</span><span class="n">owner</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
@@ -195,16 +196,16 @@
 <span class="sd">        Supports ``owner/name`` (assumes repo == name, skill at root) and</span>
 <span class="sd">        ``owner/repo/name`` (skill in ``skills/{name}/`` or at root).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">parts</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">owner</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">parts</span>
             <span class="n">repo</span> <span class="o">=</span> <span class="n">name</span>
-            <span class="n">paths_to_try</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SKILL.md&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;skills/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">/SKILL.md&#39;</span><span class="p">]</span>
+            <span class="n">paths_to_try</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SKILL.md&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;skills/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">/SKILL.md&quot;</span><span class="p">]</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="n">owner</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">parts</span>
             <span class="n">paths_to_try</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="sa">f</span><span class="s1">&#39;skills/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">/SKILL.md&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;SKILL.md&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;skills/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">/SKILL.md&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;SKILL.md&quot;</span><span class="p">,</span>
             <span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid key: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -232,23 +233,23 @@
 <a class="viewcode-back" href="../../../module_docs/skill/backends/github.html#skill.backends.github.GitHubSkillSource.list_repo_skills">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">list_repo_skills</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">repo</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SkillInfo</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;List all skills in a GitHub repo using the Trees API.&quot;&quot;&quot;</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">_GITHUB_API</span><span class="si">}</span><span class="s1">/repos/</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">repo</span><span class="si">}</span><span class="s1">/git/trees/HEAD?recursive=1&#39;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_GITHUB_API</span><span class="si">}</span><span class="s2">/repos/</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">repo</span><span class="si">}</span><span class="s2">/git/trees/HEAD?recursive=1&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tree&#39;</span><span class="p">,</span> <span class="p">[]):</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;/SKILL.md&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">path</span> <span class="o">==</span> <span class="s1">&#39;SKILL.md&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tree&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/SKILL.md&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">path</span> <span class="o">==</span> <span class="s2">&quot;SKILL.md&quot;</span><span class="p">:</span>
                 <span class="n">name</span> <span class="o">=</span> <span class="n">_skill_name_from_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="ow">or</span> <span class="n">repo</span>
                 <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">SkillInfo</span><span class="p">(</span>
-                        <span class="n">canonical_key</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="n">canonical_key</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                         <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-                        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-                        <span class="n">source</span><span class="o">=</span><span class="s1">&#39;github&#39;</span><span class="p">,</span>
-                        <span class="n">url</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;https://github.com/</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">repo</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">source</span><span class="o">=</span><span class="s2">&quot;github&quot;</span><span class="p">,</span>
+                        <span class="n">url</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;https://github.com/</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">repo</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                         <span class="n">owner</span><span class="o">=</span><span class="n">owner</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
@@ -270,8 +271,8 @@
 <span class="sd">    &gt;&gt;&gt; _skill_name_from_path(&#39;.claude/skills/foo/SKILL.md&#39;)</span>
 <span class="sd">    &#39;foo&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">parts</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;SKILL.md&#39;</span><span class="p">:</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SKILL.md&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
     <span class="k">return</span> <span class="kc">None</span>
 </pre></div>

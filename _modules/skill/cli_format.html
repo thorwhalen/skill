@@ -1,0 +1,263 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skill.cli_format &mdash; skill 0.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            skill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill.html">skill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/__main__.html">skill.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/ai.html">skill.ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends.html">skill.backends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends/github.html">skill.backends.github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/base.html">skill.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/cli_format.html">skill.cli_format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/completion.html">skill.completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/config.html">skill.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/create.html">skill.create</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/install.html">skill.install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/registry.html">skill.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/search.html">skill.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/stores.html">skill.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/translate.html">skill.translate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/util.html">skill.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">skill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../skill.html">skill</a></li>
+      <li class="breadcrumb-item active">skill.cli_format</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for skill.cli_format</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Terminal-friendly formatting for CLI output.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Skill</span><span class="p">,</span> <span class="n">SkillInfo</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_terminal_width</span><span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">80</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get terminal width, with a sensible fallback.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">get_terminal_size</span><span class="p">((</span><span class="n">default</span><span class="p">,</span> <span class="mi">24</span><span class="p">))</span><span class="o">.</span><span class="n">columns</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_truncate</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Truncate text to width, adding ellipsis if needed.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">width</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span>
+    <span class="k">return</span> <span class="n">text</span><span class="p">[:</span> <span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;…&#39;</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># SkillInfo formatting</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="format_skill_info">
+<a class="viewcode-back" href="../../module_docs/skill/cli_format.html#skill.cli_format.format_skill_info">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">format_skill_info</span><span class="p">(</span><span class="n">info</span><span class="p">:</span> <span class="n">SkillInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a single SkillInfo as a compact one-liner.</span>
+
+<span class="sd">    &gt;&gt;&gt; si = SkillInfo(&#39;owner/test&#39;, &#39;test&#39;, &#39;A test skill&#39;, &#39;local&#39;, installed=True)</span>
+<span class="sd">    &gt;&gt;&gt; &#39;✓&#39; in format_skill_info(si)</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;✓&#39;</span> <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">installed</span> <span class="k">else</span> <span class="s1">&#39; &#39;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">marker</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">canonical_key</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">source</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="format_skill_info_table">
+<a class="viewcode-back" href="../../module_docs/skill/cli_format.html#skill.cli_format.format_skill_info_table">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">format_skill_info_table</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">SkillInfo</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a list of SkillInfo as an aligned, readable table.</span>
+
+<span class="sd">    Returns an empty string if items is empty.</span>
+
+<span class="sd">    &gt;&gt;&gt; items = [</span>
+<span class="sd">    ...     SkillInfo(&#39;alice/lint&#39;, &#39;lint&#39;, &#39;Lint Python code&#39;, &#39;local&#39;, installed=True),</span>
+<span class="sd">    ...     SkillInfo(&#39;bob/react-tips&#39;, &#39;react-tips&#39;, &#39;React best practices guide&#39;, &#39;github&#39;,</span>
+<span class="sd">    ...               url=&#39;https://github.com/bob/react-tips&#39;),</span>
+<span class="sd">    ... ]</span>
+<span class="sd">    &gt;&gt;&gt; out = format_skill_info_table(items)</span>
+<span class="sd">    &gt;&gt;&gt; &#39;✓&#39; in out and &#39;alice/lint&#39; in out</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">items</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;  (no results)&#39;</span>
+
+    <span class="n">term_width</span> <span class="o">=</span> <span class="n">_terminal_width</span><span class="p">()</span>
+
+    <span class="c1"># Compute column widths from data</span>
+    <span class="n">key_width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">canonical_key</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
+    <span class="n">source_width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
+
+    <span class="c1"># Description gets whatever space remains</span>
+    <span class="c1">#   layout: &quot;M KEY  DESC  (SOURCE)&quot;</span>
+    <span class="c1">#   M = 1 char marker, 1 space, KEY, 2 spaces, DESC, 2 spaces, (SOURCE)</span>
+    <span class="n">fixed</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">key_width</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">source_width</span> <span class="o">+</span> <span class="mi">2</span>  <span class="c1"># parens</span>
+    <span class="n">desc_width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">term_width</span> <span class="o">-</span> <span class="n">fixed</span><span class="p">)</span>
+
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;✓&#39;</span> <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">installed</span> <span class="k">else</span> <span class="s1">&#39; &#39;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">canonical_key</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">key_width</span><span class="p">)</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="n">_truncate</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="n">desc_width</span><span class="p">)</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">desc_width</span><span class="p">)</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">source</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">marker</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Skill (show) formatting</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="format_skill">
+<a class="viewcode-back" href="../../module_docs/skill/cli_format.html#skill.cli_format.format_skill">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">format_skill</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a full Skill for terminal display.&quot;&quot;&quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="sa">f</span><span class="s2">&quot;Name:          </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;Description:   </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">license</span><span class="p">:</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;License:       </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">license</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">compatibility</span><span class="p">:</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Compatibility: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">compatibility</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">source_path</span><span class="p">:</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Path:          </span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">source_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
+        <span class="n">res_parts</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">skill</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Resources:     </span><span class="si">{</span><span class="n">res_parts</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">allowed_tools</span><span class="p">:</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tools:         </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">allowed_tools</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Body preview</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">body</span><span class="p">:</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Dict[str, Path] formatting (install / uninstall / link_skills)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="format_path_dict">
+<a class="viewcode-back" href="../../module_docs/skill/cli_format.html#skill.cli_format.format_path_dict">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">format_path_dict</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">verb</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;Installed&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a {name: path} dict as readable output.</span>
+
+<span class="sd">    &gt;&gt;&gt; from pathlib import Path</span>
+<span class="sd">    &gt;&gt;&gt; out = format_path_dict({&#39;claude-code&#39;: Path(&#39;/a/b&#39;)}, verb=&#39;Installed&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; &#39;claude-code&#39; in out</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">d</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;  (none)&#39;</span>
+
+    <span class="n">key_width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">d</span><span class="p">)</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">key_width</span><span class="p">)</span><span class="si">}</span><span class="s2">  → </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

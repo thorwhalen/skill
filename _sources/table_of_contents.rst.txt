@@ -8,6 +8,7 @@
    module_docs/skill/backends
    module_docs/skill/backends/github
    module_docs/skill/base
+   module_docs/skill/cli_format
    module_docs/skill/completion
    module_docs/skill/config
    module_docs/skill/create
