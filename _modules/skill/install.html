@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.install &mdash; skill 0.1.1 documentation</title>
+  <title>skill.install &mdash; skill 0.1.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
+      <script src="../../_static/documentation_options.js?v=92734c54"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -104,7 +104,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">skill.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_project_root</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">skill.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_config</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">skill.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Registry</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">skill.create</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_skill</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.create</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_skill</span><span class="p">,</span> <span class="n">check_dependencies</span>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
@@ -291,6 +291,12 @@
         <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skill </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s2"> not found in local store. Fetch it first.&quot;</span><span class="p">)</span>
 
     <span class="n">skill</span> <span class="o">=</span> <span class="n">store</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="c1"># Warn about missing dependencies (non-blocking)</span>
+    <span class="n">dep_warnings</span> <span class="o">=</span> <span class="n">check_dependencies</span><span class="p">(</span><span class="n">skill</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">dep_warnings</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
     <span class="n">config</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">()</span>
     <span class="n">targets</span> <span class="o">=</span> <span class="n">agent_targets</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">default_agent_targets</span>
 

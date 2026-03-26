@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.create &mdash; skill 0.1.1 documentation</title>
+  <title>skill.create &mdash; skill 0.1.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
+      <script src="../../_static/documentation_options.js?v=92734c54"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -183,6 +183,19 @@
 <span class="n">validators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;lengths&quot;</span><span class="p">,</span> <span class="n">_validate_lengths</span><span class="p">)</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_dependencies</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if declared dependencies are installed locally.</span>
+
+<span class="sd">    &gt;&gt;&gt; from skill.base import SkillMeta</span>
+<span class="sd">    &gt;&gt;&gt; _validate_dependencies(Skill(meta=SkillMeta(name=&#39;x&#39;, description=&#39;y&#39;), body=&#39;z&#39;))</span>
+<span class="sd">    []</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">check_dependencies</span><span class="p">(</span><span class="n">skill</span><span class="p">)</span>
+
+
+<span class="n">validators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;dependencies&quot;</span><span class="p">,</span> <span class="n">_validate_dependencies</span><span class="p">)</span>
+
+
 <span class="c1"># ---------------------------------------------------------------------------</span>
 <span class="c1"># Template</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
@@ -312,6 +325,38 @@
     <span class="k">for</span> <span class="n">validator</span> <span class="ow">in</span> <span class="n">validators</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
         <span class="n">issues</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">validator</span><span class="p">(</span><span class="n">skill</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">issues</span>
+
+
+<div class="viewcode-block" id="check_dependencies">
+<a class="viewcode-back" href="../../module_docs/skill/create.html#skill.create.check_dependencies">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_dependencies</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">store</span><span class="p">:</span> <span class="n">LocalSkillStore</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if a skill&#39;s declared dependencies are installed.</span>
+
+<span class="sd">    Looks for ``metadata.dependencies`` (a list of canonical skill keys).</span>
+<span class="sd">    Returns a list of warning strings for missing dependencies (empty = all satisfied).</span>
+
+<span class="sd">    &gt;&gt;&gt; from skill.base import SkillMeta</span>
+<span class="sd">    &gt;&gt;&gt; s = Skill(meta=SkillMeta(name=&#39;x&#39;, description=&#39;y&#39;, metadata={&#39;dependencies&#39;: [&#39;alice/foo&#39;]}), body=&#39;z&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; warnings = check_dependencies(s)</span>
+<span class="sd">    &gt;&gt;&gt; any(&#39;alice/foo&#39; in w for w in warnings)</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">deps</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dependencies&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">deps</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">deps</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">deps</span> <span class="o">=</span> <span class="p">[</span><span class="n">deps</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">deps</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">store</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">store</span> <span class="o">=</span> <span class="n">LocalSkillStore</span><span class="p">()</span>
+
+    <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">deps</span> <span class="k">if</span> <span class="n">d</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">store</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Missing dependencies: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[]</span></div>
+
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_is_valid_name</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>

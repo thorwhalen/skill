@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.stores &mdash; skill 0.1.1 documentation</title>
+  <title>skill.stores &mdash; skill 0.1.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
+      <script src="../../_static/documentation_options.js?v=92734c54"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -64,7 +64,9 @@
 <li class="toctree-l1"><a class="reference internal" href="search.html">skill.search</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">skill.stores</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#skill.stores.LocalSkillStore"><code class="docutils literal notranslate"><span class="pre">LocalSkillStore</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#skill.stores.LocalSkillStore.get_source_meta"><code class="docutils literal notranslate"><span class="pre">LocalSkillStore.get_source_meta()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#skill.stores.LocalSkillStore.list_info"><code class="docutils literal notranslate"><span class="pre">LocalSkillStore.list_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#skill.stores.LocalSkillStore.set_source_meta"><code class="docutils literal notranslate"><span class="pre">LocalSkillStore.set_source_meta()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -115,9 +117,21 @@ directory containing <code class="docutils literal notranslate"><span class="pre
 </pre></div>
 </div>
 <dl class="py method">
+<dt class="sig sig-object py" id="skill.stores.LocalSkillStore.get_source_meta">
+<span class="sig-name descname"><span class="pre">get_source_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/skill/stores.html#LocalSkillStore.get_source_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.stores.LocalSkillStore.get_source_meta" title="Link to this definition"></a></dt>
+<dd><p>Read source metadata for a skill, or empty dict if none.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="skill.stores.LocalSkillStore.list_info">
 <span class="sig-name descname"><span class="pre">list_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="base.html#skill.base.SkillInfo" title="skill.base.SkillInfo"><span class="pre">SkillInfo</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/skill/stores.html#LocalSkillStore.list_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.stores.LocalSkillStore.list_info" title="Link to this definition"></a></dt>
 <dd><p>Return SkillInfo for all locally stored skills.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skill.stores.LocalSkillStore.set_source_meta">
+<span class="sig-name descname"><span class="pre">set_source_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/skill/stores.html#LocalSkillStore.set_source_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.stores.LocalSkillStore.set_source_meta" title="Link to this definition"></a></dt>
+<dd><p>Store source metadata (URL, origin) alongside a skill.</p>
 </dd></dl>
 
 </dd></dl>
