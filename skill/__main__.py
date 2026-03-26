@@ -33,6 +33,7 @@ from skill.cli_format import (
 # CLI wrappers — call the real function, then format for terminal output
 # ---------------------------------------------------------------------------
 
+
 def search(
     query: str,
     *,
@@ -42,7 +43,10 @@ def search(
 ) -> str:
     """Search for skills across local index and remote backends."""
     results = _search(
-        query, max_results=max_results, local_only=local_only, backends=backends,
+        query,
+        max_results=max_results,
+        local_only=local_only,
+        backends=backends,
     )
     return format_skill_info_table(results)
 
@@ -50,7 +54,7 @@ def search(
 def list_skills(
     *,
     agent_target: str | None = None,
-    scope: str = 'all',
+    scope: str = "all",
 ) -> str:
     """List locally installed skills."""
     results = _list_skills(agent_target=agent_target, scope=scope)
@@ -67,7 +71,7 @@ def install(
     key: str,
     *,
     agent_targets: list[str] | None = None,
-    scope: str = 'project',
+    scope: str = "project",
     copy: bool = False,
     force: bool = False,
     project_dir: str | None = None,
@@ -81,14 +85,14 @@ def install(
         force=force,
         project_dir=project_dir,
     )
-    return format_path_dict(result, verb='Installed')
+    return format_path_dict(result, verb="Installed")
 
 
 def uninstall(
     key: str,
     *,
     agent_targets: list[str] | None = None,
-    scope: str = 'project',
+    scope: str = "project",
     project_dir: str | None = None,
 ) -> str:
     """Uninstall a skill from agent target directories."""
@@ -98,15 +102,15 @@ def uninstall(
         scope=scope,
         project_dir=project_dir,
     )
-    return format_path_dict(result, verb='Removed')
+    return format_path_dict(result, verb="Removed")
 
 
 def create(
     name: str,
     *,
-    description: str = '',
-    body: str = '',
-    owner: str = '_local',
+    description: str = "",
+    body: str = "",
+    owner: str = "_local",
 ) -> str:
     """Create a new skill locally."""
     skill = _create(name, description=description, body=body, owner=owner)
@@ -116,7 +120,7 @@ def create(
 def link_skills(
     source: str,
     *,
-    target: str = '',
+    target: str = "",
     copy: bool = False,
     force: bool = False,
 ) -> str:
@@ -127,7 +131,7 @@ def link_skills(
         copy=copy,
         force=force,
     )
-    return format_path_dict(result, verb='Linked')
+    return format_path_dict(result, verb="Linked")
 
 
 def main():

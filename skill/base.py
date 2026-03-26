@@ -226,5 +226,5 @@ class SkillInfo:
     installed: bool = False
 
     def __str__(self) -> str:
-        marker = '✓' if self.installed else ' '
+        marker = "✓" if self.installed else " "
         return f"{marker} {self.canonical_key}  {self.description}  ({self.source})"

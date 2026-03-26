@@ -15,12 +15,13 @@ def _truncate(text: str, width: int) -> str:
     """Truncate text to width, adding ellipsis if needed."""
     if len(text) <= width:
         return text
-    return text[: width - 1] + '…'
+    return text[: width - 1] + "…"
 
 
 # ---------------------------------------------------------------------------
 # SkillInfo formatting
 # ---------------------------------------------------------------------------
+
 
 def format_skill_info(info: SkillInfo) -> str:
     """Format a single SkillInfo as a compact one-liner.
@@ -29,7 +30,7 @@ def format_skill_info(info: SkillInfo) -> str:
     >>> '✓' in format_skill_info(si)
     True
     """
-    marker = '✓' if info.installed else ' '
+    marker = "✓" if info.installed else " "
     return f"{marker} {info.canonical_key}  {info.description}  ({info.source})"
 
 
@@ -48,7 +49,7 @@ def format_skill_info_table(items: list[SkillInfo]) -> str:
     True
     """
     if not items:
-        return '  (no results)'
+        return "  (no results)"
 
     term_width = _terminal_width()
 
@@ -64,18 +65,19 @@ def format_skill_info_table(items: list[SkillInfo]) -> str:
 
     lines = []
     for info in items:
-        marker = '✓' if info.installed else ' '
+        marker = "✓" if info.installed else " "
         key = info.canonical_key.ljust(key_width)
         desc = _truncate(info.description, desc_width).ljust(desc_width)
         source = info.source
         lines.append(f"{marker} {key}  {desc}  ({source})")
 
-    return '\n'.join(lines)
+    return "\n".join(lines)
 
 
 # ---------------------------------------------------------------------------
 # Skill (show) formatting
 # ---------------------------------------------------------------------------
+
 
 def format_skill(skill: Skill) -> str:
     """Format a full Skill for terminal display."""
@@ -91,9 +93,7 @@ def format_skill(skill: Skill) -> str:
     if skill.source_path:
         lines.append(f"Path:          {skill.source_path}")
     if skill.resources:
-        res_parts = ', '.join(
-            f"{k} ({len(v)})" for k, v in skill.resources.items()
-        )
+        res_parts = ", ".join(f"{k} ({len(v)})" for k, v in skill.resources.items())
         lines.append(f"Resources:     {res_parts}")
     if m.allowed_tools:
         lines.append(f"Tools:         {', '.join(m.allowed_tools)}")
@@ -101,17 +101,18 @@ def format_skill(skill: Skill) -> str:
     # Body preview
     body = skill.body.strip()
     if body:
-        lines.append('')
+        lines.append("")
         lines.append(body)
 
-    return '\n'.join(lines)
+    return "\n".join(lines)
 
 
 # ---------------------------------------------------------------------------
 # Dict[str, Path] formatting (install / uninstall / link_skills)
 # ---------------------------------------------------------------------------
 
-def format_path_dict(d: dict, *, verb: str = 'Installed') -> str:
+
+def format_path_dict(d: dict, *, verb: str = "Installed") -> str:
     """Format a {name: path} dict as readable output.
 
     >>> from pathlib import Path
@@ -120,10 +121,10 @@ def format_path_dict(d: dict, *, verb: str = 'Installed') -> str:
     True
     """
     if not d:
-        return '  (none)'
+        return "  (none)"
 
     key_width = max(len(k) for k in d)
     lines = []
     for name, path in d.items():
         lines.append(f"  {name.ljust(key_width)}  → {path}")
-    return '\n'.join(lines)
+    return "\n".join(lines)
