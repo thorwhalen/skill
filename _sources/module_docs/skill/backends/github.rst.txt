@@ -1,0 +1,4 @@
+skill.backends.github
+=====================
+.. automodule:: skill.backends.github
+   :members:

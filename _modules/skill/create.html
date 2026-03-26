@@ -1,0 +1,356 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skill.create &mdash; skill 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            skill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill.html">skill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/__main__.html">skill.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/ai.html">skill.ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends.html">skill.backends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends/github.html">skill.backends.github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/base.html">skill.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/completion.html">skill.completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/config.html">skill.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/create.html">skill.create</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/install.html">skill.install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/registry.html">skill.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/search.html">skill.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/stores.html">skill.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/translate.html">skill.translate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/util.html">skill.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">skill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../skill.html">skill</a></li>
+      <li class="breadcrumb-item active">skill.create</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for skill.create</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Skill scaffolding, validation, and creation.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Skill</span><span class="p">,</span> <span class="n">SkillMeta</span><span class="p">,</span> <span class="n">parse_frontmatter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.stores</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocalSkillStore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParsedKey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Registry</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Validator registry</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="n">validators</span><span class="p">:</span> <span class="n">Registry</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Skill</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">(</span><span class="s1">&#39;validators&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Registry of validation rules. Each validator is a ``(Skill) -&gt; list[str]``</span>
+<span class="sd">callable that returns a list of issue strings (empty = pass).&quot;&quot;&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_required_fields</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that name and description are present.</span>
+
+<span class="sd">    &gt;&gt;&gt; from skill.base import SkillMeta</span>
+<span class="sd">    &gt;&gt;&gt; _validate_required_fields(Skill(meta=SkillMeta(name=&#39;&#39;, description=&#39;x&#39;), body=&#39;y&#39;))</span>
+<span class="sd">    [&quot;Missing or empty &#39;name&#39; in frontmatter&quot;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Missing or empty &#39;name&#39; in frontmatter&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Missing or empty &#39;description&#39; in frontmatter&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">issues</span>
+
+
+<span class="n">validators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;required_fields&#39;</span><span class="p">,</span> <span class="n">_validate_required_fields</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_body</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that body is not empty.</span>
+
+<span class="sd">    &gt;&gt;&gt; from skill.base import SkillMeta</span>
+<span class="sd">    &gt;&gt;&gt; _validate_body(Skill(meta=SkillMeta(name=&#39;x&#39;, description=&#39;y&#39;), body=&#39;  &#39;))</span>
+<span class="sd">    [&#39;Skill body is empty&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">skill</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;Skill body is empty&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[]</span>
+
+
+<span class="n">validators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">,</span> <span class="n">_validate_body</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_name_format</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that name matches the spec: ``^[a-z0-9]+(-[a-z0-9]+)*$``.</span>
+
+<span class="sd">    &gt;&gt;&gt; from skill.base import SkillMeta</span>
+<span class="sd">    &gt;&gt;&gt; _validate_name_format(Skill(meta=SkillMeta(name=&#39;BadName&#39;, description=&#39;x&#39;), body=&#39;y&#39;))</span>
+<span class="sd">    [&quot;Invalid name: &#39;BadName&#39;. Must be lowercase alphanumeric with hyphens.&quot;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>  <span class="c1"># Handled by required_fields validator</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_valid_name</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">&quot;Invalid name: </span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2">. &quot;</span>
+            <span class="s2">&quot;Must be lowercase alphanumeric with hyphens.&quot;</span>
+        <span class="p">]</span>
+    <span class="k">return</span> <span class="p">[]</span>
+
+
+<span class="n">validators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;name_format&#39;</span><span class="p">,</span> <span class="n">_validate_name_format</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_lengths</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check name and description length limits.</span>
+
+<span class="sd">    &gt;&gt;&gt; from skill.base import SkillMeta</span>
+<span class="sd">    &gt;&gt;&gt; _validate_lengths(Skill(meta=SkillMeta(name=&#39;x&#39; * 65, description=&#39;y&#39;), body=&#39;z&#39;))</span>
+<span class="sd">    [&#39;Name exceeds 64 characters (65)&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">64</span><span class="p">:</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Name exceeds 64 characters (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">description</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1024</span><span class="p">:</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Description exceeds 1024 characters (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">description</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">issues</span>
+
+
+<span class="n">validators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;lengths&#39;</span><span class="p">,</span> <span class="n">_validate_lengths</span><span class="p">)</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Template</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="n">_TEMPLATE_BODY</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2"># </span><span class="si">{name}</span>
+
+<span class="si">{description}</span>
+
+<span class="s2">## Usage</span>
+
+<span class="s2">&lt;!-- Describe how this skill should be used --&gt;</span>
+
+<span class="s2">## Instructions</span>
+
+<span class="s2">&lt;!-- Add your skill instructions here --&gt;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Public API</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="create">
+<a class="viewcode-back" href="../../module_docs/skill/create.html#skill.create.create">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">body</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">owner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;_local&#39;</span><span class="p">,</span>
+    <span class="n">store</span><span class="p">:</span> <span class="n">LocalSkillStore</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Skill</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new skill and store it locally.</span>
+
+<span class="sd">    &gt;&gt;&gt; import tempfile</span>
+<span class="sd">    &gt;&gt;&gt; from pathlib import Path</span>
+<span class="sd">    &gt;&gt;&gt; store = LocalSkillStore(root=Path(tempfile.mkdtemp()))</span>
+<span class="sd">    &gt;&gt;&gt; s = create(&#39;my-skill&#39;, description=&#39;Does things&#39;, store=store)</span>
+<span class="sd">    &gt;&gt;&gt; s.meta.name</span>
+<span class="sd">    &#39;my-skill&#39;</span>
+<span class="sd">    &gt;&gt;&gt; &#39;_local/my-skill&#39; in store</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">store</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">store</span> <span class="o">=</span> <span class="n">LocalSkillStore</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">body</span><span class="p">:</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="n">_TEMPLATE_BODY</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">)</span>
+    <span class="n">meta</span> <span class="o">=</span> <span class="n">SkillMeta</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">)</span>
+    <span class="n">skill</span> <span class="o">=</span> <span class="n">Skill</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">)</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ParsedKey</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="n">owner</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span>
+    <span class="n">store</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">skill</span>
+    <span class="k">return</span> <span class="n">skill</span></div>
+
+
+
+<div class="viewcode-block" id="scaffold">
+<a class="viewcode-back" href="../../module_docs/skill/create.html#skill.create.scaffold">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">scaffold</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a new skill folder with boilerplate SKILL.md.</span>
+
+<span class="sd">    &gt;&gt;&gt; import tempfile</span>
+<span class="sd">    &gt;&gt;&gt; p = scaffold(&#39;demo-skill&#39;, path=Path(tempfile.mkdtemp()) / &#39;demo-skill&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; (p / &#39;SKILL.md&#39;).exists()</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="n">name</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">description</span> <span class="ow">or</span> <span class="sa">f</span><span class="s1">&#39;A skill for </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">_TEMPLATE_BODY</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">desc</span><span class="p">)</span>
+    <span class="n">skill</span> <span class="o">=</span> <span class="n">Skill</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="n">SkillMeta</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">desc</span><span class="p">),</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">)</span>
+    <span class="n">skill</span><span class="o">.</span><span class="n">write_to</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="c1"># Create optional resource subdirectories</span>
+    <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;scripts&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;references&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">path</span></div>
+
+
+
+<div class="viewcode-block" id="validate">
+<a class="viewcode-back" href="../../module_docs/skill/create.html#skill.create.validate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="n">path_or_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate a skill, returning a list of issue strings (empty = valid).</span>
+
+<span class="sd">    Runs all registered validators. Accepts a filesystem path to a skill</span>
+<span class="sd">    directory, or a canonical key to look up in the local store.</span>
+
+<span class="sd">    &gt;&gt;&gt; import tempfile</span>
+<span class="sd">    &gt;&gt;&gt; from skill.base import Skill, SkillMeta</span>
+<span class="sd">    &gt;&gt;&gt; d = Path(tempfile.mkdtemp()) / &#39;test&#39;</span>
+<span class="sd">    &gt;&gt;&gt; Skill(meta=SkillMeta(name=&#39;test&#39;, description=&#39;OK&#39;), body=&#39;body&#39;).write_to(d)</span>
+<span class="sd">    &gt;&gt;&gt; validate(str(d))</span>
+<span class="sd">    []</span>
+<span class="sd">    &gt;&gt;&gt; d2 = Path(tempfile.mkdtemp()) / &#39;bad&#39;</span>
+<span class="sd">    &gt;&gt;&gt; Skill(meta=SkillMeta(name=&#39;&#39;, description=&#39;&#39;), body=&#39;&#39;).write_to(d2)</span>
+<span class="sd">    &gt;&gt;&gt; issues = validate(str(d2))</span>
+<span class="sd">    &gt;&gt;&gt; any(&#39;name&#39; in i for i in issues)</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Resolve path or key to a Skill</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path_or_key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="n">skill_md</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="s1">&#39;SKILL.md&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">skill_md</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Missing SKILL.md in </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+        <span class="n">skill</span> <span class="o">=</span> <span class="n">Skill</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">store</span> <span class="o">=</span> <span class="n">LocalSkillStore</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">skill</span> <span class="o">=</span> <span class="n">store</span><span class="p">[</span><span class="n">path_or_key</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Not a valid path or skill key: </span><span class="si">{</span><span class="n">path_or_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">_validate_skill</span><span class="p">(</span><span class="n">skill</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_skill</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run all registered validators against a Skill.&quot;&quot;&quot;</span>
+    <span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">validator</span> <span class="ow">in</span> <span class="n">validators</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">validator</span><span class="p">(</span><span class="n">skill</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">issues</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_valid_name</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if a skill name matches the spec: ``^[a-z0-9]+(-[a-z0-9]+)*$``.</span>
+
+<span class="sd">    &gt;&gt;&gt; _is_valid_name(&#39;my-skill&#39;)</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; _is_valid_name(&#39;MySkill&#39;)</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; _is_valid_name(&#39;&#39;)</span>
+<span class="sd">    False</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[a-z0-9]+(-[a-z0-9]+)*$&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

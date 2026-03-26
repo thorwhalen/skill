@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skill.translate &mdash; skill 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            skill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill.html">skill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/__main__.html">skill.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/ai.html">skill.ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends.html">skill.backends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends/github.html">skill.backends.github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/base.html">skill.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/completion.html">skill.completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/config.html">skill.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/create.html">skill.create</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/install.html">skill.install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/registry.html">skill.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/search.html">skill.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/stores.html">skill.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/translate.html">skill.translate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/util.html">skill.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">skill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../skill.html">skill</a></li>
+      <li class="breadcrumb-item active">skill.translate</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for skill.translate</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Format translators: SKILL.md &lt;-&gt; agent-specific formats.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Skill</span><span class="p">,</span> <span class="n">SkillMeta</span><span class="p">,</span> <span class="n">parse_frontmatter</span><span class="p">,</span> <span class="n">_meta_from_dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Registry</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Translator registry</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="n">translators</span><span class="p">:</span> <span class="n">Registry</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Skill</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">(</span><span class="s1">&#39;translators&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Registry of format translators (Skill -&gt; target format string).&quot;&quot;&quot;</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># SKILL.md -&gt; Cursor .mdc</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="to_mdc">
+<a class="viewcode-back" href="../../module_docs/skill/translate.html#skill.translate.to_mdc">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_mdc</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate a Skill to Cursor ``.mdc`` format.</span>
+
+<span class="sd">    Lossy: ``allowed-tools``, ``license``, bundled resources, and progressive</span>
+<span class="sd">    disclosure semantics are lost.</span>
+
+<span class="sd">    &gt;&gt;&gt; from skill.base import SkillMeta</span>
+<span class="sd">    &gt;&gt;&gt; s = Skill(meta=SkillMeta(name=&#39;test&#39;, description=&#39;Test skill&#39;), body=&#39;Do stuff.&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; mdc = to_mdc(s)</span>
+<span class="sd">    &gt;&gt;&gt; &#39;description: Test skill&#39; in mdc</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; &#39;Do stuff.&#39; in mdc</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lost</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">allowed_tools</span><span class="p">:</span>
+        <span class="n">lost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;allowed-tools&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">license</span><span class="p">:</span>
+        <span class="n">lost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;license&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
+        <span class="n">lost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;bundled resources (</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">resources</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">lost</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Lossy translation to .mdc: dropping </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lost</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Build .mdc frontmatter</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;---&#39;</span><span class="p">]</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;description: </span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="c1"># Check for cursor-specific metadata</span>
+    <span class="n">globs</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cursor.globs&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">globs</span><span class="p">:</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;globs: </span><span class="si">{</span><span class="n">globs</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">always_apply</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cursor.alwaysApply&#39;</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;alwaysApply: </span><span class="si">{</span><span class="n">always_apply</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;---&#39;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+
+
+<span class="n">translators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;mdc&#39;</span><span class="p">,</span> <span class="n">to_mdc</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="from_mdc">
+<a class="viewcode-back" href="../../module_docs/skill/translate.html#skill.translate.from_mdc">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">from_mdc</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Skill</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Import a Cursor ``.mdc`` file as a Skill.</span>
+
+<span class="sd">    &gt;&gt;&gt; content = &quot;---\\ndescription: Do things\\nglobs: &#39;*.py&#39;\\nalwaysApply: false\\n---\\n# Rules&quot;</span>
+<span class="sd">    &gt;&gt;&gt; s = from_mdc(content)</span>
+<span class="sd">    &gt;&gt;&gt; s.meta.description</span>
+<span class="sd">    &#39;Do things&#39;</span>
+<span class="sd">    &gt;&gt;&gt; s.meta.metadata.get(&#39;cursor.globs&#39;)</span>
+<span class="sd">    &#39;*.py&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">raw_meta</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">parse_frontmatter</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="s1">&#39;globs&#39;</span> <span class="ow">in</span> <span class="n">raw_meta</span><span class="p">:</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;cursor.globs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">raw_meta</span><span class="p">[</span><span class="s1">&#39;globs&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="s1">&#39;alwaysApply&#39;</span> <span class="ow">in</span> <span class="n">raw_meta</span><span class="p">:</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;cursor.alwaysApply&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">raw_meta</span><span class="p">[</span><span class="s1">&#39;alwaysApply&#39;</span><span class="p">])</span>
+
+    <span class="c1"># Derive name from description (first few words, slugified)</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">raw_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">desc</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">3</span><span class="p">])</span> <span class="ow">or</span> <span class="s1">&#39;imported-rule&#39;</span>
+    <span class="c1"># Clean name to valid chars</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isalnum</span><span class="p">()</span> <span class="ow">or</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span> <span class="k">else</span> <span class="s1">&#39;-&#39;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+
+    <span class="n">meta</span> <span class="o">=</span> <span class="n">SkillMeta</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">desc</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">Skill</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># SKILL.md -&gt; Copilot instructions</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="to_copilot_instructions">
+<a class="viewcode-back" href="../../module_docs/skill/translate.html#skill.translate.to_copilot_instructions">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_copilot_instructions</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate a Skill to GitHub Copilot instructions format.</span>
+
+<span class="sd">    Produces a Markdown section suitable for appending to</span>
+<span class="sd">    ``.github/copilot-instructions.md``. Lossy: no frontmatter support</span>
+<span class="sd">    beyond ``applyTo``, no progressive disclosure, no resources.</span>
+
+<span class="sd">    &gt;&gt;&gt; from skill.base import SkillMeta</span>
+<span class="sd">    &gt;&gt;&gt; s = Skill(meta=SkillMeta(name=&#39;lint&#39;, description=&#39;Lint rules&#39;), body=&#39;Use ruff.&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; md = to_copilot_instructions(s)</span>
+<span class="sd">    &gt;&gt;&gt; &#39;## lint&#39; in md</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; &#39;Use ruff.&#39; in md</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lost</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">allowed_tools</span><span class="p">:</span>
+        <span class="n">lost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;allowed-tools&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
+        <span class="n">lost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;bundled resources (</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">resources</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">lost</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Lossy translation to copilot-instructions: dropping </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lost</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;## </span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt; </span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+
+
+<span class="n">translators</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;copilot_md&#39;</span><span class="p">,</span> <span class="n">to_copilot_instructions</span><span class="p">)</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Dispatcher</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="translate">
+<a class="viewcode-back" href="../../module_docs/skill/translate.html#skill.translate.translate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">translate</span><span class="p">(</span><span class="n">skill</span><span class="p">:</span> <span class="n">Skill</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">target_format</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate a Skill to the specified target format.</span>
+
+<span class="sd">    &gt;&gt;&gt; from skill.base import SkillMeta</span>
+<span class="sd">    &gt;&gt;&gt; s = Skill(meta=SkillMeta(name=&#39;x&#39;, description=&#39;y&#39;), body=&#39;z&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; &#39;alwaysApply&#39; in translate(s, target_format=&#39;mdc&#39;)</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">translator</span> <span class="o">=</span> <span class="n">translators</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">target_format</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">translator</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">available</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">translators</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Unknown target format: </span><span class="si">{</span><span class="n">target_format</span><span class="si">!r}</span><span class="s2">. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Available: </span><span class="si">{</span><span class="n">available</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">translator</span><span class="p">(</span><span class="n">skill</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

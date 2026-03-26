@@ -1,0 +1,206 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skill.install &mdash; skill 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="skill.registry" href="registry.html" />
+    <link rel="prev" title="skill.create" href="create.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            skill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../skill.html">skill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="__main__.html">skill.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ai.html">skill.ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends.html">skill.backends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends/github.html">skill.backends.github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">skill.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="completion.html">skill.completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">skill.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create.html">skill.create</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">skill.install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#skill.install.AgentTarget"><code class="docutils literal notranslate"><span class="pre">AgentTarget</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#skill.install.agent_targets"><code class="docutils literal notranslate"><span class="pre">agent_targets</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#skill.install.install"><code class="docutils literal notranslate"><span class="pre">install()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#skill.install.link_skills"><code class="docutils literal notranslate"><span class="pre">link_skills()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#skill.install.uninstall"><code class="docutils literal notranslate"><span class="pre">uninstall()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="registry.html">skill.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search.html">skill.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">skill.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="translate.html">skill.translate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">skill.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">skill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">skill.install</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/skill/install.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-skill.install">
+<span id="skill-install"></span><h1>skill.install<a class="headerlink" href="#module-skill.install" title="Link to this heading"></a></h1>
+<p>Installation logic: symlink/copy skills into agent target directories.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="skill.install.AgentTarget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skill.install.</span></span><span class="sig-name descname"><span class="pre">AgentTarget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'skill.md'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">needs_translation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/skill/install.html#AgentTarget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.install.AgentTarget" title="Link to this definition"></a></dt>
+<dd><p>Describes where an agent expects skills to be installed.</p>
+<p>Path templates support <code class="docutils literal notranslate"><span class="pre">{home}</span></code>, <code class="docutils literal notranslate"><span class="pre">{project}</span></code>, and <code class="docutils literal notranslate"><span class="pre">{name}</span></code> placeholders.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">AgentTarget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">project_path</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{project}</span><span class="s1">/.test/</span><span class="si">{name}</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format_project_path</span><span class="p">(</span><span class="s1">&#39;/proj&#39;</span><span class="p">,</span> <span class="s1">&#39;my-skill&#39;</span><span class="p">))</span>
+<span class="go">&#39;/proj/.test/my-skill&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="skill.install.agent_targets">
+<span class="sig-prename descclassname"><span class="pre">skill.install.</span></span><span class="sig-name descname"><span class="pre">agent_targets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="registry.html#skill.registry.Registry" title="skill.registry.Registry"><span class="pre">Registry</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#skill.install.AgentTarget" title="skill.install.AgentTarget"><span class="pre">AgentTarget</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Registry('agent_targets',</span> <span class="pre">keys=['claude-code',</span> <span class="pre">'cursor',</span> <span class="pre">'copilot'])</span></em><a class="headerlink" href="#skill.install.agent_targets" title="Link to this definition"></a></dt>
+<dd><p>Registry of agent targets (e.g., claude-code, cursor, copilot).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skill.install.install">
+<span class="sig-prename descclassname"><span class="pre">skill.install.</span></span><span class="sig-name descname"><span class="pre">install</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'project'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="stores.html#skill.stores.LocalSkillStore" title="skill.stores.LocalSkillStore"><span class="pre">LocalSkillStore</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/skill/install.html#install"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.install.install" title="Link to this definition"></a></dt>
+<dd><p>Install a skill into one or more agent target directories.</p>
+<p>Returns a dict mapping agent target names to the paths where the skill
+was installed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>) – Canonical skill key (e.g., <code class="docutils literal notranslate"><span class="pre">'owner/skill-name'</span></code>).</p></li>
+<li><p><strong>agent_targets</strong> (<em>list</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>) – Agent targets to install into. Defaults to config’s <code class="docutils literal notranslate"><span class="pre">default_agent_targets</span></code>.</p></li>
+<li><p><strong>scope</strong> (<em>str</em>) – <code class="docutils literal notranslate"><span class="pre">'project'</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">'global'</span></code>.</p></li>
+<li><p><strong>copy</strong> (<em>bool</em>) – If True, copy instead of symlink.</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – If True, overwrite existing files/links.</p></li>
+<li><p><strong>project_dir</strong> (<em>Path</em><em> | </em><em>str</em><em> | </em><em>None</em>) – Project root. Auto-detected if None.</p></li>
+<li><p><strong>store</strong> (<a class="reference internal" href="stores.html#skill.stores.LocalSkillStore" title="skill.stores.LocalSkillStore"><em>LocalSkillStore</em></a><em> | </em><em>None</em>) – Skill store to read from. Uses default if None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skill.install.link_skills">
+<span class="sig-prename descclassname"><span class="pre">skill.install.</span></span><span class="sig-name descname"><span class="pre">link_skills</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/skill/install.html#link_skills"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.install.link_skills" title="Link to this definition"></a></dt>
+<dd><p>Symlink (or copy) every skill found under <code class="docutils literal notranslate"><span class="pre">source</span></code> into <code class="docutils literal notranslate"><span class="pre">target</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">source</span></code> can be a skills directory directly, a project root (will look
+for <code class="docutils literal notranslate"><span class="pre">.claude/skills/</span></code> or <code class="docutils literal notranslate"><span class="pre">{pkg}/data/skills/</span></code>), or any directory
+containing skill subdirectories (each with a <code class="docutils literal notranslate"><span class="pre">SKILL.md</span></code>).</p>
+<p>Each candidate skill is validated before linking. Skills with validation
+errors are skipped and a warning is emitted.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">target</span></code> directory is checked against known agent target directories.
+If it doesn’t match a recognized target, a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> is raised (unless
+it’s empty or already contains skills).</p>
+<p>Returns a dict mapping skill names to their installed paths.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<em>str</em>) – A skills directory, or a project root containing skills.</p></li>
+<li><p><strong>target</strong> (<em>str</em>) – Destination directory. Defaults to <code class="docutils literal notranslate"><span class="pre">~/.claude/skills</span></code>.</p></li>
+<li><p><strong>copy</strong> (<em>bool</em>) – If True, copy instead of symlink.</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – If True, overwrite existing files/links at the destination.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skill.install.uninstall">
+<span class="sig-prename descclassname"><span class="pre">skill.install.</span></span><span class="sig-name descname"><span class="pre">uninstall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'project'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="stores.html#skill.stores.LocalSkillStore" title="skill.stores.LocalSkillStore"><span class="pre">LocalSkillStore</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/skill/install.html#uninstall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.install.uninstall" title="Link to this definition"></a></dt>
+<dd><p>Remove a skill’s installation from agent target directories.</p>
+<p>Returns a dict mapping agent target names to the paths that were removed.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="create.html" class="btn btn-neutral float-left" title="skill.create" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="registry.html" class="btn btn-neutral float-right" title="skill.registry" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

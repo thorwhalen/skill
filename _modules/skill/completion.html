@@ -1,0 +1,256 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skill.completion &mdash; skill 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            skill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill.html">skill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/__main__.html">skill.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/ai.html">skill.ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends.html">skill.backends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends/github.html">skill.backends.github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/base.html">skill.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/completion.html">skill.completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/config.html">skill.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/create.html">skill.create</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/install.html">skill.install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/registry.html">skill.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/search.html">skill.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/stores.html">skill.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/translate.html">skill.translate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/util.html">skill.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">skill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../skill.html">skill</a></li>
+      <li class="breadcrumb-item active">skill.completion</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for skill.completion</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Shell completion setup and diagnostics.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config_dir</span>
+
+<span class="n">_COMPLETION_HINTED_MARKER</span> <span class="o">=</span> <span class="n">config_dir</span><span class="p">()</span> <span class="o">/</span> <span class="s1">&#39;.completion_hinted&#39;</span>
+
+<span class="n">_SHELL_CONFIGS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;zsh&#39;</span><span class="p">:</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s1">&#39;.zshrc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;bash&#39;</span><span class="p">:</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s1">&#39;.bashrc&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">_REGISTER_LINE</span> <span class="o">=</span> <span class="s1">&#39;eval &quot;$(register-python-argcomplete skill)&quot;&#39;</span>
+<span class="n">_REGISTER_COMMENT</span> <span class="o">=</span> <span class="s1">&#39;# Shell completion for the skill CLI (added by `skill install-completion`)&#39;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_detect_shell</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Detect the current shell from the SHELL environment variable.</span>
+
+<span class="sd">    &gt;&gt;&gt; _detect_shell() in (&#39;bash&#39;, &#39;zsh&#39;, &#39;fish&#39;, &#39;unknown&#39;)</span>
+<span class="sd">    True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">shell_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SHELL&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">shell_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">shell_path</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">if</span> <span class="n">shell_name</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;bash&#39;</span><span class="p">,</span> <span class="s1">&#39;zsh&#39;</span><span class="p">,</span> <span class="s1">&#39;fish&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">shell_name</span>
+    <span class="k">return</span> <span class="s1">&#39;unknown&#39;</span>
+
+
+<div class="viewcode-block" id="is_completion_registered">
+<a class="viewcode-back" href="../../module_docs/skill/completion.html#skill.completion.is_completion_registered">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_completion_registered</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check whether shell completion for ``skill`` appears to be set up.</span>
+
+<span class="sd">    Looks for the ``register-python-argcomplete skill`` line in the</span>
+<span class="sd">    user&#39;s shell config, or checks if argcomplete global activation is present.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">shell</span> <span class="o">=</span> <span class="n">_detect_shell</span><span class="p">()</span>
+    <span class="n">config_file</span> <span class="o">=</span> <span class="n">_SHELL_CONFIGS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">config_file</span> <span class="ow">and</span> <span class="n">config_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">config_file</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;register-python-argcomplete skill&#39;</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="c1"># Global activation: the user has run activate-global-python-argcomplete</span>
+        <span class="k">if</span> <span class="s1">&#39;activate-global-python-argcomplete&#39;</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="s1">&#39;python-argcomplete-check-easy-install-script&#39;</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="c1"># Also check if the global completion script is installed</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;/etc/bash_completion.d&#39;</span><span class="p">,</span> <span class="s1">&#39;/usr/local/etc/bash_completion.d&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;_python-argcomplete&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="install_completion">
+<a class="viewcode-back" href="../../module_docs/skill/completion.html#skill.completion.install_completion">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">install_completion</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Register shell completion for ``skill`` in the user&#39;s shell config.</span>
+
+<span class="sd">    Returns a status message describing what was done.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s1">&#39;register-python-argcomplete&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s2">&quot;argcomplete is not installed or register-python-argcomplete is &quot;</span>
+            <span class="s2">&quot;not on PATH. Install it with: pip install argcomplete&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">shell</span> <span class="o">=</span> <span class="n">_detect_shell</span><span class="p">()</span>
+    <span class="n">config_file</span> <span class="o">=</span> <span class="n">_SHELL_CONFIGS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">shell</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">config_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Unsupported shell — give manual instructions</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;register-python-argcomplete&#39;</span><span class="p">,</span> <span class="s1">&#39;skill&#39;</span><span class="p">],</span>
+            <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Could not detect a supported shell (got </span><span class="si">{</span><span class="n">shell</span><span class="si">!r}</span><span class="s2">). &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Add the following to your shell config manually:</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">_REGISTER_LINE</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Or use the output of: register-python-argcomplete skill&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">config_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">config_file</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;register-python-argcomplete skill&#39;</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Completion already registered in </span><span class="si">{</span><span class="n">config_file</span><span class="si">}</span><span class="s2">.&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="c1"># Append the registration line</span>
+    <span class="n">addition</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">_REGISTER_COMMENT</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">_REGISTER_LINE</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">config_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">addition</span><span class="p">)</span>
+    <span class="n">_mark_hinted</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Completion registered in </span><span class="si">{</span><span class="n">config_file</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;Restart your shell or run: source </span><span class="si">{</span><span class="n">config_file</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="maybe_hint_completion">
+<a class="viewcode-back" href="../../module_docs/skill/completion.html#skill.completion.maybe_hint_completion">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">maybe_hint_completion</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print a one-time hint about shell completion if it isn&#39;t set up.</span>
+
+<span class="sd">    Called on first CLI invocation. Writes a marker file so the hint</span>
+<span class="sd">    is only shown once.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_COMPLETION_HINTED_MARKER</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">is_completion_registered</span><span class="p">():</span>
+        <span class="n">_mark_hinted</span><span class="p">()</span>
+        <span class="k">return</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;Tip: Enable tab completion for skill commands by running:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;  skill install-completion</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">_mark_hinted</span><span class="p">()</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_mark_hinted</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write the marker file so the completion hint is not shown again.&quot;&quot;&quot;</span>
+    <span class="n">_COMPLETION_HINTED_MARKER</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">_COMPLETION_HINTED_MARKER</span><span class="o">.</span><span class="n">touch</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

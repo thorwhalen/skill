@@ -1,0 +1,649 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skill.install &mdash; skill 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            skill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill.html">skill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/__main__.html">skill.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/ai.html">skill.ai</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends.html">skill.backends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/backends/github.html">skill.backends.github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/base.html">skill.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/completion.html">skill.completion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/config.html">skill.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/create.html">skill.create</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/install.html">skill.install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/registry.html">skill.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/search.html">skill.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/stores.html">skill.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/translate.html">skill.translate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/skill/util.html">skill.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">skill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../skill.html">skill</a></li>
+      <li class="breadcrumb-item active">skill.install</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for skill.install</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Installation logic: symlink/copy skills into agent target directories.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Skill</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.stores</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocalSkillStore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.translate</span><span class="w"> </span><span class="kn">import</span> <span class="n">translators</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_project_root</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Registry</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skill.create</span><span class="w"> </span><span class="kn">import</span> <span class="n">_validate_skill</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Agent target registry</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="AgentTarget">
+<a class="viewcode-back" href="../../module_docs/skill/install.html#skill.install.AgentTarget">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AgentTarget</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Describes where an agent expects skills to be installed.</span>
+
+<span class="sd">    Path templates support ``{home}``, ``{project}``, and ``{name}`` placeholders.</span>
+
+<span class="sd">    &gt;&gt;&gt; str(AgentTarget(name=&#39;test&#39;, project_path=&#39;{project}/.test/{name}&#39;).format_project_path(&#39;/proj&#39;, &#39;my-skill&#39;))</span>
+<span class="sd">    &#39;/proj/.test/my-skill&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">global_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">project_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;skill.md&#39;</span>
+    <span class="n">needs_translation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_global_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_path</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">home</span><span class="o">=</span><span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_project_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">project_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_path</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">))</span></div>
+
+
+
+<span class="n">agent_targets</span><span class="p">:</span> <span class="n">Registry</span><span class="p">[</span><span class="n">AgentTarget</span><span class="p">]</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">(</span><span class="s1">&#39;agent_targets&#39;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Registry of agent targets (e.g., claude-code, cursor, copilot).&quot;&quot;&quot;</span>
+
+<span class="n">agent_targets</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
+    <span class="s1">&#39;claude-code&#39;</span><span class="p">,</span>
+    <span class="n">AgentTarget</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;claude-code&#39;</span><span class="p">,</span>
+        <span class="n">global_path</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{home}</span><span class="s1">/.claude/skills/</span><span class="si">{name}</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">project_path</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{project}</span><span class="s1">/.claude/skills/</span><span class="si">{name}</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;skill.md&#39;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="n">agent_targets</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
+    <span class="s1">&#39;cursor&#39;</span><span class="p">,</span>
+    <span class="n">AgentTarget</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;cursor&#39;</span><span class="p">,</span>
+        <span class="n">project_path</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{project}</span><span class="s1">/.cursor/rules/</span><span class="si">{name}</span><span class="s1">.mdc&#39;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;mdc&#39;</span><span class="p">,</span>
+        <span class="n">needs_translation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+<span class="n">agent_targets</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
+    <span class="s1">&#39;copilot&#39;</span><span class="p">,</span>
+    <span class="n">AgentTarget</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;copilot&#39;</span><span class="p">,</span>
+        <span class="n">project_path</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{project}</span><span class="s1">/.github/copilot-instructions.md&#39;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;copilot_md&#39;</span><span class="p">,</span>
+        <span class="n">needs_translation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1"># Keep AGENT_TARGETS as a backward-compatible alias</span>
+<span class="n">AGENT_TARGETS</span> <span class="o">=</span> <span class="n">agent_targets</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Link/copy helpers</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_existing</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Classify what currently exists at ``target``.</span>
+
+<span class="sd">    Returns one of: ``&#39;none&#39;``, ``&#39;our_symlink&#39;``, ``&#39;foreign_symlink&#39;``,</span>
+<span class="sd">    ``&#39;directory&#39;``, ``&#39;file&#39;``.</span>
+
+<span class="sd">    &gt;&gt;&gt; _check_existing(Path(&#39;/nonexistent/path/abc&#39;))</span>
+<span class="sd">    &#39;none&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">target</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">target</span><span class="o">.</span><span class="n">is_symlink</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s1">&#39;none&#39;</span>
+    <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">is_symlink</span><span class="p">():</span>
+        <span class="c1"># Check if it points into our skills dir</span>
+        <span class="n">link_target</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">skill.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">skills_dir</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">skills_dir</span><span class="p">())</span> <span class="ow">in</span> <span class="n">link_target</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;our_symlink&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;foreign_symlink&#39;</span>
+    <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s1">&#39;directory&#39;</span>
+    <span class="k">return</span> <span class="s1">&#39;file&#39;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_link</span><span class="p">(</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">target</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">copy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a symlink (or copy) from ``target`` pointing to ``source``.</span>
+
+<span class="sd">    On Windows, uses a directory junction instead of symlink.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">existing</span> <span class="o">=</span> <span class="n">_check_existing</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">existing</span> <span class="o">==</span> <span class="s1">&#39;our_symlink&#39;</span><span class="p">:</span>
+        <span class="c1"># Already linked by us — update if source changed</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">existing</span> <span class="o">!=</span> <span class="s1">&#39;none&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Target already exists (</span><span class="si">{</span><span class="n">existing</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Use force=True to overwrite.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">is_symlink</span><span class="p">()</span> <span class="ow">or</span> <span class="n">target</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="n">target</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">target</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+
+    <span class="n">target</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">copy</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">source</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">target</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Install / uninstall</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="install">
+<a class="viewcode-back" href="../../module_docs/skill/install.html#skill.install.install">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">install</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">agent_targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">scope</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;project&#39;</span><span class="p">,</span>
+    <span class="n">copy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">project_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">store</span><span class="p">:</span> <span class="n">LocalSkillStore</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Install a skill into one or more agent target directories.</span>
+
+<span class="sd">    Returns a dict mapping agent target names to the paths where the skill</span>
+<span class="sd">    was installed.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    key : str</span>
+<span class="sd">        Canonical skill key (e.g., ``&#39;owner/skill-name&#39;``).</span>
+<span class="sd">    agent_targets : list[str] | None</span>
+<span class="sd">        Agent targets to install into. Defaults to config&#39;s ``default_agent_targets``.</span>
+<span class="sd">    scope : str</span>
+<span class="sd">        ``&#39;project&#39;`` (default) or ``&#39;global&#39;``.</span>
+<span class="sd">    copy : bool</span>
+<span class="sd">        If True, copy instead of symlink.</span>
+<span class="sd">    force : bool</span>
+<span class="sd">        If True, overwrite existing files/links.</span>
+<span class="sd">    project_dir : Path | str | None</span>
+<span class="sd">        Project root. Auto-detected if None.</span>
+<span class="sd">    store : LocalSkillStore | None</span>
+<span class="sd">        Skill store to read from. Uses default if None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">store</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">store</span> <span class="o">=</span> <span class="n">LocalSkillStore</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">store</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skill </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s2"> not found in local store. Fetch it first.&quot;</span><span class="p">)</span>
+
+    <span class="n">skill</span> <span class="o">=</span> <span class="n">store</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">()</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">agent_targets</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">default_agent_targets</span>
+
+    <span class="k">if</span> <span class="n">scope</span> <span class="o">==</span> <span class="s1">&#39;project&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">project_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">project_dir</span> <span class="o">=</span> <span class="n">find_project_root</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">project_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;Could not detect project root. Pass project_dir explicitly &quot;</span>
+                <span class="s2">&quot;or run from within a project directory.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">project_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">project_dir</span><span class="p">)</span>
+
+    <span class="n">installed</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">target_name</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">AGENT_TARGETS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">target_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown agent target: </span><span class="si">{</span><span class="n">target_name</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">skill_name</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">if</span> <span class="n">scope</span> <span class="o">==</span> <span class="s1">&#39;project&#39;</span><span class="p">:</span>
+            <span class="n">dest</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">format_project_path</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dest</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">format_global_path</span><span class="p">(</span><span class="n">skill_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dest</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Agent target </span><span class="si">{</span><span class="n">target_name</span><span class="si">!r}</span><span class="s2"> has no </span><span class="si">{</span><span class="n">scope</span><span class="si">}</span><span class="s2"> path&quot;</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">needs_translation</span><span class="p">:</span>
+            <span class="c1"># Write translated content as a file</span>
+            <span class="n">translator</span> <span class="o">=</span> <span class="n">translators</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">translator</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;No translator for format </span><span class="si">{</span><span class="n">target</span><span class="o">.</span><span class="n">format</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span>
+                <span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">translator</span><span class="p">(</span><span class="n">skill</span><span class="p">)</span>
+            <span class="n">dest</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">format</span> <span class="o">==</span> <span class="s1">&#39;copilot_md&#39;</span><span class="p">:</span>
+                <span class="c1"># Copilot: append to the instructions file</span>
+                <span class="n">_append_or_create</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dest</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+            <span class="n">installed</span><span class="p">[</span><span class="n">target_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">dest</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Symlink/copy the skill directory</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">source_path</span> <span class="ow">or</span> <span class="n">store</span><span class="o">.</span><span class="n">_key_to_path</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">_create_link</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+            <span class="n">installed</span><span class="p">[</span><span class="n">target_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">dest</span>
+
+    <span class="k">return</span> <span class="n">installed</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_append_or_create</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Append content to a file, or create it. Avoids duplicates by skill name.&quot;&quot;&quot;</span>
+    <span class="n">marker</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&lt;!-- skill:</span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s1"> --&gt;&#39;</span>
+    <span class="n">end_marker</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&lt;!-- /skill:</span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s1"> --&gt;&#39;</span>
+
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">existing</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">existing</span><span class="p">:</span>
+            <span class="c1"># Replace existing section</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">existing</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">marker</span><span class="p">)</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">existing</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">end_marker</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">end_marker</span><span class="p">)</span>
+            <span class="n">existing</span> <span class="o">=</span> <span class="n">existing</span><span class="p">[:</span><span class="n">start</span><span class="p">]</span> <span class="o">+</span> <span class="n">existing</span><span class="p">[</span><span class="n">end</span><span class="p">:]</span>
+            <span class="n">existing</span> <span class="o">=</span> <span class="n">existing</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">existing</span> <span class="o">=</span> <span class="n">existing</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">existing</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">existing</span><span class="si">}{</span><span class="n">marker</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">end_marker</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="uninstall">
+<a class="viewcode-back" href="../../module_docs/skill/install.html#skill.install.uninstall">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">uninstall</span><span class="p">(</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">agent_targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">scope</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;project&#39;</span><span class="p">,</span>
+    <span class="n">project_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">store</span><span class="p">:</span> <span class="n">LocalSkillStore</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove a skill&#39;s installation from agent target directories.</span>
+
+<span class="sd">    Returns a dict mapping agent target names to the paths that were removed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">store</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">store</span> <span class="o">=</span> <span class="n">LocalSkillStore</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">store</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skill </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s2"> not found in local store.&quot;</span><span class="p">)</span>
+
+    <span class="n">skill</span> <span class="o">=</span> <span class="n">store</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">()</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">agent_targets</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">default_agent_targets</span>
+
+    <span class="k">if</span> <span class="n">scope</span> <span class="o">==</span> <span class="s1">&#39;project&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">project_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">project_dir</span> <span class="o">=</span> <span class="n">find_project_root</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">project_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Could not detect project root.&quot;</span><span class="p">)</span>
+        <span class="n">project_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">project_dir</span><span class="p">)</span>
+
+    <span class="n">removed</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">target_name</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">AGENT_TARGETS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">target_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">skill_name</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">if</span> <span class="n">scope</span> <span class="o">==</span> <span class="s1">&#39;project&#39;</span><span class="p">:</span>
+            <span class="n">dest</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">format_project_path</span><span class="p">(</span><span class="n">project_dir</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dest</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">format_global_path</span><span class="p">(</span><span class="n">skill_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dest</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">format</span> <span class="o">==</span> <span class="s1">&#39;copilot_md&#39;</span> <span class="ow">and</span> <span class="n">dest</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="c1"># Remove the section from copilot instructions</span>
+            <span class="n">_remove_section</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">)</span>
+            <span class="n">removed</span><span class="p">[</span><span class="n">target_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">dest</span>
+        <span class="k">elif</span> <span class="n">dest</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">or</span> <span class="n">dest</span><span class="o">.</span><span class="n">is_symlink</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">dest</span><span class="o">.</span><span class="n">is_symlink</span><span class="p">()</span> <span class="ow">or</span> <span class="n">dest</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+                <span class="n">dest</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">dest</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
+            <span class="n">removed</span><span class="p">[</span><span class="n">target_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">dest</span>
+
+    <span class="k">return</span> <span class="n">removed</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Link skills from a source directory</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="n">_SKILL_MARKER</span> <span class="o">=</span> <span class="s1">&#39;SKILL.md&#39;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_has_skills</span><span class="p">(</span><span class="n">directory</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return True if ``directory`` contains at least one skill subdirectory.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">directory</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span>
+        <span class="n">child</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="n">child</span> <span class="o">/</span> <span class="n">_SKILL_MARKER</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">directory</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_resolve_skills_source</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find the actual skills directory given a path that might be a project root.</span>
+
+<span class="sd">    Resolution order:</span>
+
+<span class="sd">    1. If ``source`` itself contains skill subdirectories, use it directly.</span>
+<span class="sd">    2. If ``source/.claude/skills`` exists and contains skills, use that.</span>
+<span class="sd">    3. If ``source/{pkg}/data/skills`` exists for some package ``pkg`` (detected</span>
+<span class="sd">       via ``pyproject.toml``), use that.</span>
+<span class="sd">    4. Fall back to ``source`` as-is (will yield nothing if no skills found).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># 1. Direct: source already contains skill subdirs</span>
+    <span class="k">if</span> <span class="n">_has_skills</span><span class="p">(</span><span class="n">source</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">source</span>
+
+    <span class="c1"># 2. .claude/skills convention</span>
+    <span class="n">claude_skills</span> <span class="o">=</span> <span class="n">source</span> <span class="o">/</span> <span class="s1">&#39;.claude&#39;</span> <span class="o">/</span> <span class="s1">&#39;skills&#39;</span>
+    <span class="k">if</span> <span class="n">_has_skills</span><span class="p">(</span><span class="n">claude_skills</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">claude_skills</span>
+
+    <span class="c1"># 3. {pkg}/data/skills convention (Python projects)</span>
+    <span class="n">pyproject</span> <span class="o">=</span> <span class="n">source</span> <span class="o">/</span> <span class="s1">&#39;pyproject.toml&#39;</span>
+    <span class="k">if</span> <span class="n">pyproject</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="c1"># Infer package name from the directory name (common convention)</span>
+        <span class="n">pkg_name</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
+        <span class="n">pkg_skills</span> <span class="o">=</span> <span class="n">source</span> <span class="o">/</span> <span class="n">pkg_name</span> <span class="o">/</span> <span class="s1">&#39;data&#39;</span> <span class="o">/</span> <span class="s1">&#39;skills&#39;</span>
+        <span class="k">if</span> <span class="n">_has_skills</span><span class="p">(</span><span class="n">pkg_skills</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">pkg_skills</span>
+
+    <span class="k">return</span> <span class="n">source</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_iter_skill_dirs</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Yield ``(name, path)`` for each skill directory found under ``source``.</span>
+
+<span class="sd">    A skill directory is any immediate subdirectory containing a ``SKILL.md``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">source</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">NotADirectoryError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Not a directory: </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="n">child</span> <span class="o">/</span> <span class="n">_SKILL_MARKER</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">child</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">child</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Target validation</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_known_target_parents</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the set of resolved parent directories for all known agent targets.</span>
+
+<span class="sd">    For example, ``~/.claude/skills`` for claude-code global,</span>
+<span class="sd">    ``.cursor/rules`` for cursor project, etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parents</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">home</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">AGENT_TARGETS</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">global_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Format with a dummy name, then take the parent</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">global_path</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">home</span><span class="o">=</span><span class="n">home</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;_dummy&#39;</span><span class="p">))</span>
+            <span class="n">parents</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parents</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_recognized_target</span><span class="p">(</span><span class="n">target_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check whether ``target_path`` is a recognized skills target directory.</span>
+
+<span class="sd">    Recognized if:</span>
+<span class="sd">    - It matches a known agent target parent directory (e.g. ~/.claude/skills).</span>
+<span class="sd">    - It already contains at least one skill subdirectory (existing skills dir).</span>
+<span class="sd">    - It is empty or does not yet exist (fresh target — allow it).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">resolved</span> <span class="o">=</span> <span class="n">target_path</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+
+    <span class="c1"># Known agent target directories</span>
+    <span class="k">if</span> <span class="n">resolved</span> <span class="ow">in</span> <span class="n">_known_target_parents</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># Doesn&#39;t exist yet or is empty — safe to create into</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">resolved</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">resolved</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">resolved</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># Already contains skills — it&#39;s a skills directory</span>
+    <span class="k">if</span> <span class="n">_has_skills</span><span class="p">(</span><span class="n">resolved</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span>
+
+
+<div class="viewcode-block" id="link_skills">
+<a class="viewcode-back" href="../../module_docs/skill/install.html#skill.install.link_skills">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">link_skills</span><span class="p">(</span>
+    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">target</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">copy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Symlink (or copy) every skill found under ``source`` into ``target``.</span>
+
+<span class="sd">    ``source`` can be a skills directory directly, a project root (will look</span>
+<span class="sd">    for ``.claude/skills/`` or ``{pkg}/data/skills/``), or any directory</span>
+<span class="sd">    containing skill subdirectories (each with a ``SKILL.md``).</span>
+
+<span class="sd">    Each candidate skill is validated before linking. Skills with validation</span>
+<span class="sd">    errors are skipped and a warning is emitted.</span>
+
+<span class="sd">    The ``target`` directory is checked against known agent target directories.</span>
+<span class="sd">    If it doesn&#39;t match a recognized target, a ``ValueError`` is raised (unless</span>
+<span class="sd">    it&#39;s empty or already contains skills).</span>
+
+<span class="sd">    Returns a dict mapping skill names to their installed paths.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    source : str</span>
+<span class="sd">        A skills directory, or a project root containing skills.</span>
+<span class="sd">    target : str</span>
+<span class="sd">        Destination directory. Defaults to ``~/.claude/skills``.</span>
+<span class="sd">    copy : bool</span>
+<span class="sd">        If True, copy instead of symlink.</span>
+<span class="sd">    force : bool</span>
+<span class="sd">        If True, overwrite existing files/links at the destination.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">source_path</span> <span class="o">=</span> <span class="n">_resolve_skills_source</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">source</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">target</span><span class="p">:</span>
+        <span class="n">target_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">target_path</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s1">&#39;.claude&#39;</span> <span class="o">/</span> <span class="s1">&#39;skills&#39;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_recognized_target</span><span class="p">(</span><span class="n">target_path</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Target directory </span><span class="si">{</span><span class="n">target_path</span><span class="si">}</span><span class="s2"> is not a recognized skills &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;target. Known targets: &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">_known_target_parents</span><span class="p">()))</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;The target must be a known agent skills directory, an empty &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;directory, or a directory already containing skills.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">installed</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">skill_dir</span> <span class="ow">in</span> <span class="n">_iter_skill_dirs</span><span class="p">(</span><span class="n">source_path</span><span class="p">):</span>
+        <span class="n">skill</span> <span class="o">=</span> <span class="n">Skill</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span><span class="n">skill_dir</span><span class="p">)</span>
+        <span class="n">issues</span> <span class="o">=</span> <span class="n">_validate_skill</span><span class="p">(</span><span class="n">skill</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">issues</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Skipping invalid skill </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> at </span><span class="si">{</span><span class="n">skill_dir</span><span class="si">}</span><span class="s2">: &quot;</span>
+                <span class="o">+</span> <span class="s1">&#39;; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">issues</span><span class="p">),</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">dest</span> <span class="o">=</span> <span class="n">target_path</span> <span class="o">/</span> <span class="n">name</span>
+        <span class="n">_create_link</span><span class="p">(</span><span class="n">skill_dir</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+        <span class="n">installed</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">dest</span>
+
+    <span class="k">return</span> <span class="n">installed</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_remove_section</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">skill_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove a skill section from a copilot instructions file.&quot;&quot;&quot;</span>
+    <span class="n">marker</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&lt;!-- skill:</span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s1"> --&gt;&#39;</span>
+    <span class="n">end_marker</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&lt;!-- /skill:</span><span class="si">{</span><span class="n">skill_name</span><span class="si">}</span><span class="s1"> --&gt;&#39;</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">content</span> <span class="ow">and</span> <span class="n">end_marker</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">marker</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">end_marker</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">end_marker</span><span class="p">)</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="p">[:</span><span class="n">start</span><span class="p">]</span> <span class="o">+</span> <span class="n">content</span><span class="p">[</span><span class="n">end</span><span class="p">:]</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">content</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

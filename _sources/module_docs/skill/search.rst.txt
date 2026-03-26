@@ -1,0 +1,4 @@
+skill.search
+============
+.. automodule:: skill.search
+   :members:

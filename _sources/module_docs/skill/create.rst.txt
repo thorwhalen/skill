@@ -1,0 +1,4 @@
+skill.create
+============
+.. automodule:: skill.create
+   :members:

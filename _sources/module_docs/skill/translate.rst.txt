@@ -1,0 +1,4 @@
+skill.translate
+===============
+.. automodule:: skill.translate
+   :members:

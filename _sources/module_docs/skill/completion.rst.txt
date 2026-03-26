@@ -1,0 +1,4 @@
+skill.completion
+================
+.. automodule:: skill.completion
+   :members:

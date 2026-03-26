@@ -1,0 +1,19 @@
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   module_docs/skill
+   module_docs/skill/__main__
+   module_docs/skill/ai
+   module_docs/skill/backends
+   module_docs/skill/backends/github
+   module_docs/skill/base
+   module_docs/skill/completion
+   module_docs/skill/config
+   module_docs/skill/create
+   module_docs/skill/install
+   module_docs/skill/registry
+   module_docs/skill/search
+   module_docs/skill/stores
+   module_docs/skill/translate
+   module_docs/skill/util

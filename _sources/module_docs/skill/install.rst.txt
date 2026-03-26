@@ -1,0 +1,4 @@
+skill.install
+=============
+.. automodule:: skill.install
+   :members:
