@@ -226,7 +226,9 @@ def _validate_skill(skill: Skill) -> list[str]:
     return issues
 
 
-def check_dependencies(skill: Skill, *, store: LocalSkillStore | None = None) -> list[str]:
+def check_dependencies(
+    skill: Skill, *, store: LocalSkillStore | None = None
+) -> list[str]:
     """Check if a skill's declared dependencies are installed.
 
     Looks for ``metadata.dependencies`` (a list of canonical skill keys).

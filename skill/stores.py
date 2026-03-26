@@ -43,7 +43,9 @@ class LocalSkillStore(MutableMapping):
         path = self._key_to_path(key)
         skill.write_to(path)
 
-    def set_source_meta(self, key: str, *, url: str | None = None, source: str | None = None) -> None:
+    def set_source_meta(
+        self, key: str, *, url: str | None = None, source: str | None = None
+    ) -> None:
         """Store source metadata (URL, origin) alongside a skill."""
         path = self._key_to_path(key) / _SOURCE_META_FILE
         meta = {}

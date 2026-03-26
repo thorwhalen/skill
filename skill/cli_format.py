@@ -73,7 +73,7 @@ def format_skill_info_table(items: list[SkillInfo]) -> str:
         lines.append(f"{marker} {key}  {desc}  ({source})")
         if info.url:
             # Indent URL under the description column
-            indent = ' ' * (1 + 1 + key_width + 2)
+            indent = " " * (1 + 1 + key_width + 2)
             lines.append(f"{indent}{info.url}")
 
     return "\n".join(lines)
@@ -127,7 +127,7 @@ def format_skill(
 
     # Dependency warnings
     if dep_warnings:
-        lines.append('')
+        lines.append("")
         for w in dep_warnings:
             lines.append(f"  WARNING: {w}")
 
@@ -144,6 +144,7 @@ def format_skill(
 # Sources formatting
 # ---------------------------------------------------------------------------
 
+
 def format_sources(sources: list[dict]) -> str:
     """Format a list of source dicts for terminal display.
 
@@ -152,19 +153,19 @@ def format_sources(sources: list[dict]) -> str:
     True
     """
     if not sources:
-        return '  (no sources configured)'
+        return "  (no sources configured)"
 
     lines = []
     for src in sources:
-        status = '✓' if src.get('enabled', True) else '✗'
-        name = src['name']
-        homepage = src.get('homepage') or ''
+        status = "✓" if src.get("enabled", True) else "✗"
+        name = src["name"]
+        homepage = src.get("homepage") or ""
         line = f"  {status} {name}"
         if homepage:
             line += f"  {homepage}"
         lines.append(line)
 
-    return '\n'.join(lines)
+    return "\n".join(lines)
 
 
 # ---------------------------------------------------------------------------
