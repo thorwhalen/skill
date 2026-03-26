@@ -91,6 +91,19 @@ def _validate_lengths(skill: Skill) -> list[str]:
 validators.register("lengths", _validate_lengths)
 
 
+def _validate_dependencies(skill: Skill) -> list[str]:
+    """Check if declared dependencies are installed locally.
+
+    >>> from skill.base import SkillMeta
+    >>> _validate_dependencies(Skill(meta=SkillMeta(name='x', description='y'), body='z'))
+    []
+    """
+    return check_dependencies(skill)
+
+
+validators.register("dependencies", _validate_dependencies)
+
+
 # ---------------------------------------------------------------------------
 # Template
 # ---------------------------------------------------------------------------
@@ -211,6 +224,35 @@ def _validate_skill(skill: Skill) -> list[str]:
     for validator in validators.values():
         issues.extend(validator(skill))
     return issues
+
+
+def check_dependencies(skill: Skill, *, store: LocalSkillStore | None = None) -> list[str]:
+    """Check if a skill's declared dependencies are installed.
+
+    Looks for ``metadata.dependencies`` (a list of canonical skill keys).
+    Returns a list of warning strings for missing dependencies (empty = all satisfied).
+
+    >>> from skill.base import SkillMeta
+    >>> s = Skill(meta=SkillMeta(name='x', description='y', metadata={'dependencies': ['alice/foo']}), body='z')
+    >>> warnings = check_dependencies(s)
+    >>> any('alice/foo' in w for w in warnings)
+    True
+    """
+    deps = skill.meta.metadata.get("dependencies")
+    if not deps:
+        return []
+    if isinstance(deps, str):
+        deps = [deps]
+    if not isinstance(deps, list):
+        return []
+
+    if store is None:
+        store = LocalSkillStore()
+
+    missing = [d for d in deps if d not in store]
+    if missing:
+        return [f"Missing dependencies: {', '.join(missing)}"]
+    return []
 
 
 def _is_valid_name(name: str) -> bool:

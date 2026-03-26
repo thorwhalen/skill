@@ -12,7 +12,7 @@ from skill.translate import translators
 from skill.util import find_project_root
 from skill.config import load_config
 from skill.registry import Registry
-from skill.create import _validate_skill
+from skill.create import _validate_skill, check_dependencies
 
 
 # ---------------------------------------------------------------------------
@@ -194,6 +194,12 @@ def install(
         raise KeyError(f"Skill {key!r} not found in local store. Fetch it first.")
 
     skill = store[key]
+
+    # Warn about missing dependencies (non-blocking)
+    dep_warnings = check_dependencies(skill, store=store)
+    for w in dep_warnings:
+        warnings.warn(w, stacklevel=2)
+
     config = load_config()
     targets = agent_targets or config.default_agent_targets
 

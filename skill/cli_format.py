@@ -1,6 +1,5 @@
 """Terminal-friendly formatting for CLI output."""
 
-import os
 import shutil
 
 from skill.base import Skill, SkillInfo
@@ -37,7 +36,7 @@ def format_skill_info(info: SkillInfo) -> str:
 def format_skill_info_table(items: list[SkillInfo]) -> str:
     """Format a list of SkillInfo as an aligned, readable table.
 
-    Returns an empty string if items is empty.
+    Shows URL on a second line when available.
 
     >>> items = [
     ...     SkillInfo('alice/lint', 'lint', 'Lint Python code', 'local', installed=True),
@@ -46,6 +45,8 @@ def format_skill_info_table(items: list[SkillInfo]) -> str:
     ... ]
     >>> out = format_skill_info_table(items)
     >>> '✓' in out and 'alice/lint' in out
+    True
+    >>> 'https://github.com/bob/react-tips' in out
     True
     """
     if not items:
@@ -70,6 +71,10 @@ def format_skill_info_table(items: list[SkillInfo]) -> str:
         desc = _truncate(info.description, desc_width).ljust(desc_width)
         source = info.source
         lines.append(f"{marker} {key}  {desc}  ({source})")
+        if info.url:
+            # Indent URL under the description column
+            indent = ' ' * (1 + 1 + key_width + 2)
+            lines.append(f"{indent}{info.url}")
 
     return "\n".join(lines)
 
@@ -79,8 +84,21 @@ def format_skill_info_table(items: list[SkillInfo]) -> str:
 # ---------------------------------------------------------------------------
 
 
-def format_skill(skill: Skill) -> str:
-    """Format a full Skill for terminal display."""
+def format_skill(
+    skill: Skill,
+    *,
+    url: str | None = None,
+    dep_warnings: list[str] | None = None,
+) -> str:
+    """Format a full Skill for terminal display.
+
+    >>> from skill.base import SkillMeta
+    >>> s = Skill(meta=SkillMeta(name='test', description='A test'), body='# Hello')
+    >>> 'Name:' in format_skill(s)
+    True
+    >>> 'WARNING' in format_skill(s, dep_warnings=['Missing dependencies: alice/foo'])
+    True
+    """
     m = skill.meta
     lines = [
         f"Name:          {m.name}",
@@ -90,6 +108,8 @@ def format_skill(skill: Skill) -> str:
         lines.append(f"License:       {m.license}")
     if m.compatibility:
         lines.append(f"Compatibility: {m.compatibility}")
+    if url:
+        lines.append(f"URL:           {url}")
     if skill.source_path:
         lines.append(f"Path:          {skill.source_path}")
     if skill.resources:
@@ -98,6 +118,19 @@ def format_skill(skill: Skill) -> str:
     if m.allowed_tools:
         lines.append(f"Tools:         {', '.join(m.allowed_tools)}")
 
+    deps = m.metadata.get("dependencies")
+    if deps:
+        if isinstance(deps, str):
+            deps = [deps]
+        if isinstance(deps, list):
+            lines.append(f"Dependencies:  {', '.join(deps)}")
+
+    # Dependency warnings
+    if dep_warnings:
+        lines.append('')
+        for w in dep_warnings:
+            lines.append(f"  WARNING: {w}")
+
     # Body preview
     body = skill.body.strip()
     if body:
@@ -105,6 +138,33 @@ def format_skill(skill: Skill) -> str:
         lines.append(body)
 
     return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
+# Sources formatting
+# ---------------------------------------------------------------------------
+
+def format_sources(sources: list[dict]) -> str:
+    """Format a list of source dicts for terminal display.
+
+    >>> out = format_sources([{'name': 'github', 'homepage': 'https://github.com', 'enabled': True}])
+    >>> 'github' in out and 'https://github.com' in out
+    True
+    """
+    if not sources:
+        return '  (no sources configured)'
+
+    lines = []
+    for src in sources:
+        status = '✓' if src.get('enabled', True) else '✗'
+        name = src['name']
+        homepage = src.get('homepage') or ''
+        line = f"  {status} {name}"
+        if homepage:
+            line += f"  {homepage}"
+        lines.append(line)
+
+    return '\n'.join(lines)
 
 
 # ---------------------------------------------------------------------------

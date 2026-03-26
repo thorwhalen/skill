@@ -16,6 +16,7 @@ class SkillSource(Protocol):
     """
 
     name: str
+    homepage: str | None
 
     def __getitem__(self, key: str) -> Skill: ...
 
@@ -45,6 +46,7 @@ class LocalDirSource:
     """
 
     name: str = "local"
+    homepage: str | None = None
 
     def __init__(self, root: Path):
         self.root = Path(root)

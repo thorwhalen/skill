@@ -9,6 +9,7 @@ Usage::
     python -m skill list
     python -m skill link-skills /path/to/project
     python -m skill install-completion
+    python -m skill sources
 """
 
 import argh
@@ -21,11 +22,15 @@ from skill import list_skills as _list_skills
 from skill import validate
 from skill import show as _show
 from skill import link_skills as _link_skills
+from skill import sources as _sources
+from skill import check_dependencies
+from skill.stores import LocalSkillStore
 from skill.completion import install_completion, maybe_hint_completion
 from skill.cli_format import (
     format_skill_info_table,
     format_skill,
     format_path_dict,
+    format_sources,
 )
 
 
@@ -64,7 +69,16 @@ def list_skills(
 def show(key: str) -> str:
     """Read and display a skill by its canonical key."""
     skill = _show(key)
-    return format_skill(skill)
+    store = LocalSkillStore()
+    source_meta = store.get_source_meta(key)
+    url = source_meta.get("url")
+    dep_warnings = check_dependencies(skill, store=store)
+    return format_skill(skill, url=url, dep_warnings=dep_warnings)
+
+
+def sources() -> str:
+    """List registered search backends and their status."""
+    return format_sources(_sources())
 
 
 def install(
@@ -146,6 +160,7 @@ def main():
             validate,
             show,
             link_skills,
+            sources,
             install_completion,
         ]
     )

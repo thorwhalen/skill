@@ -38,6 +38,7 @@ class GitHubSkillSource:
     """
 
     name: str = "github"
+    homepage: str = "https://github.com"
 
     def __init__(
         self,
