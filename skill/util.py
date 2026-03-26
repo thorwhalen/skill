@@ -27,15 +27,15 @@ class ParsedKey:
     name: str
 
     @classmethod
-    def from_string(cls, raw: str) -> 'ParsedKey':
+    def from_string(cls, raw: str) -> "ParsedKey":
         """Parse a raw key string into a normalized ParsedKey.
 
         Supports 1-part (name only), 2-part (owner/name), and 3-part
         (owner/repo/name) keys. All parts are lowercased.
         """
-        parts = raw.strip().split('/')
+        parts = raw.strip().split("/")
         if len(parts) == 1:
-            return cls(owner='_local', name=parts[0].lower())
+            return cls(owner="_local", name=parts[0].lower())
         elif len(parts) == 2:
             return cls(owner=parts[0].lower(), name=parts[1].lower())
         elif len(parts) == 3:
@@ -48,7 +48,7 @@ class ParsedKey:
         return f"{self.owner}/{self.name}"
 
 
-_ENV_VAR_PATTERN = re.compile(r'\$\{([^}]+)\}|\$([A-Za-z_][A-Za-z0-9_]*)')
+_ENV_VAR_PATTERN = re.compile(r"\$\{([^}]+)\}|\$([A-Za-z_][A-Za-z0-9_]*)")
 
 
 def resolve_env_vars(value: str) -> str:
@@ -76,17 +76,19 @@ def resolve_env_vars(value: str) -> str:
     return _ENV_VAR_PATTERN.sub(_replace, value)
 
 
-_PROJECT_MARKERS = frozenset({
-    '.git',
-    'pyproject.toml',
-    'setup.py',
-    'setup.cfg',
-    'package.json',
-    'Cargo.toml',
-    'go.mod',
-    'Makefile',
-    'pom.xml',
-})
+_PROJECT_MARKERS = frozenset(
+    {
+        ".git",
+        "pyproject.toml",
+        "setup.py",
+        "setup.cfg",
+        "package.json",
+        "Cargo.toml",
+        "go.mod",
+        "Makefile",
+        "pom.xml",
+    }
+)
 
 
 def find_project_root(start: Path | None = None) -> Path | None:
@@ -123,9 +125,9 @@ def atomic_write(path: Path, content: str) -> None:
     'hello'
     """
     path.parent.mkdir(parents=True, exist_ok=True)
-    fd, tmp = tempfile.mkstemp(dir=path.parent, suffix='.tmp')
+    fd, tmp = tempfile.mkstemp(dir=path.parent, suffix=".tmp")
     try:
-        with os.fdopen(fd, 'w') as f:
+        with os.fdopen(fd, "w") as f:
             f.write(content)
         os.replace(tmp, path)
     except BaseException:

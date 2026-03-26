@@ -32,7 +32,7 @@ from skill.registry import Registry
 def list_skills(
     *,
     agent_target: str | None = None,
-    scope: str = 'all',
+    scope: str = "all",
 ) -> list[SkillInfo]:
     """List locally installed skills, optionally filtered by agent target.
 

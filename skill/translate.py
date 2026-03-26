@@ -11,13 +11,14 @@ from skill.registry import Registry
 # Translator registry
 # ---------------------------------------------------------------------------
 
-translators: Registry[Callable[[Skill], str]] = Registry('translators')
+translators: Registry[Callable[[Skill], str]] = Registry("translators")
 """Registry of format translators (Skill -> target format string)."""
 
 
 # ---------------------------------------------------------------------------
 # SKILL.md -> Cursor .mdc
 # ---------------------------------------------------------------------------
+
 
 def to_mdc(skill: Skill) -> str:
     """Translate a Skill to Cursor ``.mdc`` format.
@@ -35,9 +36,9 @@ def to_mdc(skill: Skill) -> str:
     """
     lost = []
     if skill.meta.allowed_tools:
-        lost.append('allowed-tools')
+        lost.append("allowed-tools")
     if skill.meta.license:
-        lost.append('license')
+        lost.append("license")
     if skill.resources:
         lost.append(f"bundled resources ({', '.join(skill.resources)})")
     if lost:
@@ -47,21 +48,21 @@ def to_mdc(skill: Skill) -> str:
         )
 
     # Build .mdc frontmatter
-    lines = ['---']
-    lines.append(f'description: {skill.meta.description}')
+    lines = ["---"]
+    lines.append(f"description: {skill.meta.description}")
     # Check for cursor-specific metadata
-    globs = skill.meta.metadata.get('cursor.globs')
+    globs = skill.meta.metadata.get("cursor.globs")
     if globs:
-        lines.append(f'globs: {globs}')
-    always_apply = skill.meta.metadata.get('cursor.alwaysApply', 'false')
-    lines.append(f'alwaysApply: {always_apply}')
-    lines.append('---')
-    lines.append('')
+        lines.append(f"globs: {globs}")
+    always_apply = skill.meta.metadata.get("cursor.alwaysApply", "false")
+    lines.append(f"alwaysApply: {always_apply}")
+    lines.append("---")
+    lines.append("")
     lines.append(skill.body)
-    return '\n'.join(lines)
+    return "\n".join(lines)
 
 
-translators.register('mdc', to_mdc)
+translators.register("mdc", to_mdc)
 
 
 def from_mdc(content: str) -> Skill:
@@ -76,16 +77,16 @@ def from_mdc(content: str) -> Skill:
     """
     raw_meta, body = parse_frontmatter(content)
     metadata = {}
-    if 'globs' in raw_meta:
-        metadata['cursor.globs'] = str(raw_meta['globs'])
-    if 'alwaysApply' in raw_meta:
-        metadata['cursor.alwaysApply'] = str(raw_meta['alwaysApply'])
+    if "globs" in raw_meta:
+        metadata["cursor.globs"] = str(raw_meta["globs"])
+    if "alwaysApply" in raw_meta:
+        metadata["cursor.alwaysApply"] = str(raw_meta["alwaysApply"])
 
     # Derive name from description (first few words, slugified)
-    desc = raw_meta.get('description', '')
-    name = '-'.join(desc.lower().split()[:3]) or 'imported-rule'
+    desc = raw_meta.get("description", "")
+    name = "-".join(desc.lower().split()[:3]) or "imported-rule"
     # Clean name to valid chars
-    name = ''.join(c if c.isalnum() or c == '-' else '-' for c in name).strip('-')
+    name = "".join(c if c.isalnum() or c == "-" else "-" for c in name).strip("-")
 
     meta = SkillMeta(
         name=name,
@@ -98,6 +99,7 @@ def from_mdc(content: str) -> Skill:
 # ---------------------------------------------------------------------------
 # SKILL.md -> Copilot instructions
 # ---------------------------------------------------------------------------
+
 
 def to_copilot_instructions(skill: Skill) -> str:
     """Translate a Skill to GitHub Copilot instructions format.
@@ -116,7 +118,7 @@ def to_copilot_instructions(skill: Skill) -> str:
     """
     lost = []
     if skill.meta.allowed_tools:
-        lost.append('allowed-tools')
+        lost.append("allowed-tools")
     if skill.resources:
         lost.append(f"bundled resources ({', '.join(skill.resources)})")
     if lost:
@@ -125,19 +127,20 @@ def to_copilot_instructions(skill: Skill) -> str:
             stacklevel=2,
         )
 
-    lines = [f'## {skill.meta.name}', '']
-    lines.append(f'> {skill.meta.description}')
-    lines.append('')
+    lines = [f"## {skill.meta.name}", ""]
+    lines.append(f"> {skill.meta.description}")
+    lines.append("")
     lines.append(skill.body)
-    return '\n'.join(lines)
+    return "\n".join(lines)
 
 
-translators.register('copilot_md', to_copilot_instructions)
+translators.register("copilot_md", to_copilot_instructions)
 
 
 # ---------------------------------------------------------------------------
 # Dispatcher
 # ---------------------------------------------------------------------------
+
 
 def translate(skill: Skill, *, target_format: str) -> str:
     """Translate a Skill to the specified target format.
@@ -149,9 +152,8 @@ def translate(skill: Skill, *, target_format: str) -> str:
     """
     translator = translators.get(target_format)
     if translator is None:
-        available = ', '.join(sorted(translators))
+        available = ", ".join(sorted(translators))
         raise ValueError(
-            f"Unknown target format: {target_format!r}. "
-            f"Available: {available}"
+            f"Unknown target format: {target_format!r}. Available: {available}"
         )
     return translator(skill)

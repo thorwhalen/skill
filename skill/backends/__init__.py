@@ -44,20 +44,20 @@ class LocalDirSource:
     'greet'
     """
 
-    name: str = 'local'
+    name: str = "local"
 
     def __init__(self, root: Path):
         self.root = Path(root)
 
     def __getitem__(self, key: str) -> Skill:
-        parts = key.split('/')
+        parts = key.split("/")
         if len(parts) == 2:
             path = self.root / parts[0] / parts[1]
         elif len(parts) == 1:
             path = self.root / parts[0]
         else:
             raise KeyError(key)
-        if not (path / 'SKILL.md').exists():
+        if not (path / "SKILL.md").exists():
             raise KeyError(key)
         return Skill.from_path(path)
 
@@ -77,7 +77,7 @@ class LocalDirSource:
             if not owner_dir.is_dir():
                 continue
             for skill_dir in sorted(owner_dir.iterdir()):
-                if (skill_dir / 'SKILL.md').exists():
+                if (skill_dir / "SKILL.md").exists():
                     yield f"{owner_dir.name}/{skill_dir.name}"
 
     def __len__(self) -> int:
@@ -104,7 +104,7 @@ class LocalDirSource:
             skill = self[key]
             text = f"{skill.meta.name} {skill.meta.description}".lower()
             if query_lower in text:
-                owner = key.split('/')[0] if '/' in key else None
+                owner = key.split("/")[0] if "/" in key else None
                 results.append(
                     SkillInfo(
                         canonical_key=key,

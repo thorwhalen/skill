@@ -13,7 +13,7 @@ from skill.registry import Registry
 # Validator registry
 # ---------------------------------------------------------------------------
 
-validators: Registry[Callable[[Skill], list[str]]] = Registry('validators')
+validators: Registry[Callable[[Skill], list[str]]] = Registry("validators")
 """Registry of validation rules. Each validator is a ``(Skill) -> list[str]``
 callable that returns a list of issue strings (empty = pass)."""
 
@@ -33,7 +33,7 @@ def _validate_required_fields(skill: Skill) -> list[str]:
     return issues
 
 
-validators.register('required_fields', _validate_required_fields)
+validators.register("required_fields", _validate_required_fields)
 
 
 def _validate_body(skill: Skill) -> list[str]:
@@ -44,11 +44,11 @@ def _validate_body(skill: Skill) -> list[str]:
     ['Skill body is empty']
     """
     if not skill.body.strip():
-        return ['Skill body is empty']
+        return ["Skill body is empty"]
     return []
 
 
-validators.register('body', _validate_body)
+validators.register("body", _validate_body)
 
 
 def _validate_name_format(skill: Skill) -> list[str]:
@@ -68,7 +68,7 @@ def _validate_name_format(skill: Skill) -> list[str]:
     return []
 
 
-validators.register('name_format', _validate_name_format)
+validators.register("name_format", _validate_name_format)
 
 
 def _validate_lengths(skill: Skill) -> list[str]:
@@ -88,7 +88,7 @@ def _validate_lengths(skill: Skill) -> list[str]:
     return issues
 
 
-validators.register('lengths', _validate_lengths)
+validators.register("lengths", _validate_lengths)
 
 
 # ---------------------------------------------------------------------------
@@ -114,12 +114,13 @@ _TEMPLATE_BODY = """\
 # Public API
 # ---------------------------------------------------------------------------
 
+
 def create(
     name: str,
     *,
-    description: str = '',
-    body: str = '',
-    owner: str = '_local',
+    description: str = "",
+    body: str = "",
+    owner: str = "_local",
     store: LocalSkillStore | None = None,
 ) -> Skill:
     """Create a new skill and store it locally.
@@ -159,13 +160,13 @@ def scaffold(
     """
     if path is None:
         path = Path.cwd() / name
-    desc = description or f'A skill for {name}'
+    desc = description or f"A skill for {name}"
     body = _TEMPLATE_BODY.format(name=name, description=desc)
     skill = Skill(meta=SkillMeta(name=name, description=desc), body=body)
     skill.write_to(path)
     # Create optional resource subdirectories
-    (path / 'scripts').mkdir(exist_ok=True)
-    (path / 'references').mkdir(exist_ok=True)
+    (path / "scripts").mkdir(exist_ok=True)
+    (path / "references").mkdir(exist_ok=True)
     return path
 
 
@@ -190,7 +191,7 @@ def validate(path_or_key: str) -> list[str]:
     # Resolve path or key to a Skill
     path = Path(path_or_key)
     if path.is_dir():
-        skill_md = path / 'SKILL.md'
+        skill_md = path / "SKILL.md"
         if not skill_md.exists():
             return [f"Missing SKILL.md in {path}"]
         skill = Skill.from_path(path)
@@ -223,4 +224,5 @@ def _is_valid_name(name: str) -> bool:
     False
     """
     import re
-    return bool(re.match(r'^[a-z0-9]+(-[a-z0-9]+)*$', name))
+
+    return bool(re.match(r"^[a-z0-9]+(-[a-z0-9]+)*$", name))

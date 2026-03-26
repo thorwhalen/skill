@@ -19,6 +19,7 @@ from skill.create import _validate_skill
 # Agent target registry
 # ---------------------------------------------------------------------------
 
+
 @dataclass(frozen=True)
 class AgentTarget:
     """Describes where an agent expects skills to be installed.
@@ -32,7 +33,7 @@ class AgentTarget:
     name: str
     global_path: str | None = None
     project_path: str | None = None
-    format: str = 'skill.md'
+    format: str = "skill.md"
     needs_translation: bool = False
 
     def format_global_path(self, name: str) -> Path | None:
@@ -46,33 +47,33 @@ class AgentTarget:
         return Path(self.project_path.format(project=project, name=name))
 
 
-agent_targets: Registry[AgentTarget] = Registry('agent_targets')
+agent_targets: Registry[AgentTarget] = Registry("agent_targets")
 """Registry of agent targets (e.g., claude-code, cursor, copilot)."""
 
 agent_targets.register(
-    'claude-code',
+    "claude-code",
     AgentTarget(
-        name='claude-code',
-        global_path='{home}/.claude/skills/{name}',
-        project_path='{project}/.claude/skills/{name}',
-        format='skill.md',
+        name="claude-code",
+        global_path="{home}/.claude/skills/{name}",
+        project_path="{project}/.claude/skills/{name}",
+        format="skill.md",
     ),
 )
 agent_targets.register(
-    'cursor',
+    "cursor",
     AgentTarget(
-        name='cursor',
-        project_path='{project}/.cursor/rules/{name}.mdc',
-        format='mdc',
+        name="cursor",
+        project_path="{project}/.cursor/rules/{name}.mdc",
+        format="mdc",
         needs_translation=True,
     ),
 )
 agent_targets.register(
-    'copilot',
+    "copilot",
     AgentTarget(
-        name='copilot',
-        project_path='{project}/.github/copilot-instructions.md',
-        format='copilot_md',
+        name="copilot",
+        project_path="{project}/.github/copilot-instructions.md",
+        format="copilot_md",
         needs_translation=True,
     ),
 )
@@ -85,6 +86,7 @@ AGENT_TARGETS = agent_targets
 # Link/copy helpers
 # ---------------------------------------------------------------------------
 
+
 def _check_existing(target: Path) -> str:
     """Classify what currently exists at ``target``.
 
@@ -95,17 +97,18 @@ def _check_existing(target: Path) -> str:
     'none'
     """
     if not target.exists() and not target.is_symlink():
-        return 'none'
+        return "none"
     if target.is_symlink():
         # Check if it points into our skills dir
         link_target = str(target.resolve())
         from skill.config import skills_dir
+
         if str(skills_dir()) in link_target:
-            return 'our_symlink'
-        return 'foreign_symlink'
+            return "our_symlink"
+        return "foreign_symlink"
     if target.is_dir():
-        return 'directory'
-    return 'file'
+        return "directory"
+    return "file"
 
 
 def _create_link(
@@ -120,10 +123,10 @@ def _create_link(
     On Windows, uses a directory junction instead of symlink.
     """
     existing = _check_existing(target)
-    if existing == 'our_symlink':
+    if existing == "our_symlink":
         # Already linked by us — update if source changed
         target.unlink()
-    elif existing != 'none':
+    elif existing != "none":
         if not force:
             raise FileExistsError(
                 f"Target already exists ({existing}): {target}. "
@@ -151,11 +154,12 @@ def _create_link(
 # Install / uninstall
 # ---------------------------------------------------------------------------
 
+
 def install(
     key: str,
     *,
     agent_targets: list[str] | None = None,
-    scope: str = 'project',
+    scope: str = "project",
     copy: bool = False,
     force: bool = False,
     project_dir: Path | str | None = None,
@@ -193,7 +197,7 @@ def install(
     config = load_config()
     targets = agent_targets or config.default_agent_targets
 
-    if scope == 'project':
+    if scope == "project":
         if project_dir is None:
             project_dir = find_project_root()
         if project_dir is None:
@@ -212,7 +216,7 @@ def install(
 
         skill_name = skill.meta.name
 
-        if scope == 'project':
+        if scope == "project":
             dest = target.format_project_path(project_dir, skill_name)
         else:
             dest = target.format_global_path(skill_name)
@@ -234,7 +238,7 @@ def install(
                 continue
             content = translator(skill)
             dest.parent.mkdir(parents=True, exist_ok=True)
-            if target.format == 'copilot_md':
+            if target.format == "copilot_md":
                 # Copilot: append to the instructions file
                 _append_or_create(dest, content, skill_name)
             else:
@@ -251,8 +255,8 @@ def install(
 
 def _append_or_create(path: Path, content: str, skill_name: str) -> None:
     """Append content to a file, or create it. Avoids duplicates by skill name."""
-    marker = f'<!-- skill:{skill_name} -->'
-    end_marker = f'<!-- /skill:{skill_name} -->'
+    marker = f"<!-- skill:{skill_name} -->"
+    end_marker = f"<!-- /skill:{skill_name} -->"
 
     if path.exists():
         existing = path.read_text()
@@ -261,21 +265,21 @@ def _append_or_create(path: Path, content: str, skill_name: str) -> None:
             start = existing.index(marker)
             end = existing.index(end_marker) + len(end_marker)
             existing = existing[:start] + existing[end:]
-            existing = existing.rstrip() + '\n\n'
+            existing = existing.rstrip() + "\n\n"
         else:
-            existing = existing.rstrip() + '\n\n'
+            existing = existing.rstrip() + "\n\n"
     else:
         path.parent.mkdir(parents=True, exist_ok=True)
-        existing = ''
+        existing = ""
 
-    path.write_text(f'{existing}{marker}\n{content}\n{end_marker}\n')
+    path.write_text(f"{existing}{marker}\n{content}\n{end_marker}\n")
 
 
 def uninstall(
     key: str,
     *,
     agent_targets: list[str] | None = None,
-    scope: str = 'project',
+    scope: str = "project",
     project_dir: Path | str | None = None,
     store: LocalSkillStore | None = None,
 ) -> dict[str, Path]:
@@ -293,7 +297,7 @@ def uninstall(
     config = load_config()
     targets = agent_targets or config.default_agent_targets
 
-    if scope == 'project':
+    if scope == "project":
         if project_dir is None:
             project_dir = find_project_root()
         if project_dir is None:
@@ -307,7 +311,7 @@ def uninstall(
             continue
 
         skill_name = skill.meta.name
-        if scope == 'project':
+        if scope == "project":
             dest = target.format_project_path(project_dir, skill_name)
         else:
             dest = target.format_global_path(skill_name)
@@ -315,7 +319,7 @@ def uninstall(
         if dest is None:
             continue
 
-        if target.format == 'copilot_md' and dest.exists():
+        if target.format == "copilot_md" and dest.exists():
             # Remove the section from copilot instructions
             _remove_section(dest, skill_name)
             removed[target_name] = dest
@@ -333,7 +337,7 @@ def uninstall(
 # Link skills from a source directory
 # ---------------------------------------------------------------------------
 
-_SKILL_MARKER = 'SKILL.md'
+_SKILL_MARKER = "SKILL.md"
 
 
 def _has_skills(directory: Path) -> bool:
@@ -362,16 +366,16 @@ def _resolve_skills_source(source: Path) -> Path:
         return source
 
     # 2. .claude/skills convention
-    claude_skills = source / '.claude' / 'skills'
+    claude_skills = source / ".claude" / "skills"
     if _has_skills(claude_skills):
         return claude_skills
 
     # 3. {pkg}/data/skills convention (Python projects)
-    pyproject = source / 'pyproject.toml'
+    pyproject = source / "pyproject.toml"
     if pyproject.exists():
         # Infer package name from the directory name (common convention)
-        pkg_name = source.name.replace('-', '_')
-        pkg_skills = source / pkg_name / 'data' / 'skills'
+        pkg_name = source.name.replace("-", "_")
+        pkg_skills = source / pkg_name / "data" / "skills"
         if _has_skills(pkg_skills):
             return pkg_skills
 
@@ -394,6 +398,7 @@ def _iter_skill_dirs(source: Path):
 # Target validation
 # ---------------------------------------------------------------------------
 
+
 def _known_target_parents() -> set[Path]:
     """Return the set of resolved parent directories for all known agent targets.
 
@@ -405,7 +410,7 @@ def _known_target_parents() -> set[Path]:
     for target in AGENT_TARGETS.values():
         if target.global_path is not None:
             # Format with a dummy name, then take the parent
-            p = Path(target.global_path.format(home=home, name='_dummy'))
+            p = Path(target.global_path.format(home=home, name="_dummy"))
             parents.add(p.parent)
     return parents
 
@@ -440,7 +445,7 @@ def _is_recognized_target(target_path: Path) -> bool:
 def link_skills(
     source: str,
     *,
-    target: str = '',
+    target: str = "",
     copy: bool = False,
     force: bool = False,
 ) -> dict[str, Path]:
@@ -474,7 +479,7 @@ def link_skills(
     if target:
         target_path = Path(target).expanduser().resolve()
     else:
-        target_path = Path.home() / '.claude' / 'skills'
+        target_path = Path.home() / ".claude" / "skills"
 
     if not _is_recognized_target(target_path):
         raise ValueError(
@@ -491,8 +496,7 @@ def link_skills(
         issues = _validate_skill(skill)
         if issues:
             warnings.warn(
-                f"Skipping invalid skill {name!r} at {skill_dir}: "
-                + '; '.join(issues),
+                f"Skipping invalid skill {name!r} at {skill_dir}: " + "; ".join(issues),
                 stacklevel=2,
             )
             continue
@@ -505,12 +509,12 @@ def link_skills(
 
 def _remove_section(path: Path, skill_name: str) -> None:
     """Remove a skill section from a copilot instructions file."""
-    marker = f'<!-- skill:{skill_name} -->'
-    end_marker = f'<!-- /skill:{skill_name} -->'
+    marker = f"<!-- skill:{skill_name} -->"
+    end_marker = f"<!-- /skill:{skill_name} -->"
     content = path.read_text()
     if marker in content and end_marker in content:
         start = content.index(marker)
         end = content.index(end_marker) + len(end_marker)
         content = content[:start] + content[end:]
-        content = content.strip() + '\n' if content.strip() else ''
+        content = content.strip() + "\n" if content.strip() else ""
         path.write_text(content)

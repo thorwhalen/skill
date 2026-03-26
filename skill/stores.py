@@ -32,7 +32,7 @@ class LocalSkillStore(MutableMapping):
 
     def __getitem__(self, key: str) -> Skill:
         path = self._key_to_path(key)
-        if not (path / 'SKILL.md').exists():
+        if not (path / "SKILL.md").exists():
             raise KeyError(key)
         return Skill.from_path(path)
 
@@ -59,7 +59,7 @@ class LocalSkillStore(MutableMapping):
             if not owner_dir.is_dir():
                 continue
             for skill_dir in sorted(owner_dir.iterdir()):
-                if (skill_dir / 'SKILL.md').exists():
+                if (skill_dir / "SKILL.md").exists():
                     yield f"{owner_dir.name}/{skill_dir.name}"
 
     def __len__(self) -> int:
@@ -68,7 +68,7 @@ class LocalSkillStore(MutableMapping):
     def __contains__(self, key: object) -> bool:
         if not isinstance(key, str):
             return False
-        return (self._key_to_path(key) / 'SKILL.md').exists()
+        return (self._key_to_path(key) / "SKILL.md").exists()
 
     def list_info(self) -> list[SkillInfo]:
         """Return SkillInfo for all locally stored skills."""
@@ -81,7 +81,7 @@ class LocalSkillStore(MutableMapping):
                     canonical_key=key,
                     name=skill.meta.name,
                     description=skill.meta.description,
-                    source='local',
+                    source="local",
                     owner=pk.owner,
                     installed=True,
                 )

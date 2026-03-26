@@ -4,9 +4,9 @@ from collections.abc import MutableMapping, Iterator
 from importlib.metadata import entry_points
 from typing import TypeVar, Generic
 
-T = TypeVar('T')
+T = TypeVar("T")
 
-_ENTRY_POINT_GROUP_PREFIX = 'skill.'
+_ENTRY_POINT_GROUP_PREFIX = "skill."
 
 
 class Registry(MutableMapping, Generic[T]):
@@ -33,7 +33,7 @@ class Registry(MutableMapping, Generic[T]):
         self._name = name
         self._items: dict[str, T] = {}
         self._entry_point_group = (
-            entry_point_group or f'{_ENTRY_POINT_GROUP_PREFIX}{name}'
+            entry_point_group or f"{_ENTRY_POINT_GROUP_PREFIX}{name}"
         )
         self._entry_points_loaded = False
 

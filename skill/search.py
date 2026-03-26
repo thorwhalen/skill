@@ -7,16 +7,17 @@ from skill.registry import Registry
 from skill.backends import SkillSource
 
 
-backends: Registry[SkillSource] = Registry('backends')
+backends: Registry[SkillSource] = Registry("backends")
 """Registry of remote skill backends (e.g., github, local directories)."""
 
 
 def _ensure_default_backends() -> None:
     """Lazily register built-in backends on first use."""
-    if 'github' not in backends._items and not backends._entry_points_loaded:
+    if "github" not in backends._items and not backends._entry_points_loaded:
         try:
             from skill.backends.github import GitHubSkillSource
-            backends.register('github', GitHubSkillSource())
+
+            backends.register("github", GitHubSkillSource())
         except Exception:
             pass
 
@@ -61,7 +62,7 @@ def _search_remote(
         if backend_names is not None and name not in backend_names:
             continue
         # Check config for github-specific enable flag
-        if name == 'github' and not config.github_enabled:
+        if name == "github" and not config.github_enabled:
             continue
         try:
             results.extend(source.search(query, max_results=max_results))
@@ -90,9 +91,7 @@ def search(
 
     if not local_only and len(results) < max_results:
         remaining = max_results - len(results)
-        remote = _search_remote(
-            query, backend_names=backends, max_results=remaining
-        )
+        remote = _search_remote(query, backend_names=backends, max_results=remaining)
         # Deduplicate by canonical_key
         seen = {r.canonical_key for r in results}
         for r in remote:

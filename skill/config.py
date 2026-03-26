@@ -8,7 +8,7 @@ import platformdirs
 
 from skill.util import resolve_env_vars, atomic_write
 
-_APP_NAME = 'skill'
+_APP_NAME = "skill"
 
 
 def data_dir() -> Path:
@@ -44,7 +44,7 @@ def skills_dir() -> Path:
     >>> skills_dir().name
     'skills'
     """
-    return data_dir() / 'skills'
+    return data_dir() / "skills"
 
 
 def config_path() -> Path:
@@ -53,7 +53,7 @@ def config_path() -> Path:
     >>> config_path().name
     'config.toml'
     """
-    return config_dir() / 'config.toml'
+    return config_dir() / "config.toml"
 
 
 @dataclass
@@ -67,13 +67,11 @@ class SkillConfig:
     'symlink'
     """
 
-    default_agent_targets: list[str] = field(
-        default_factory=lambda: ['claude-code']
-    )
-    default_scope: str = 'project'
-    install_method: str = 'symlink'
-    ai_provider_model: str = 'anthropic:claude-sonnet-4-20250514'
-    ai_api_key: str = '$ANTHROPIC_API_KEY'
+    default_agent_targets: list[str] = field(default_factory=lambda: ["claude-code"])
+    default_scope: str = "project"
+    install_method: str = "symlink"
+    ai_provider_model: str = "anthropic:claude-sonnet-4-20250514"
+    ai_api_key: str = "$ANTHROPIC_API_KEY"
     github_enabled: bool = True
     search_cache_ttl: int = 3600
 
@@ -86,7 +84,7 @@ def _load_toml(path: Path) -> dict:
         import tomllib
     else:
         import tomli as tomllib
-    with open(path, 'rb') as f:
+    with open(path, "rb") as f:
         return tomllib.load(f)
 
 
@@ -95,15 +93,15 @@ def _serialize_toml(data: dict) -> str:
     lines = []
     for k, v in data.items():
         if isinstance(v, bool):
-            lines.append(f'{k} = {str(v).lower()}')
+            lines.append(f"{k} = {str(v).lower()}")
         elif isinstance(v, int):
-            lines.append(f'{k} = {v}')
+            lines.append(f"{k} = {v}")
         elif isinstance(v, str):
-            lines.append(f'{k} = {v!r}')
+            lines.append(f"{k} = {v!r}")
         elif isinstance(v, list):
-            items = ', '.join(repr(i) for i in v)
-            lines.append(f'{k} = [{items}]')
-    return '\n'.join(lines) + '\n'
+            items = ", ".join(repr(i) for i in v)
+            lines.append(f"{k} = [{items}]")
+    return "\n".join(lines) + "\n"
 
 
 def load_config(path: Path | None = None) -> SkillConfig:

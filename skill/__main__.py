@@ -13,7 +13,16 @@ Usage::
 
 import argh
 
-from skill import search, install, uninstall, create, list_skills, validate, show, link_skills
+from skill import (
+    search,
+    install,
+    uninstall,
+    create,
+    list_skills,
+    validate,
+    show,
+    link_skills,
+)
 from skill.completion import install_completion, maybe_hint_completion
 
 
@@ -21,11 +30,18 @@ def main():
     maybe_hint_completion()
     argh.dispatch_commands(
         [
-            search, install, uninstall, create, list_skills, validate, show,
-            link_skills, install_completion,
+            search,
+            install,
+            uninstall,
+            create,
+            list_skills,
+            validate,
+            show,
+            link_skills,
+            install_completion,
         ]
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
