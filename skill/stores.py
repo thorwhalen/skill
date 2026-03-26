@@ -1,11 +1,14 @@
 """Storage layer: LocalSkillStore and SourcedSkillStore via dol."""
 
+import json
 from collections.abc import MutableMapping, Iterator
 from pathlib import Path
 
 from skill.base import Skill, SkillInfo
 from skill.config import skills_dir
 from skill.util import ParsedKey
+
+_SOURCE_META_FILE = "_source.json"
 
 
 class LocalSkillStore(MutableMapping):
@@ -39,6 +42,26 @@ class LocalSkillStore(MutableMapping):
     def __setitem__(self, key: str, skill: Skill) -> None:
         path = self._key_to_path(key)
         skill.write_to(path)
+
+    def set_source_meta(self, key: str, *, url: str | None = None, source: str | None = None) -> None:
+        """Store source metadata (URL, origin) alongside a skill."""
+        path = self._key_to_path(key) / _SOURCE_META_FILE
+        meta = {}
+        if path.exists():
+            meta = json.loads(path.read_text())
+        if url is not None:
+            meta["url"] = url
+        if source is not None:
+            meta["source"] = source
+        if meta:
+            path.write_text(json.dumps(meta, indent=2) + "\n")
+
+    def get_source_meta(self, key: str) -> dict:
+        """Read source metadata for a skill, or empty dict if none."""
+        path = self._key_to_path(key) / _SOURCE_META_FILE
+        if path.exists():
+            return json.loads(path.read_text())
+        return {}
 
     def __delitem__(self, key: str) -> None:
         import shutil
@@ -76,12 +99,14 @@ class LocalSkillStore(MutableMapping):
         for key in self:
             skill = self[key]
             pk = ParsedKey.from_string(key)
+            source_meta = self.get_source_meta(key)
             result.append(
                 SkillInfo(
                     canonical_key=key,
                     name=skill.meta.name,
                     description=skill.meta.description,
-                    source="local",
+                    source=source_meta.get("source", "local"),
+                    url=source_meta.get("url"),
                     owner=pk.owner,
                     installed=True,
                 )

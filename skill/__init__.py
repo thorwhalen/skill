@@ -23,7 +23,7 @@ Plugin registries::
 
 from skill.search import search
 from skill.install import install, uninstall, link_skills
-from skill.create import create, scaffold, validate
+from skill.create import create, scaffold, validate, check_dependencies
 from skill.base import Skill, SkillMeta, SkillInfo
 from skill.stores import LocalSkillStore
 from skill.registry import Registry
@@ -52,3 +52,30 @@ def show(key: str) -> Skill:
     """
     store = LocalSkillStore()
     return store[key]
+
+
+def sources() -> list[dict]:
+    """List registered search backends with their name, homepage, and status.
+
+    >>> isinstance(sources(), list)
+    True
+    """
+    from skill.search import backends, _ensure_default_backends
+    from skill.config import load_config
+
+    _ensure_default_backends()
+    config = load_config()
+
+    result = []
+    for name, source in backends.items():
+        enabled = True
+        if name == "github":
+            enabled = config.github_enabled
+        result.append(
+            {
+                "name": name,
+                "homepage": getattr(source, "homepage", None),
+                "enabled": enabled,
+            }
+        )
+    return result
