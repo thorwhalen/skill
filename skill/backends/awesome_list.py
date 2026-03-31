@@ -9,17 +9,12 @@ from typing import Any
 from skill.base import Skill, SkillInfo
 
 _README_URL = (
-    "https://raw.githubusercontent.com/"
-    "travisvn/awesome-claude-skills/main/README.md"
+    "https://raw.githubusercontent.com/travisvn/awesome-claude-skills/main/README.md"
 )
 
 # Patterns for parsing the two listing formats in the README.
-_BULLET_RE = re.compile(
-    r'- \*\*\[(.+?)\]\((.+?)\)\*\*\s*[-–]\s*(.+)'
-)
-_TABLE_RE = re.compile(
-    r'\|\s*\*\*\[(.+?)\]\((.+?)\)\*\*\s*\|\s*(.+?)\s*\|'
-)
+_BULLET_RE = re.compile(r"- \*\*\[(.+?)\]\((.+?)\)\*\*\s*[-–]\s*(.+)")
+_TABLE_RE = re.compile(r"\|\s*\*\*\[(.+?)\]\((.+?)\)\*\*\s*\|\s*(.+?)\s*\|")
 
 
 def _default_http_get(url: str, *, headers: dict | None = None) -> str:
@@ -91,7 +86,8 @@ class AwesomeListSource:
             return []
         q = query.lower()
         results = [
-            e for e in entries
+            e
+            for e in entries
             if q in e.name.lower() or q in e.description.lower() or not q
         ]
         return results[:max_results]
