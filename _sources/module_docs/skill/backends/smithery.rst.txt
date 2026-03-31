@@ -1,0 +1,4 @@
+skill.backends.smithery
+=======================
+.. automodule:: skill.backends.smithery
+   :members:

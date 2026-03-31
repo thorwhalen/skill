@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.config &mdash; skill 0.1.2 documentation</title>
+  <title>skill.config &mdash; skill 0.1.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=92734c54"></script>
+      <script src="../../_static/documentation_options.js?v=360bc84d"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -53,7 +53,11 @@
 <li class="toctree-l1"><a class="reference internal" href="__main__.html">skill.__main__</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ai.html">skill.ai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backends.html">skill.backends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends/awesome_list.html">skill.backends.awesome_list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends/composio.html">skill.backends.composio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backends/github.html">skill.backends.github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends/skillsdirectory.html">skill.backends.skillsdirectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends/smithery.html">skill.backends.smithery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="base.html">skill.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli_format.html">skill.cli_format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="completion.html">skill.completion</a></li>
@@ -106,7 +110,7 @@
 <p>Configuration management via platformdirs and TOML.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="skill.config.SkillConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skill.config.</span></span><span class="sig-name descname"><span class="pre">SkillConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_agent_targets:</span> <span class="pre">list[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_scope:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'project'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">install_method:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'symlink'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ai_provider_model:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'anthropic:claude-sonnet-4-20250514'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ai_api_key:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'$ANTHROPIC_API_KEY'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">github_enabled:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_cache_ttl:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">3600</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/skill/config.html#SkillConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.config.SkillConfig" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skill.config.</span></span><span class="sig-name descname"><span class="pre">SkillConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default_agent_targets:</span> <span class="pre">list[str]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_scope:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'project'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">install_method:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'symlink'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ai_provider_model:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'anthropic:claude-sonnet-4-20250514'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ai_api_key:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'$ANTHROPIC_API_KEY'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">github_enabled:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smithery_enabled:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">composio_enabled:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">awesome_list_enabled:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skillsdirectory_enabled:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_cache_ttl:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">3600</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/skill/config.html#SkillConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.config.SkillConfig" title="Link to this definition"></a></dt>
 <dd><p>Root configuration schema with sensible defaults for zero-config first run.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">SkillConfig</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">default_agent_targets</span>

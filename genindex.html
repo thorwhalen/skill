@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; skill 0.1.2 documentation</title>
+  <title>Index &mdash; skill 0.1.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=92734c54"></script>
+      <script src="_static/documentation_options.js?v=360bc84d"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -50,7 +50,11 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/skill/__main__.html">skill.__main__</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/skill/ai.html">skill.ai</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/skill/backends.html">skill.backends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/skill/backends/awesome_list.html">skill.backends.awesome_list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/skill/backends/composio.html">skill.backends.composio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/skill/backends/github.html">skill.backends.github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/skill/backends/skillsdirectory.html">skill.backends.skillsdirectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/skill/backends/smithery.html">skill.backends.smithery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/skill/base.html">skill.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/skill/cli_format.html">skill.cli_format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/skill/completion.html">skill.completion</a></li>
@@ -115,11 +119,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/skill/install.html#skill.install.agent_targets">agent_targets (in module skill.install)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/skill/install.html#skill.install.AgentTarget">AgentTarget (class in skill.install)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/skill/util.html#skill.util.atomic_write">atomic_write() (in module skill.util)</a>
+</li>
+      <li><a href="module_docs/skill/backends/awesome_list.html#skill.backends.awesome_list.AwesomeListSource">AwesomeListSource (class in skill.backends.awesome_list)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -140,6 +146,8 @@
       <li><a href="module_docs/skill/ai.html#skill.ai.chat">chat() (in module skill.ai)</a>
 </li>
       <li><a href="module_docs/skill/create.html#skill.create.check_dependencies">check_dependencies() (in module skill.create)</a>
+</li>
+      <li><a href="module_docs/skill/backends/composio.html#skill.backends.composio.ComposioSkillSource">ComposioSkillSource (class in skill.backends.composio)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -277,7 +285,15 @@
 </li>
         <li><a href="module_docs/skill/backends.html#module-skill.backends">skill.backends</a>
 </li>
+        <li><a href="module_docs/skill/backends/awesome_list.html#module-skill.backends.awesome_list">skill.backends.awesome_list</a>
+</li>
+        <li><a href="module_docs/skill/backends/composio.html#module-skill.backends.composio">skill.backends.composio</a>
+</li>
         <li><a href="module_docs/skill/backends/github.html#module-skill.backends.github">skill.backends.github</a>
+</li>
+        <li><a href="module_docs/skill/backends/skillsdirectory.html#module-skill.backends.skillsdirectory">skill.backends.skillsdirectory</a>
+</li>
+        <li><a href="module_docs/skill/backends/smithery.html#module-skill.backends.smithery">skill.backends.smithery</a>
 </li>
         <li><a href="module_docs/skill/base.html#module-skill.base">skill.base</a>
 </li>
@@ -357,9 +373,17 @@
       <ul>
         <li><a href="module_docs/skill/search.html#skill.search.search">(in module skill.search)</a>
 </li>
+        <li><a href="module_docs/skill/backends/awesome_list.html#skill.backends.awesome_list.AwesomeListSource.search">(skill.backends.awesome_list.AwesomeListSource method)</a>
+</li>
+        <li><a href="module_docs/skill/backends/composio.html#skill.backends.composio.ComposioSkillSource.search">(skill.backends.composio.ComposioSkillSource method)</a>
+</li>
         <li><a href="module_docs/skill/backends/github.html#skill.backends.github.GitHubSkillSource.search">(skill.backends.github.GitHubSkillSource method)</a>
 </li>
         <li><a href="module_docs/skill/backends.html#skill.backends.LocalDirSource.search">(skill.backends.LocalDirSource method)</a>
+</li>
+        <li><a href="module_docs/skill/backends/skillsdirectory.html#skill.backends.skillsdirectory.SkillsDirectorySource.search">(skill.backends.skillsdirectory.SkillsDirectorySource method)</a>
+</li>
+        <li><a href="module_docs/skill/backends/smithery.html#skill.backends.smithery.SmitherySkillSource.search">(skill.backends.smithery.SmitherySkillSource method)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/skill/stores.html#skill.stores.LocalSkillStore.set_source_meta">set_source_meta() (skill.stores.LocalSkillStore method)</a>
@@ -401,12 +425,42 @@
 </li>
       </ul></li>
       <li>
+    skill.backends.awesome_list
+
+      <ul>
+        <li><a href="module_docs/skill/backends/awesome_list.html#module-skill.backends.awesome_list">module</a>
+</li>
+      </ul></li>
+      <li>
+    skill.backends.composio
+
+      <ul>
+        <li><a href="module_docs/skill/backends/composio.html#module-skill.backends.composio">module</a>
+</li>
+      </ul></li>
+      <li>
     skill.backends.github
 
       <ul>
         <li><a href="module_docs/skill/backends/github.html#module-skill.backends.github">module</a>
 </li>
       </ul></li>
+      <li>
+    skill.backends.skillsdirectory
+
+      <ul>
+        <li><a href="module_docs/skill/backends/skillsdirectory.html#module-skill.backends.skillsdirectory">module</a>
+</li>
+      </ul></li>
+      <li>
+    skill.backends.smithery
+
+      <ul>
+        <li><a href="module_docs/skill/backends/smithery.html#module-skill.backends.smithery">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     skill.base
 
@@ -421,8 +475,6 @@
         <li><a href="module_docs/skill/cli_format.html#module-skill.cli_format">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     skill.completion
 
@@ -494,7 +546,11 @@
 </li>
       <li><a href="module_docs/skill/config.html#skill.config.skills_dir">skills_dir() (in module skill.config)</a>
 </li>
+      <li><a href="module_docs/skill/backends/skillsdirectory.html#skill.backends.skillsdirectory.SkillsDirectorySource">SkillsDirectorySource (class in skill.backends.skillsdirectory)</a>
+</li>
       <li><a href="module_docs/skill/backends.html#skill.backends.SkillSource">SkillSource (class in skill.backends)</a>
+</li>
+      <li><a href="module_docs/skill/backends/smithery.html#skill.backends.smithery.SmitherySkillSource">SmitherySkillSource (class in skill.backends.smithery)</a>
 </li>
       <li><a href="module_docs/skill.html#skill.sources">sources() (in module skill)</a>
 

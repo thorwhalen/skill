@@ -1,0 +1,4 @@
+skill.backends.skillsdirectory
+==============================
+.. automodule:: skill.backends.skillsdirectory
+   :members:

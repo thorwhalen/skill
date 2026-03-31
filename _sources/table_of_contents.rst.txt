@@ -6,7 +6,11 @@
    module_docs/skill/__main__
    module_docs/skill/ai
    module_docs/skill/backends
+   module_docs/skill/backends/awesome_list
+   module_docs/skill/backends/composio
    module_docs/skill/backends/github
+   module_docs/skill/backends/skillsdirectory
+   module_docs/skill/backends/smithery
    module_docs/skill/base
    module_docs/skill/cli_format
    module_docs/skill/completion
