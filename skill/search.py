@@ -13,13 +13,43 @@ backends: Registry[SkillSource] = Registry("backends")
 
 def _ensure_default_backends() -> None:
     """Lazily register built-in backends on first use."""
-    if "github" not in backends._items and not backends._entry_points_loaded:
+    if backends._entry_points_loaded:
+        return
+    if "github" not in backends._items:
         try:
             from skill.backends.github import GitHubSkillSource
 
             backends.register("github", GitHubSkillSource())
         except Exception:
             pass
+    if "smithery" not in backends._items:
+        try:
+            from skill.backends.smithery import SmitherySkillSource
+
+            backends.register("smithery", SmitherySkillSource())
+        except Exception:
+            pass
+    if "composio" not in backends._items:
+        try:
+            from skill.backends.composio import ComposioSkillSource
+
+            backends.register("composio", ComposioSkillSource())
+        except Exception:
+            pass  # Requires COMPOSIO_API_KEY
+    if "awesome-list" not in backends._items:
+        try:
+            from skill.backends.awesome_list import AwesomeListSource
+
+            backends.register("awesome-list", AwesomeListSource())
+        except Exception:
+            pass
+    if "skillsdirectory" not in backends._items:
+        try:
+            from skill.backends.skillsdirectory import SkillsDirectorySource
+
+            backends.register("skillsdirectory", SkillsDirectorySource())
+        except Exception:
+            pass  # Requires SKILLSDIRECTORY_API_KEY
 
 
 def _search_local(
@@ -58,11 +88,20 @@ def _search_remote(
     config = load_config()
     results = []
 
+    # Map backend names to their config enable flags
+    _enable_flags = {
+        "github": "github_enabled",
+        "smithery": "smithery_enabled",
+        "composio": "composio_enabled",
+        "awesome-list": "awesome_list_enabled",
+        "skillsdirectory": "skillsdirectory_enabled",
+    }
+
     for name, source in backends.items():
         if backend_names is not None and name not in backend_names:
             continue
-        # Check config for github-specific enable flag
-        if name == "github" and not config.github_enabled:
+        flag = _enable_flags.get(name)
+        if flag and not getattr(config, flag, True):
             continue
         try:
             results.extend(source.search(query, max_results=max_results))

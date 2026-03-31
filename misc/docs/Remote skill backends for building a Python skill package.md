@@ -6,12 +6,13 @@ The Agent Skills specification — published by Anthropic in December 2025 at ag
 
 ## Summary of all backends investigated
 
-| Backend | URL | API | Auth | Native SKILL.md | Free | Viable for v1 |
-|---------|-----|-----|------|-----------------|------|---------------|
-| **GitHub** (Contents/Trees/Search) | api.github.com | REST ✅ | Token (optional for public) | ✅ Yes | Free tier | **Yes — Primary** |
-| **Smithery** | registry.smithery.ai | REST ✅ | Bearer token | ❌ MCP tools | Free tier | **Yes — Secondary** |
-| **Composio** | backend.composio.dev | REST + Python SDK ✅ | API key | ❌ Tool definitions | 20K calls/mo free | **Yes — Secondary** |
-| **awesome-claude-skills** | github.com/travisvn/awesome-claude-skills | Parseable README | None | ✅ Links to SKILL.md repos | Free | **Yes — Index** |
+| Backend | URL | API | Auth | Native SKILL.md | Free | Status |
+|---------|-----|-----|------|-----------------|------|--------|
+| **GitHub** (Contents/Trees/Search) | api.github.com | REST ✅ | Token (optional for public) | ✅ Yes | Free tier | **Implemented** |
+| **Smithery** | api.smithery.ai | REST ✅ | None for read, Bearer for write | ❌ MCP tools / skills | Free | **Implemented** |
+| **Composio** | backend.composio.dev | REST + Python SDK ✅ | API key (`COMPOSIO_API_KEY`) | ❌ Tool definitions | 20K calls/mo free | **Implemented** |
+| **awesome-claude-skills** | github.com/travisvn/awesome-claude-skills | Parseable README | None | ✅ Links to SKILL.md repos | Free | **Implemented** |
+| **SkillsDirectory** | skillsdirectory.com | REST ✅ | API key (`SKILLSDIRECTORY_API_KEY`) | Mixed (some have content) | 100 req/day free | **Implemented** |
 | skills.sh | skills.sh | ❌ None | None | ✅ (browse only) | Free | No — no API |
 | Vercel skills CLI | github.com/vercel-labs/skills | CLI only | None | ✅ Yes | Free | Wrap via subprocess |
 | Agensi.io | agensi.io | ❌ None | Account for purchases | ✅ Yes | Free + paid ($3–$30) | No — no API |
@@ -21,6 +22,10 @@ The Agent Skills specification — published by Anthropic in December 2025 at ag
 | PromptBase | promptbase.com | Limited | Account | ❌ Text prompts | Paid ($2.99+) | No |
 | OpenRouter | openrouter.ai | REST ✅ | API key | ❌ Model metadata | Credits-based | No — not a skill registry |
 | Official MCP Registry | registry.modelcontextprotocol.io | REST (preview) | TBD | ❌ MCP metadata | Free | Future — still in preview |
+| skillsmp.com | skillsmp.com | ❌ 403 Cloudflare | Unknown | Unknown | Unknown | **Not viable** — blocked by Cloudflare |
+| claudeskills.info | claudeskills.info | ❌ None | None | N/A (content site) | Free to browse | **Not viable** — no API |
+| mcpmarket.com | mcpmarket.com | ❌ 403 Vercel | Unknown | Unknown | Unknown | **Not viable** — blocked |
+| platform.claude.com tool-search | platform.claude.com | Docs only | Anthropic API key | N/A | N/A | **Not a registry** — docs about tool search feature |
 
 ## GitHub is the canonical skill backend
 
@@ -86,15 +91,18 @@ The `awesome-claude-skills` list (7.5K stars, CC0 licensed) provides a parseable
 
 ```
 Backend: Smithery
-URL: https://registry.smithery.ai
-Auth: Bearer token (required)
-Search endpoint: GET /servers?q=<query>&page=1&pageSize=10
-Detail endpoint: GET /servers/{qualifiedName}
-Key format: "owner/repository"
-Skill format: MCP tool definitions → needs translation to SKILL.md
-Response: JSON with servers[], pagination, tools[] with inputSchema
-Python client: raw requests (REST API is straightforward)
-Notes: Tools array provides name/description/inputSchema — high translation fidelity
+URL: https://api.smithery.ai
+Auth: None for read (GET /servers, GET /skills); Bearer token for write
+Skills endpoint: GET /skills?q=<query>&pageSize=10&page=1
+Servers endpoint: GET /servers?q=<query>&pageSize=10&page=1
+Detail endpoint: GET /skills/{qualifiedName}
+Key format: "owner/skill-name" (qualifiedName)
+Skill format: Mixed — some link to GitHub SKILL.md repos, others are metadata-only
+Response: JSON with skills[], pagination; includes gitUrl, categories, qualityScore
+Python client: raw urllib (REST API is straightforward)
+Notes: Has both /skills (agent skills) and /servers (MCP servers) endpoints.
+       Skills often have gitUrl pointing to GitHub repos with SKILL.md.
+       Implementation: skill.backends.smithery.SmitherySkillSource
 ```
 
 **Composio** provides the broadest tool catalog: **11,000+ tools across 850+ toolkits** covering GitHub, Slack, Gmail, Notion, Jira, and hundreds more services. The REST API at `backend.composio.dev/api/v3` has full OpenAPI documentation. The Python SDK (`composio-core`) offers direct access: `composio.tools.get(toolkits=["GITHUB"])`. Tool definitions include structured input schemas that translate cleanly to SKILL.md. The free tier provides **20,000 calls/month**. The main complexity is authentication — many tools require per-user OAuth flows managed by Composio's connection system.
@@ -102,15 +110,45 @@ Notes: Tools array provides name/description/inputSchema — high translation fi
 ```
 Backend: Composio
 URL: https://backend.composio.dev/api/v3
-Auth: x-api-key header (free tier available)
-Search endpoint: GET /api/v3/tools
+Auth: x-api-key header (COMPOSIO_API_KEY env var)
+Search endpoint: GET /api/v3/tools?query=<query>&limit=10
 Detail endpoint: GET /api/v3/tools/{tool_slug}
-Key format: "TOOLKIT_ACTION_NAME" slug (e.g., GITHUB_CREATE_ISSUE)
-Skill format: Tool definitions → needs translation to SKILL.md
+Key format: "toolkit_slug/TOOL_SLUG" (e.g., github/GITHUB_CREATE_ISSUE)
+Skill format: Tool definitions → translated to SKILL.md with parameters documented
+Response: JSON with items[], total_items; includes input_parameters, output_parameters
 Rate limits: 20K–100K requests/10min (plan-dependent)
-Python client: composio-core (pip install composio-core)
-Notes: 11K+ tools; auth complexity is the main integration challenge
+Python client: composio (pip install composio) or raw urllib
+Notes: 11K+ tools across 850+ toolkits. Cursor-based pagination.
+       Sign up at platform.composio.dev for API key.
+       Implementation: skill.backends.composio.ComposioSkillSource
 ```
+
+**SkillsDirectory** (skillsdirectory.com) provides a curated directory of 36,000+ skills with a REST API. Free tier allows 100 requests/day. Some skills include full SKILL.md content, others provide metadata only. The API supports search, category filtering, and security scoring.
+
+```
+Backend: SkillsDirectory
+URL: https://www.skillsdirectory.com/api/v1
+Auth: x-api-key header (SKILLSDIRECTORY_API_KEY env var)
+Search endpoint: GET /api/v1/skills?q=<query>&limit=10
+Detail endpoint: GET /api/v1/skills/{slug}
+Key format: "author/slug" (e.g., alice/python-linter)
+Skill format: Mixed — some include full SKILL.md content, others metadata-only
+Response: JSON with skills[]; detail may include content field
+Rate limits: 100 req/day (free), 1000/day (Pro $29/mo), 10000/day (Enterprise $199/mo)
+Python client: raw urllib
+Notes: Sign up at skillsdirectory.com/login?next=/developer/keys for API key.
+       Implementation: skill.backends.skillsdirectory.SkillsDirectorySource
+```
+
+## Sites investigated but not viable
+
+**skillsmp.com** — Returns HTTP 403 (Cloudflare bot challenge). Cannot be accessed programmatically.
+
+**claudeskills.info** — A Next.js content/blog site about Claude Skills. Has an `/explore` search page but no JSON API. Would require fragile SPA scraping.
+
+**mcpmarket.com** — Returns HTTP 403 from Vercel (`x-vercel-mitigated: deny`). Entirely inaccessible.
+
+**platform.claude.com tool-search-tool** — This is Anthropic's documentation for a feature that lets you search *your own* tool catalog at runtime (using `tool_search_tool_regex_20251119` or `tool_search_tool_bm25_20251119` within the Messages API). It's not a skill marketplace or registry.
 
 **LangChain Hub** offers prompts via `langsmith` Python SDK (`client.pull_prompt("owner/name")`) with versioning and tags. However, prompts are passive text templates rather than tool definitions, making the SKILL.md translation less natural. The key format `owner/prompt_name:commit_hash` supports version pinning. Access requires a `LANGCHAIN_API_KEY`. This backend is lower priority because prompt-as-skill is a weaker abstraction than tool-as-skill.
 
@@ -126,15 +164,20 @@ For backends that don't serve native SKILL.md, a translator must produce a valid
 
 No universal format translator exists today. The `skills-ref` CLI from agentskills/agentskills validates SKILL.md files but doesn't generate them. **Mintlify** auto-generates `/.well-known/skills/default/skill.md` for all documentation sites — a pattern worth noting but not directly useful as a registry. **Speakeasy** (speakeasy-api/skills) has released skills that convert OpenAPI specs into SKILL.md format, establishing a precedent for the OpenAPI → SKILL.md translation path.
 
-## Recommended backend priority for the `skill` package
+## Implemented backends in the `skill` package
 
-**Tier 1 — Must have for v1.** GitHub API is the non-negotiable primary backend. Implement three methods: `search_skills()` using Code Search API, `list_skills(owner, repo)` using Contents/Trees API, and `fetch_skill(owner, repo, skill_name)` using raw content URLs. Parse YAML frontmatter with `python-frontmatter` or `pyyaml`. Cache aggressively using ETags and `skillFolderHash` (tree SHA).
+All five backends share the `SkillSource` protocol: `search(query, *, max_results) -> list[SkillInfo]`, `__getitem__(key) -> Skill`, `__contains__(key) -> bool`. They are registered lazily in `skill.search.backends` and can be enabled/disabled via config flags in `config.toml`.
 
-**Tier 1b — Curated indexes.** Parse `awesome-claude-skills` and similar lists to build a local index of known skill repos. Periodically refresh. This provides a high-quality starting set without API costs.
+**No auth needed (register automatically):**
+- `GitHubSkillSource` — Primary backend. Searches via Code Search API, fetches raw SKILL.md.
+- `SmitherySkillSource` — Searches `/skills` endpoint. Tries to fetch SKILL.md from linked git repos, falls back to synthesized skills.
+- `AwesomeListSource` — Parses the curated README, caches entries. Fetches SKILL.md from linked GitHub repos.
 
-**Tier 2 — High-value expansion.** Smithery's REST API provides the cleanest path to MCP-based skill discovery with minimal translation effort. Composio's Python SDK offers the broadest tool catalog. Both require API keys but have free tiers. Implement these as optional backends behind a `skill.backends.smithery` / `skill.backends.composio` interface.
+**Auth needed (register if env var set):**
+- `ComposioSkillSource` — Requires `COMPOSIO_API_KEY`. Translates tool definitions into SKILL.md format with parameter documentation.
+- `SkillsDirectorySource` — Requires `SKILLSDIRECTORY_API_KEY`. Parses SKILL.md content from API response or synthesizes from metadata.
 
-**Tier 3 — Future consideration.** The official MCP Registry (registry.modelcontextprotocol.io) is still in preview but will likely become the canonical MCP discovery layer. LangChain Hub offers prompts but with weaker skill semantics. Agensi.io and skills.sh lack APIs entirely — monitor for API announcements. SkillsMP (500K+ indexed skills) and PulseMCP (`api.pulsemcp.com/v0beta/servers`) are emerging alternatives worth tracking.
+**Future consideration.** The official MCP Registry (registry.modelcontextprotocol.io) is still in preview but will likely become the canonical MCP discovery layer. LangChain Hub offers prompts but with weaker skill semantics. Agensi.io and skills.sh lack APIs entirely — monitor for API announcements.
 
 ## Conclusion
 

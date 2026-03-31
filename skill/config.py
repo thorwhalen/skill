@@ -73,6 +73,10 @@ class SkillConfig:
     ai_provider_model: str = "anthropic:claude-sonnet-4-20250514"
     ai_api_key: str = "$ANTHROPIC_API_KEY"
     github_enabled: bool = True
+    smithery_enabled: bool = True
+    composio_enabled: bool = True
+    awesome_list_enabled: bool = True
+    skillsdirectory_enabled: bool = True
     search_cache_ttl: int = 3600
 
 

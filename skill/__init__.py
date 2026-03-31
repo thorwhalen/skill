@@ -66,11 +66,18 @@ def sources() -> list[dict]:
     _ensure_default_backends()
     config = load_config()
 
+    _enable_flags = {
+        "github": "github_enabled",
+        "smithery": "smithery_enabled",
+        "composio": "composio_enabled",
+        "awesome-list": "awesome_list_enabled",
+        "skillsdirectory": "skillsdirectory_enabled",
+    }
+
     result = []
     for name, source in backends.items():
-        enabled = True
-        if name == "github":
-            enabled = config.github_enabled
+        flag = _enable_flags.get(name)
+        enabled = getattr(config, flag, True) if flag else True
         result.append(
             {
                 "name": name,
