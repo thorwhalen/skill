@@ -103,12 +103,23 @@ description: >-
   {Domain} tooling for the {package} package. {One-liner about what it does}.
   Use this skill when {trigger scenarios}.
   {Be slightly "pushy" — describe adjacent triggers that should also match.}
+audience: users          # "users", "developers", or "both"
 ---
 ```
 
 Note the description pattern: lead with `"{Domain} tooling for the {package}
 package."` so the package name appears early in the description for semantic
 matching.
+
+**Audience field:** Set `audience` based on the Consumer/Producer classification
+from step 2:
+- Consumer skill → `audience: users`
+- Producer skill → `audience: developers`
+- Skills that serve both → `audience: both`
+
+This field controls whether the skill ships with `pip install` (see `skill-enable`).
+If omitted, downstream tooling will infer it from the skill's content — but
+setting it explicitly is more reliable and self-documenting.
 
 **Body structure:**
 - Lead with *what* and *why* — a 2-3 sentence summary.

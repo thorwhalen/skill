@@ -67,6 +67,7 @@ class SkillMeta:
 
     name: str
     description: str
+    audience: str | None = None
     license: str | None = None
     compatibility: str | None = None
     metadata: dict[str, str] = field(default_factory=dict)
@@ -75,6 +76,8 @@ class SkillMeta:
     def to_dict(self) -> dict:
         """Convert to a dict suitable for YAML frontmatter, omitting None values."""
         d = {"name": self.name, "description": self.description}
+        if self.audience is not None:
+            d["audience"] = self.audience
         if self.license is not None:
             d["license"] = self.license
         if self.compatibility is not None:
@@ -96,6 +99,7 @@ def _meta_from_dict(d: dict) -> SkillMeta:
     return SkillMeta(
         name=d.get("name", ""),
         description=d.get("description", ""),
+        audience=d.get("audience"),
         license=d.get("license"),
         compatibility=d.get("compatibility"),
         metadata=d.get("metadata", {}),

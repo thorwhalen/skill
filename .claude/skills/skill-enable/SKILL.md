@@ -29,7 +29,68 @@ skills.
 Ship skills as **package data** inside your Python package, then let users
 link them into their agent's skills directory using the `skill` package.
 
-### Step 1: Create a data/skills directory
+### Step 1: Decide which skills to ship
+
+Not all skills in a project should be distributed with `pip install`. There are
+two audiences:
+
+- **Consumer skills** (`audience: users`) — Help people *use* the package. These
+  should ship with pip install. Examples: "how to search for skills", "how to
+  build storage interfaces with dol".
+- **Contributor skills** (`audience: developers`) — Help people *develop* or
+  *contribute to* the package. These belong in the repo (`.claude/skills/`) but
+  should NOT ship in the distribution by default. Examples: "how to run the test
+  suite", "how to set up the dev environment", "CI/CD workflow for this project".
+
+Some skills serve both audiences — mark those `audience: both`.
+
+#### How to classify
+
+**If the skill has an `audience` field in its frontmatter, respect it.** But most
+skills won't have one yet. In that case, read the skill's name, description, and
+body to infer its audience. Here are the signals:
+
+**Developer-only signals** — if *most* of these apply and *none* of the consumer
+signals apply, classify as `developers`:
+
+- **Name** contains: `dev`, `debug`, `ci`, `lint`, `contrib`, `internal`,
+  `test`, `setup-dev`, `release`
+- **Description** says things like: "contribute to", "develop the package",
+  "maintain the codebase", "internal tooling", "run the test suite", "CI/CD
+  pipeline for this project", "set up a development environment"
+- **Body** primarily references: development setup (virtualenv, editable
+  installs), running tests (pytest, tox, nox), linting/formatting (ruff, black,
+  mypy), git workflows (branching, PR conventions), CI configuration
+  (`.github/workflows/`), release processes, internal architecture that only
+  matters for contributors
+- **The skill only makes sense if you have the repo checked out** — not just the
+  installed package
+
+**Consumer signals** — if any of these apply, the skill is likely for users:
+
+- **Description** focuses on what users of the package *do with it*: "use this
+  skill when", "how to search", "how to build", "how to configure"
+- **Body** references the package's public API — functions, classes, and CLI
+  commands that are available after `pip install`
+- **The skill works equally well for someone who only has the installed package**
+  (no repo checkout needed)
+
+**When in doubt, include it** — a slightly larger distribution is better than a
+user missing a skill they need. Classify as `users` unless the skill is clearly
+developer-only.
+
+#### Applying the classification
+
+When setting up `{pkg}/data/skills/`, only copy/symlink consumer skills
+(`users` and `both`). For each excluded skill, tell the user:
+
+> "Skipping `{name}` — classified as developer-only because {reason}.
+> To include it anyway, add `audience: both` to its frontmatter."
+
+This way the user sees what was excluded, understands why, and knows exactly how
+to override the decision.
+
+### Step 2: Create a data/skills directory (consumer skills only)
 
 ```
 your-package/
@@ -53,7 +114,7 @@ your-package/
 The key insight: `.claude/skills/` is for development (symlinks during dev),
 while `{pkg}/data/skills/` is what gets distributed.
 
-### Step 2: Include in pyproject.toml
+### Step 3: Include in pyproject.toml
 
 Make sure the skill files are included in the distribution:
 
@@ -69,7 +130,7 @@ For non-setuptools backends (flit, hatch, maturin), consult their docs on
 including data files. The principle is the same: declare that `data/skills/`
 and its contents should be part of the distribution.
 
-### Step 3: Keep dev skills in sync
+### Step 4: Keep dev skills in sync
 
 During development, you want `.claude/skills/` to point to the same content
 as `{pkg}/data/skills/`. Symlinks make this easy:
@@ -90,7 +151,7 @@ skill link-skills your_pkg/data/skills --target .claude/skills --force
 This way, `.claude/skills/` (used by Claude during development) always
 reflects the latest skills from the source of truth in `{pkg}/data/skills/`.
 
-### Step 4: Document the post-install step
+### Step 5: Document the post-install step
 
 After `pip install your-package`, users need to link the skills. Add this to
 your README (the `skill-docs` skill can help with this):
@@ -110,7 +171,7 @@ skill link-skills $(python -c "import your_pkg; print(your_pkg.__path__[0])")/da
 \```
 ```
 
-### Step 5 (optional): Add a convenience function
+### Step 6 (optional): Add a convenience function
 
 For a smoother user experience, add a helper to your package:
 
@@ -140,7 +201,7 @@ def install_skills(target: str = ''):
     link_skills(str(skills_dir()), target=target)
 ```
 
-### Step 6 (optional): Entry point registration
+### Step 7 (optional): Entry point registration
 
 If you want your skills to be discoverable by the `skill` package's search
 system, register them as entry points:
@@ -156,18 +217,20 @@ symlinked.
 ## The full picture
 
 ```
-Development:
+Development (all skills available):
   .claude/skills/your-skill → symlink → your_pkg/data/skills/your-skill
-  (Claude uses .claude/skills/ during dev)
+  .claude/skills/your-dev-skill → lives in .claude/skills/ only (not shipped)
+  (Claude uses all of .claude/skills/ during dev)
 
-Distribution:
+Distribution (consumer skills only):
   pip install your-package
   → installs your_pkg/data/skills/your-skill/ as package data
+  → developer-only skills stay in .claude/skills/, NOT in the distribution
 
 Post-install:
   skill link-skills .../your_pkg/data/skills
   → symlinks into ~/.claude/skills/ or .claude/skills/
-  (Claude can now use the skills)
+  (Users get consumer skills; dev skills remain in the repo for contributors)
 ```
 
 ## Common pitfalls
@@ -181,6 +244,10 @@ Post-install:
 - **Shipping `.claude/skills/` directly** — This directory is for project-local
   agent configuration. Ship via `{pkg}/data/skills/` instead, so skills are
   properly isolated and discoverable.
+- **Shipping developer-only skills** — Skills that help contributors (run tests,
+  set up dev environment, CI workflows) shouldn't be in the pip distribution.
+  They clutter the user's skill list and may confuse the agent. Keep them in
+  `.claude/skills/` in the repo, not in `{pkg}/data/skills/`. See Step 1.
 - **Large reference files** — Skills with big reference docs will increase your
   package size. Consider whether the references are essential or if they could
   be downloaded on demand.
