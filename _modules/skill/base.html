@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.base &mdash; skill 0.1.6 documentation</title>
+  <title>skill.base &mdash; skill 0.1.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=6e0256f3"></script>
+      <script src="../../_static/documentation_options.js?v=ca7ad2ea"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -98,6 +98,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
@@ -158,6 +159,14 @@
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
 
+<span class="c1">#: Top-level frontmatter keys ``SkillMeta`` models as named fields. Anything else</span>
+<span class="c1">#: is an unknown/namespaced key (e.g. another tool&#39;s ``coact:`` block) and is kept</span>
+<span class="c1">#: verbatim in :attr:`SkillMeta.extra` so it survives a parse→render round-trip.</span>
+<span class="n">KNOWN_FRONTMATTER_KEYS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;audience&quot;</span><span class="p">,</span> <span class="s2">&quot;license&quot;</span><span class="p">,</span> <span class="s2">&quot;compatibility&quot;</span><span class="p">,</span> <span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="s2">&quot;allowed-tools&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+
+
 <div class="viewcode-block" id="SkillMeta">
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.SkillMeta">[docs]</a>
 <span class="nd">@dataclass</span>
@@ -167,6 +176,13 @@
 <span class="sd">    &gt;&gt;&gt; m = SkillMeta(name=&#39;test&#39;, description=&#39;A test skill&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; m.name</span>
 <span class="sd">    &#39;test&#39;</span>
+
+<span class="sd">    Unknown/namespaced top-level keys are preserved in :attr:`extra` and re-emitted</span>
+<span class="sd">    on render, so a tool&#39;s additive frontmatter block isn&#39;t silently dropped:</span>
+
+<span class="sd">    &gt;&gt;&gt; m = SkillMeta(name=&#39;t&#39;, description=&#39;d&#39;, extra={&#39;coact&#39;: {&#39;model&#39;: &#39;sonnet&#39;}})</span>
+<span class="sd">    &gt;&gt;&gt; m.to_dict()[&#39;coact&#39;]</span>
+<span class="sd">    {&#39;model&#39;: &#39;sonnet&#39;}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
@@ -176,11 +192,17 @@
     <span class="n">compatibility</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
     <span class="n">allowed_tools</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="c1">#: Unknown/namespaced top-level frontmatter keys, kept verbatim for round-trip.</span>
+    <span class="n">extra</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SkillMeta.to_dict">
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.SkillMeta.to_dict">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert to a dict suitable for YAML frontmatter, omitting None values.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert to a dict suitable for YAML frontmatter, omitting None values.</span>
+
+<span class="sd">        Named fields render first (stable order); preserved :attr:`extra` keys</span>
+<span class="sd">        follow, so namespaced blocks survive ``parse_skill_md`` → ``render_skill_md``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">audience</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">d</span><span class="p">[</span><span class="s2">&quot;audience&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">audience</span>
@@ -192,6 +214,10 @@
             <span class="n">d</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">allowed_tools</span><span class="p">:</span>
             <span class="n">d</span><span class="p">[</span><span class="s2">&quot;allowed-tools&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">allowed_tools</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># never let a stray extra key shadow a named field</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;allowed_tools&quot;</span><span class="p">}:</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
         <span class="k">return</span> <span class="n">d</span></div>
 </div>
 
@@ -203,6 +229,9 @@
 <span class="sd">    &gt;&gt;&gt; m = _meta_from_dict({&#39;name&#39;: &#39;x&#39;, &#39;description&#39;: &#39;y&#39;, &#39;license&#39;: &#39;MIT&#39;})</span>
 <span class="sd">    &gt;&gt;&gt; m.license</span>
 <span class="sd">    &#39;MIT&#39;</span>
+
+<span class="sd">    &gt;&gt;&gt; _meta_from_dict({&#39;name&#39;: &#39;x&#39;, &#39;description&#39;: &#39;y&#39;, &#39;coact&#39;: {&#39;a&#39;: 1}}).extra</span>
+<span class="sd">    {&#39;coact&#39;: {&#39;a&#39;: 1}}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">SkillMeta</span><span class="p">(</span>
         <span class="n">name</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
@@ -212,6 +241,7 @@
         <span class="n">compatibility</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;compatibility&quot;</span><span class="p">),</span>
         <span class="n">metadata</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="p">{}),</span>
         <span class="n">allowed_tools</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;allowed-tools&quot;</span><span class="p">,</span> <span class="p">[]),</span>
+        <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">KNOWN_FRONTMATTER_KEYS</span><span class="p">},</span>
     <span class="p">)</span>
 
 
