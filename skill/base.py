@@ -61,7 +61,15 @@ def render_frontmatter(meta: dict) -> str:
 #: is an unknown/namespaced key (e.g. another tool's ``coact:`` block) and is kept
 #: verbatim in :attr:`SkillMeta.extra` so it survives a parse→render round-trip.
 KNOWN_FRONTMATTER_KEYS = frozenset(
-    {"name", "description", "audience", "license", "compatibility", "metadata", "allowed-tools"}
+    {
+        "name",
+        "description",
+        "audience",
+        "license",
+        "compatibility",
+        "metadata",
+        "allowed-tools",
+    }
 )
 
 
