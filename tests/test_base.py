@@ -61,6 +61,59 @@ class TestRoundTrip:
         assert parsed.license == 'MIT'
         assert parsed.allowed_tools == ['Read', 'Write']
 
+    def test_roundtrip_preserves_unknown_namespaced_keys(self):
+        # an additive namespaced block (e.g. another tool's `coact:` section) must
+        # survive parse -> render rather than being silently dropped (issue #2).
+        src = (
+            "---\n"
+            "name: ux\n"
+            "description: Analyze.\n"
+            "coact:\n"
+            "  model: sonnet\n"
+            "  tools: [Read, Grep]\n"
+            "vendor-x:\n"
+            "  flag: true\n"
+            "---\n"
+            "# body\n"
+        )
+        meta, body = parse_skill_md(src)
+        assert meta.extra['coact'] == {'model': 'sonnet', 'tools': ['Read', 'Grep']}
+        assert meta.extra['vendor-x'] == {'flag': True}
+
+        rendered = render_skill_md(meta, body)
+        reparsed, _ = parse_skill_md(rendered)
+        assert reparsed.extra == meta.extra
+        assert 'coact:' in rendered and 'vendor-x:' in rendered
+
+    def test_named_fields_are_not_captured_as_extra(self):
+        meta, _ = parse_skill_md(
+            "---\nname: x\ndescription: y\naudience: developer\n"
+            "license: MIT\nallowed-tools: [Bash]\n---\nbody"
+        )
+        assert meta.extra == {}
+        assert meta.audience == 'developer' and meta.allowed_tools == ['Bash']
+
+    def test_no_extra_means_no_change_to_output(self):
+        meta = SkillMeta(name='x', description='y')
+        assert 'extra' not in render_skill_md(meta, 'b')
+
+
+class TestExtraKeys:
+    def test_default_extra_is_empty(self):
+        assert SkillMeta(name='x', description='y').extra == {}
+
+    def test_to_dict_emits_extra_after_named_fields(self):
+        d = SkillMeta(name='x', description='y', license='MIT',
+                      extra={'coact': {'model': 'sonnet'}}).to_dict()
+        keys = list(d)
+        assert keys[:3] == ['name', 'description', 'license']
+        assert d['coact'] == {'model': 'sonnet'}
+
+    def test_extra_cannot_shadow_named_frontmatter_keys(self):
+        # a stray 'name' in extra must not override the real field on render
+        d = SkillMeta(name='real', description='y', extra={'name': 'evil'}).to_dict()
+        assert d['name'] == 'real'
+
 
 class TestMetaFromDict:
     def test_minimal(self):

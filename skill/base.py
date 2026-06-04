@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -56,6 +57,14 @@ def render_frontmatter(meta: dict) -> str:
 # ---------------------------------------------------------------------------
 
 
+#: Top-level frontmatter keys ``SkillMeta`` models as named fields. Anything else
+#: is an unknown/namespaced key (e.g. another tool's ``coact:`` block) and is kept
+#: verbatim in :attr:`SkillMeta.extra` so it survives a parse→render round-trip.
+KNOWN_FRONTMATTER_KEYS = frozenset(
+    {"name", "description", "audience", "license", "compatibility", "metadata", "allowed-tools"}
+)
+
+
 @dataclass
 class SkillMeta:
     """Parsed YAML frontmatter from a SKILL.md file.
@@ -63,6 +72,13 @@ class SkillMeta:
     >>> m = SkillMeta(name='test', description='A test skill')
     >>> m.name
     'test'
+
+    Unknown/namespaced top-level keys are preserved in :attr:`extra` and re-emitted
+    on render, so a tool's additive frontmatter block isn't silently dropped:
+
+    >>> m = SkillMeta(name='t', description='d', extra={'coact': {'model': 'sonnet'}})
+    >>> m.to_dict()['coact']
+    {'model': 'sonnet'}
     """
 
     name: str
@@ -72,9 +88,15 @@ class SkillMeta:
     compatibility: str | None = None
     metadata: dict[str, str] = field(default_factory=dict)
     allowed_tools: list[str] = field(default_factory=list)
+    #: Unknown/namespaced top-level frontmatter keys, kept verbatim for round-trip.
+    extra: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict:
-        """Convert to a dict suitable for YAML frontmatter, omitting None values."""
+        """Convert to a dict suitable for YAML frontmatter, omitting None values.
+
+        Named fields render first (stable order); preserved :attr:`extra` keys
+        follow, so namespaced blocks survive ``parse_skill_md`` → ``render_skill_md``.
+        """
         d = {"name": self.name, "description": self.description}
         if self.audience is not None:
             d["audience"] = self.audience
@@ -86,6 +108,10 @@ class SkillMeta:
             d["metadata"] = self.metadata
         if self.allowed_tools:
             d["allowed-tools"] = self.allowed_tools
+        for key, value in self.extra.items():
+            # never let a stray extra key shadow a named field
+            if key not in d and key not in {"allowed_tools"}:
+                d[key] = value
         return d
 
 
@@ -95,6 +121,9 @@ def _meta_from_dict(d: dict) -> SkillMeta:
     >>> m = _meta_from_dict({'name': 'x', 'description': 'y', 'license': 'MIT'})
     >>> m.license
     'MIT'
+
+    >>> _meta_from_dict({'name': 'x', 'description': 'y', 'coact': {'a': 1}}).extra
+    {'coact': {'a': 1}}
     """
     return SkillMeta(
         name=d.get("name", ""),
@@ -104,6 +133,7 @@ def _meta_from_dict(d: dict) -> SkillMeta:
         compatibility=d.get("compatibility"),
         metadata=d.get("metadata", {}),
         allowed_tools=d.get("allowed-tools", []),
+        extra={k: v for k, v in d.items() if k not in KNOWN_FRONTMATTER_KEYS},
     )
 
 
