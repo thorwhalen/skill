@@ -86,6 +86,31 @@ eval "$(register-python-argcomplete skill)"
 The first time you run any `skill` command without completion set up, you'll
 see a one-time hint reminding you to run `skill install-completion`.
 
+## Skills
+
+This package ships its own AI agent skills (in [`skills/`](skills/)), installable
+into **any** agent host with [`gh skill`](https://cli.github.com/manual/gh_skill)
+(GitHub CLI ≥ 2.90.0):
+
+```bash
+gh skill preview thorwhalen/skill skill-package-setup        # inspect before installing
+gh skill install thorwhalen/skill skill-package-setup --agent claude-code
+gh skill install thorwhalen/skill skill-enable
+```
+
+| Skill | What it covers |
+|-------|----------------|
+| `skill-package-setup` | Canonical layout & distribution policy — where a package's skills live, `gh skill` setup, and migration |
+| `skill-build` | Author skills for a package by analyzing its code, tests, and docs |
+| `skill-enable` | Ship skills via `pip` (`{pkg}/data/skills/`) + audience classification |
+| `skill-docs` | Document a project's skills in its README |
+| `skill-manage` | Search, list, inspect, install/uninstall skills across agents |
+| `skill-sync` | Keep skills in sync with the code they document |
+
+These are dev/maintainer skills, so they're not bundled in the wheel — install
+them with `gh skill` as above. See `skill-package-setup` for the layout policy
+this repo follows (real files in `skills/`, relative symlinks in `.claude/skills/`).
+
 ## Plugin System
 
 `skill` has a registry-based plugin architecture with four extension points:

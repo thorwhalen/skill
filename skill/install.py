@@ -362,21 +362,29 @@ def _resolve_skills_source(source: Path) -> Path:
     Resolution order:
 
     1. If ``source`` itself contains skill subdirectories, use it directly.
-    2. If ``source/.claude/skills`` exists and contains skills, use that.
-    3. If ``source/{pkg}/data/skills`` exists for some package ``pkg`` (detected
+    2. If ``source/skills`` exists and contains skills, use that. This is the
+       canonical, cross-agent layout that ``gh skill``/``npx skills`` discover,
+       so it takes precedence over the others when present.
+    3. If ``source/.claude/skills`` exists and contains skills, use that.
+    4. If ``source/{pkg}/data/skills`` exists for some package ``pkg`` (detected
        via ``pyproject.toml``), use that.
-    4. Fall back to ``source`` as-is (will yield nothing if no skills found).
+    5. Fall back to ``source`` as-is (will yield nothing if no skills found).
     """
     # 1. Direct: source already contains skill subdirs
     if _has_skills(source):
         return source
 
-    # 2. .claude/skills convention
+    # 2. Canonical top-level skills/ (gh skill / npx skills layout)
+    top_level_skills = source / "skills"
+    if _has_skills(top_level_skills):
+        return top_level_skills
+
+    # 3. .claude/skills convention
     claude_skills = source / ".claude" / "skills"
     if _has_skills(claude_skills):
         return claude_skills
 
-    # 3. {pkg}/data/skills convention (Python projects)
+    # 4. {pkg}/data/skills convention (Python projects)
     pyproject = source / "pyproject.toml"
     if pyproject.exists():
         # Infer package name from the directory name (common convention)
