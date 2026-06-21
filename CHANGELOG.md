@@ -1,5 +1,69 @@
 # Changelog
 
+## [0.1.9] - 2026-06-13
+
+### Added
+
+- feat(skills): adopt canonical gh-skill layout; skill-package-setup as authority ([#5](https://github.com/thorwhalen/skill/pull/5))
+
+## [0.1.8] - 2026-06-04
+
+### Added
+
+- feat(base): preserve unknown/namespaced frontmatter keys on round-trip ([#3](https://github.com/thorwhalen/skill/pull/3))
+
+## [0.1.7] - 2026-05-14
+
+- chore(ci): bump action pins to checkout@v6, setup-uv@v7
+
+## [0.1.6] - 2026-04-14
+
+### Added
+
+- feat: Add audience field to distinguish consumer vs developer skills
+
+## [0.1.5] - 2026-04-02
+
+### Added
+
+- feat: Add 5 AI agent skills for the skill package
+
+## [0.1.4] - 2026-03-31
+
+### Added
+
+- feat: Add new skill backends for Smithery, Composio, Awesome List, and SkillsDirectory
+
+## [0.1.3] - 2026-03-26
+
+### Added
+
+- feat: add sources command, URL display, and dependency checking
+
+## [0.1.2] - 2026-03-26
+
+### Added
+
+- feat: add terminal-friendly formatting for CLI output
+
+## [0.1.1] - 2026-03-26
+
+- added homepage in pyproject
+- 0.0.7:
+- add docs/* to .gitignore
+- 0.0.6:
+- 0.0.5:
+- None: fix: *.ipynb linguist-documentation in .gitattributes
+- 0.0.3
+- .gitignore
+- 0.0.2
+
+### Added
+
+- feat: add link-skills command and shell completion ([#1](https://github.com/thorwhalen/skill/pull/1))
+- feat: full skill package implementation with plugin registry system
+- feat: added docs and a convenient  class
+
 ## 0.1.0 (2026-03-19)
 
 Initial implementation of the `skill` package.
