@@ -398,9 +398,11 @@ class TestComposioSkillSource:
         assert "github/GITHUB_CREATE_ISSUE" in src
         assert "missing/TOOL" not in src
 
-    def test_requires_token(self):
+    def test_requires_token(self, monkeypatch):
         from skill.backends.composio import ComposioSkillSource
 
+        # Ensure the env doesn't supply a token (CI is clean, but a dev machine may set it)
+        monkeypatch.delenv("COMPOSIO_API_KEY", raising=False)
         with pytest.raises(ValueError):
             ComposioSkillSource(http_get=_make_mock_http({}))
 
@@ -604,9 +606,11 @@ class TestSkillsDirectorySource:
         assert "alice/python-linter" in src
         assert "missing/thing" not in src
 
-    def test_requires_token(self):
+    def test_requires_token(self, monkeypatch):
         from skill.backends.skillsdirectory import SkillsDirectorySource
 
+        # Ensure the env doesn't supply a token (CI is clean, but a dev machine may set it)
+        monkeypatch.delenv("SKILLSDIRECTORY_API_KEY", raising=False)
         with pytest.raises(ValueError):
             SkillsDirectorySource(http_get=_make_mock_http({}))
 
