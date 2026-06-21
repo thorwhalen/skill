@@ -88,28 +88,35 @@ see a one-time hint reminding you to run `skill install-completion`.
 
 ## Skills
 
-This package ships its own AI agent skills (in [`skills/`](skills/)), installable
-into **any** agent host with [`gh skill`](https://cli.github.com/manual/gh_skill)
-(GitHub CLI ≥ 2.90.0):
+This package ships agent skills you can install into any agent host with
+[`gh skill`](https://cli.github.com/manual/gh_skill) (don't have it?
+[install gh](https://cli.github.com/)):
 
 ```bash
-gh skill preview thorwhalen/skill skill-package-setup        # inspect before installing
 gh skill install thorwhalen/skill skill-package-setup --agent claude-code
+gh skill install thorwhalen/skill skill-build
 gh skill install thorwhalen/skill skill-enable
+gh skill install thorwhalen/skill skill-docs
+gh skill install thorwhalen/skill skill-manage
+gh skill install thorwhalen/skill skill-sync
 ```
 
-| Skill | What it covers |
-|-------|----------------|
-| `skill-package-setup` | Canonical layout & distribution policy — where a package's skills live, `gh skill` setup, and migration |
-| `skill-build` | Author skills for a package by analyzing its code, tests, and docs |
-| `skill-enable` | Ship skills via `pip` (`{pkg}/data/skills/`) + audience classification |
-| `skill-docs` | Document a project's skills in its README |
-| `skill-manage` | Search, list, inspect, install/uninstall skills across agents |
-| `skill-sync` | Keep skills in sync with the code they document |
+| Skill | Use it when… |
+|-------|--------------|
+| `skill-manage` | searching, listing, inspecting, or installing/uninstalling skills across agents |
+| `skill-enable` | shipping a package's skills via `pip install` and deciding which to ship |
+| `skill-package-setup` | deciding where a package's skills live and making them `gh skill`-installable (maintainer) |
+| `skill-build` | authoring skills for a package by analyzing its code, tests, and docs (developer) |
+| `skill-docs` | documenting a project's skills in its README (developer) |
+| `skill-sync` | keeping skills in sync with the source code they document (developer) |
 
 These are dev/maintainer skills, so they're not bundled in the wheel — install
 them with `gh skill` as above. See `skill-package-setup` for the layout policy
 this repo follows (real files in `skills/`, relative symlinks in `.claude/skills/`).
+
+Packages can also install their own GitHub-published skills programmatically via
+[`skill.install_from_github(repo, names, agent='claude-code')`](skill/install.py),
+a thin wrapper over the `gh skill` CLI.
 
 ## Plugin System
 
