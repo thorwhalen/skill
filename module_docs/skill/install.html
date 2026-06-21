@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.install &mdash; skill 0.1.10 documentation</title>
+  <title>skill.install &mdash; skill 0.1.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=bafade30"></script>
+      <script src="../../_static/documentation_options.js?v=1e825a29"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -67,6 +67,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#skill.install.AgentTarget"><code class="docutils literal notranslate"><span class="pre">AgentTarget</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#skill.install.agent_targets"><code class="docutils literal notranslate"><span class="pre">agent_targets</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#skill.install.install"><code class="docutils literal notranslate"><span class="pre">install()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#skill.install.install_from_github"><code class="docutils literal notranslate"><span class="pre">install_from_github()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#skill.install.link_skills"><code class="docutils literal notranslate"><span class="pre">link_skills()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#skill.install.uninstall"><code class="docutils literal notranslate"><span class="pre">uninstall()</span></code></a></li>
 </ul>
@@ -105,6 +106,9 @@
   <section id="module-skill.install">
 <span id="skill-install"></span><h1>skill.install<a class="headerlink" href="#module-skill.install" title="Link to this heading"></a></h1>
 <p>Installation logic: symlink/copy skills into agent target directories.</p>
+<p>Also provides <a class="reference internal" href="#skill.install.install_from_github" title="skill.install.install_from_github"><code class="xref py py-func docutils literal notranslate"><span class="pre">install_from_github()</span></code></a>, a thin wrapper over the <code class="docutils literal notranslate"><span class="pre">gh</span> <span class="pre">skill</span></code>
+CLI that any package can call programmatically to install skills it ships on
+GitHub into the user’s agent host.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="skill.install.AgentTarget">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">skill.install.</span></span><span class="sig-name descname"><span class="pre">AgentTarget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'skill.md'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">needs_translation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/skill/install.html#AgentTarget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.install.AgentTarget" title="Link to this definition"></a></dt>
@@ -141,6 +145,42 @@ was installed.</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skill.install.install_from_github">
+<span class="sig-prename descclassname"><span class="pre">skill.install.</span></span><span class="sig-name descname"><span class="pre">install_from_github</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'claude-code'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preview</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/skill/install.html#install_from_github"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.install.install_from_github" title="Link to this definition"></a></dt>
+<dd><p>Install (or preview) skills published on GitHub via the <code class="docutils literal notranslate"><span class="pre">gh</span> <span class="pre">skill</span></code> CLI.</p>
+<p>Shells out to <code class="docutils literal notranslate"><span class="pre">gh</span> <span class="pre">skill</span> <span class="pre">install</span> <span class="pre">&lt;repo&gt;</span> <span class="pre">&lt;name&gt;</span> <span class="pre">--agent</span> <span class="pre">&lt;agent&gt;</span></code> for each
+requested skill name (or <code class="docutils literal notranslate"><span class="pre">gh</span> <span class="pre">skill</span> <span class="pre">preview</span> <span class="pre">&lt;repo&gt;</span> <span class="pre">&lt;name&gt;</span></code> when
+<code class="docutils literal notranslate"><span class="pre">preview=True</span></code>). This is the shared utility packages call programmatically
+to let users grab the skills they ship on GitHub.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo</strong> (<em>str</em>) – The GitHub <code class="docutils literal notranslate"><span class="pre">owner/repo</span></code> that publishes the skills (e.g. <code class="docutils literal notranslate"><span class="pre">'thorwhalen/skill'</span></code>).</p></li>
+<li><p><strong>names</strong> (<em>str</em><em> | </em><em>list</em><em>[</em><em>str</em><em>]</em>) – A single skill name or a list of skill names to install.</p></li>
+<li><p><strong>agent</strong> (<em>str</em>) – The agent host to install into (default <code class="docutils literal notranslate"><span class="pre">'claude-code'</span></code>). Ignored for previews.</p></li>
+<li><p><strong>preview</strong> (<em>bool</em>) – If True, run <code class="docutils literal notranslate"><span class="pre">gh</span> <span class="pre">skill</span> <span class="pre">preview</span></code> instead of <code class="docutils literal notranslate"><span class="pre">gh</span> <span class="pre">skill</span> <span class="pre">install</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One result per name: <code class="docutils literal notranslate"><span class="pre">{'name',</span> <span class="pre">'repo',</span> <span class="pre">'argv',</span> <span class="pre">'returncode',</span> <span class="pre">'stdout',</span> <span class="pre">'stderr'}</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[dict]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the GitHub CLI (<code class="docutils literal notranslate"><span class="pre">gh</span></code>) is not installed, or if the <code class="docutils literal notranslate"><span class="pre">gh</span> <span class="pre">skill</span></code>
+    extension/command is unavailable — with a message pointing to the
+    relevant install docs.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">install_from_github</span><span class="p">(</span><span class="s1">&#39;thorwhalen/skill&#39;</span><span class="p">,</span> <span class="s1">&#39;skill-package-setup&#39;</span><span class="p">)</span>
+<span class="go">[{&#39;name&#39;: &#39;skill-package-setup&#39;, &#39;repo&#39;: &#39;thorwhalen/skill&#39;, ...}]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
