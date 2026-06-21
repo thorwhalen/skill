@@ -1,7 +1,13 @@
-"""Installation logic: symlink/copy skills into agent target directories."""
+"""Installation logic: symlink/copy skills into agent target directories.
+
+Also provides :func:`install_from_github`, a thin wrapper over the ``gh skill``
+CLI that any package can call programmatically to install skills it ships on
+GitHub into the user's agent host.
+"""
 
 import os
 import shutil
+import subprocess
 import warnings
 from dataclasses import dataclass
 from pathlib import Path
@@ -80,6 +86,111 @@ agent_targets.register(
 
 # Keep AGENT_TARGETS as a backward-compatible alias
 AGENT_TARGETS = agent_targets
+
+
+# ---------------------------------------------------------------------------
+# Install skills published on GitHub via the ``gh skill`` CLI
+# ---------------------------------------------------------------------------
+
+_GH_INSTALL_URL = "https://cli.github.com/"
+_GH_SKILL_DOCS_URL = "https://cli.github.com/manual/gh_skill"
+
+
+def install_from_github(
+    repo: str,
+    names,
+    *,
+    agent: str = "claude-code",
+    preview: bool = False,
+) -> list[dict]:
+    """Install (or preview) skills published on GitHub via the ``gh skill`` CLI.
+
+    Shells out to ``gh skill install <repo> <name> --agent <agent>`` for each
+    requested skill name (or ``gh skill preview <repo> <name>`` when
+    ``preview=True``). This is the shared utility packages call programmatically
+    to let users grab the skills they ship on GitHub.
+
+    Parameters
+    ----------
+    repo : str
+        The GitHub ``owner/repo`` that publishes the skills (e.g. ``'thorwhalen/skill'``).
+    names : str | list[str]
+        A single skill name or a list of skill names to install.
+    agent : str
+        The agent host to install into (default ``'claude-code'``). Ignored for previews.
+    preview : bool
+        If True, run ``gh skill preview`` instead of ``gh skill install``.
+
+    Returns
+    -------
+    list[dict]
+        One result per name: ``{'name', 'repo', 'argv', 'returncode', 'stdout', 'stderr'}``.
+
+    Raises
+    ------
+    RuntimeError
+        If the GitHub CLI (``gh``) is not installed, or if the ``gh skill``
+        extension/command is unavailable — with a message pointing to the
+        relevant install docs.
+
+    Example
+    -------
+    >>> install_from_github('thorwhalen/skill', 'skill-package-setup')  # doctest: +SKIP
+    [{'name': 'skill-package-setup', 'repo': 'thorwhalen/skill', ...}]
+    """
+    if isinstance(names, str):
+        names = [names]
+
+    if shutil.which("gh") is None:
+        raise RuntimeError(
+            "The GitHub CLI (`gh`) is required to install skills from GitHub, "
+            f"but it was not found on your PATH. Install it from {_GH_INSTALL_URL}"
+        )
+
+    verb = "preview" if preview else "install"
+    results = []
+    for name in names:
+        argv = ["gh", "skill", verb, repo, name]
+        if not preview:
+            argv += ["--agent", agent]
+        try:
+            proc = subprocess.run(
+                argv,
+                capture_output=True,
+                text=True,
+            )
+        except FileNotFoundError as e:
+            raise RuntimeError(
+                "The GitHub CLI (`gh`) is required to install skills from GitHub, "
+                f"but it could not be executed. Install it from {_GH_INSTALL_URL}"
+            ) from e
+
+        if proc.returncode != 0:
+            stderr = proc.stderr or ""
+            lower = stderr.lower()
+            if "unknown command" in lower or "unknown subcommand" in lower:
+                raise RuntimeError(
+                    "The `gh skill` command is unavailable (you may need a newer "
+                    "GitHub CLI or the skill extension). See "
+                    f"{_GH_SKILL_DOCS_URL}\n\n{stderr.strip()}"
+                )
+            raise RuntimeError(
+                f"`{' '.join(argv)}` failed (exit {proc.returncode}):\n"
+                f"{stderr.strip()}"
+            )
+
+        results.append(
+            {
+                "name": name,
+                "repo": repo,
+                "argv": argv,
+                "returncode": proc.returncode,
+                "stdout": proc.stdout,
+                "stderr": proc.stderr,
+            }
+        )
+
+    return results
 
 
 # ---------------------------------------------------------------------------
