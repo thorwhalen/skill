@@ -175,8 +175,7 @@ def install_from_github(
                     f"{_GH_SKILL_DOCS_URL}\n\n{stderr.strip()}"
                 )
             raise RuntimeError(
-                f"`{' '.join(argv)}` failed (exit {proc.returncode}):\n"
-                f"{stderr.strip()}"
+                f"`{' '.join(argv)}` failed (exit {proc.returncode}):\n{stderr.strip()}"
             )
 
         results.append(
