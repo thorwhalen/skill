@@ -12,7 +12,7 @@ Usage::
     python -m skill sources
 """
 
-import argh
+import cw
 
 from skill import search as _search
 from skill import install as _install
@@ -148,22 +148,25 @@ def link_skills(
     return format_path_dict(result, verb="Linked")
 
 
+#: The commands ``skill`` exposes, in the order they appear in ``--help``.
+COMMANDS = [
+    search,
+    install,
+    uninstall,
+    create,
+    list_skills,
+    validate,
+    show,
+    link_skills,
+    sources,
+    install_completion,
+]
+
+
 def main():
+    """Entry point for the ``skill`` console script and ``python -m skill``."""
     maybe_hint_completion()
-    argh.dispatch_commands(
-        [
-            search,
-            install,
-            uninstall,
-            create,
-            list_skills,
-            validate,
-            show,
-            link_skills,
-            sources,
-            install_completion,
-        ]
-    )
+    raise SystemExit(cw.dispatch(COMMANDS))
 
 
 if __name__ == "__main__":
