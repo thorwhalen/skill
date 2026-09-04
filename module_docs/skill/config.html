@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.config &mdash; skill 0.1.11 documentation</title>
+  <title>skill.config &mdash; skill 0.1.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=1e825a29"></script>
+      <script src="../../_static/documentation_options.js?v=297ad043"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -114,9 +114,9 @@
 <dd><p>Root configuration schema with sensible defaults for zero-config first run.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">SkillConfig</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">default_agent_targets</span>
-<span class="go">[&#39;claude-code&#39;]</span>
+<span class="go">['claude-code']</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">install_method</span>
-<span class="go">&#39;symlink&#39;</span>
+<span class="go">'symlink'</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -146,7 +146,7 @@
 <span class="sig-prename descclassname"><span class="pre">skill.config.</span></span><span class="sig-name descname"><span class="pre">config_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="../../_modules/skill/config.html#config_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.config.config_path" title="Link to this definition"></a></dt>
 <dd><p>Return the path to the config TOML file.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">config_path</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;config.toml&#39;</span>
+<span class="go">'config.toml'</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -165,9 +165,9 @@
 <dt class="sig sig-object py" id="skill.config.load_config">
 <span class="sig-prename descclassname"><span class="pre">skill.config.</span></span><span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#skill.config.SkillConfig" title="skill.config.SkillConfig"><span class="pre">SkillConfig</span></a></span></span><a class="reference internal" href="../../_modules/skill/config.html#load_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.config.load_config" title="Link to this definition"></a></dt>
 <dd><p>Load config from TOML, falling back to defaults for missing fields.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/nonexistent/config.toml&#39;</span><span class="p">))</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">'/nonexistent/config.toml'</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">default_scope</span>
-<span class="go">&#39;project&#39;</span>
+<span class="go">'project'</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -178,7 +178,7 @@
 <dd><p>Save config to TOML.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;config.toml&#39;</span>
+<span class="gp">... </span>    <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="s1">'config.toml'</span>
 <span class="gp">... </span>    <span class="n">save_config</span><span class="p">(</span><span class="n">SkillConfig</span><span class="p">(),</span> <span class="n">path</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="n">p</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
 <span class="go">True</span>
@@ -191,7 +191,7 @@
 <span class="sig-prename descclassname"><span class="pre">skill.config.</span></span><span class="sig-name descname"><span class="pre">skills_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="../../_modules/skill/config.html#skills_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.config.skills_dir" title="Link to this definition"></a></dt>
 <dd><p>Return the canonical skills storage directory.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">skills_dir</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;skills&#39;</span>
+<span class="go">'skills'</span>
 </pre></div>
 </div>
 </dd></dl>

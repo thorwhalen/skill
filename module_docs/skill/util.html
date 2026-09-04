@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.util &mdash; skill 0.1.11 documentation</title>
+  <title>skill.util &mdash; skill 0.1.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=1e825a29"></script>
+      <script src="../../_static/documentation_options.js?v=297ad043"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -110,16 +110,16 @@
 <dt class="sig sig-object py" id="skill.util.ParsedKey">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">skill.util.</span></span><span class="sig-name descname"><span class="pre">ParsedKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">owner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/skill/util.html#ParsedKey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.util.ParsedKey" title="Link to this definition"></a></dt>
 <dd><p>A normalized skill key.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ParsedKey</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s1">&#39;owner/skill-name&#39;</span><span class="p">)</span>
-<span class="go">ParsedKey(owner=&#39;owner&#39;, name=&#39;skill-name&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ParsedKey</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s1">&#39;Owner/Skill-Name&#39;</span><span class="p">)</span>
-<span class="go">ParsedKey(owner=&#39;owner&#39;, name=&#39;skill-name&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ParsedKey</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s1">&#39;my-skill&#39;</span><span class="p">)</span>
-<span class="go">ParsedKey(owner=&#39;_local&#39;, name=&#39;my-skill&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ParsedKey</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s1">&#39;owner/repo/skill-name&#39;</span><span class="p">)</span>
-<span class="go">ParsedKey(owner=&#39;owner&#39;, name=&#39;skill-name&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">ParsedKey</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="s1">&#39;owner&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;skill-name&#39;</span><span class="p">))</span>
-<span class="go">&#39;owner/skill-name&#39;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ParsedKey</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s1">'owner/skill-name'</span><span class="p">)</span>
+<span class="go">ParsedKey(owner='owner', name='skill-name')</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ParsedKey</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s1">'Owner/Skill-Name'</span><span class="p">)</span>
+<span class="go">ParsedKey(owner='owner', name='skill-name')</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ParsedKey</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s1">'my-skill'</span><span class="p">)</span>
+<span class="go">ParsedKey(owner='_local', name='my-skill')</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ParsedKey</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s1">'owner/repo/skill-name'</span><span class="p">)</span>
+<span class="go">ParsedKey(owner='owner', name='skill-name')</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">ParsedKey</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="s1">'owner'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'skill-name'</span><span class="p">))</span>
+<span class="go">'owner/skill-name'</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -138,10 +138,10 @@
 <dd><p>Write <code class="docutils literal notranslate"><span class="pre">content</span></code> to <code class="docutils literal notranslate"><span class="pre">path</span></code> atomically via temp-then-rename.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;test.txt&#39;</span>
-<span class="gp">... </span>    <span class="n">atomic_write</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="s1">&#39;hello&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="s1">'test.txt'</span>
+<span class="gp">... </span>    <span class="n">atomic_write</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="s1">'hello'</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="n">p</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
-<span class="go">&#39;hello&#39;</span>
+<span class="go">'hello'</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -152,12 +152,12 @@
 <dd><p>Walk up from <code class="docutils literal notranslate"><span class="pre">start</span></code> looking for a project root marker.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">())</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">d</span> <span class="o">/</span> <span class="s1">&#39;sub&#39;</span> <span class="o">/</span> <span class="s1">&#39;deep&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">d</span> <span class="o">/</span> <span class="s1">'sub'</span> <span class="o">/</span> <span class="s1">'deep'</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">d</span> <span class="o">/</span> <span class="s1">&#39;.git&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">d</span> <span class="o">/</span> <span class="s1">'.git'</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">find_project_root</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="n">d</span>
 <span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">find_project_root</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/nonexistent/path/that/does/not/exist&#39;</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">find_project_root</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">'/nonexistent/path/that/does/not/exist'</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">None</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -167,13 +167,13 @@
 <dt class="sig sig-object py" id="skill.util.resolve_env_vars">
 <span class="sig-prename descclassname"><span class="pre">skill.util.</span></span><span class="sig-name descname"><span class="pre">resolve_env_vars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/skill/util.html#resolve_env_vars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.util.resolve_env_vars" title="Link to this definition"></a></dt>
 <dd><p>Resolve <code class="docutils literal notranslate"><span class="pre">$VAR</span></code> and <code class="docutils literal notranslate"><span class="pre">${VAR}</span></code> references from environment variables.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="p">;</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;_SKILL_TEST&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">resolve_env_vars</span><span class="p">(</span><span class="s1">&#39;key=$_SKILL_TEST&#39;</span><span class="p">)</span>
-<span class="go">&#39;key=hello&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">resolve_env_vars</span><span class="p">(</span><span class="s1">&#39;$</span><span class="si">{_SKILL_TEST}</span><span class="s1">/world&#39;</span><span class="p">)</span>
-<span class="go">&#39;hello/world&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">resolve_env_vars</span><span class="p">(</span><span class="s1">&#39;no vars here&#39;</span><span class="p">)</span>
-<span class="go">&#39;no vars here&#39;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="p">;</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">'_SKILL_TEST'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'hello'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resolve_env_vars</span><span class="p">(</span><span class="s1">'key=$_SKILL_TEST'</span><span class="p">)</span>
+<span class="go">'key=hello'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resolve_env_vars</span><span class="p">(</span><span class="s1">'$</span><span class="si">{_SKILL_TEST}</span><span class="s1">/world'</span><span class="p">)</span>
+<span class="go">'hello/world'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resolve_env_vars</span><span class="p">(</span><span class="s1">'no vars here'</span><span class="p">)</span>
+<span class="go">'no vars here'</span>
 </pre></div>
 </div>
 </dd></dl>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.registry &mdash; skill 0.1.11 documentation</title>
+  <title>skill.registry &mdash; skill 0.1.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=1e825a29"></script>
+      <script src="../../_static/documentation_options.js?v=297ad043"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -112,15 +112,15 @@
 <p>Each <code class="docutils literal notranslate"><span class="pre">Registry</span></code> wraps a dict and can auto-discover plugins registered
 via <code class="docutils literal notranslate"><span class="pre">importlib.metadata</span></code> entry points under the group
 <code class="docutils literal notranslate"><span class="pre">skill.&lt;registry_name&gt;</span></code>.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">(</span><span class="s1">&#39;demo&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">42</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">(</span><span class="s1">'demo'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s1">'foo'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s1">'foo'</span><span class="p">]</span>
 <span class="go">42</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-<span class="go">[&#39;foo&#39;]</span>
+<span class="go">['foo']</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
 <span class="go">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">r</span><span class="p">[</span><span class="s1">'foo'</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
 <span class="go">0</span>
 </pre></div>
@@ -129,8 +129,8 @@ via <code class="docutils literal notranslate"><span class="pre">importlib.metad
 <dt class="sig sig-object py" id="skill.registry.Registry.name">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#skill.registry.Registry.name" title="Link to this definition"></a></dt>
 <dd><p>Registry name (also used to derive the entry point group).</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Registry</span><span class="p">(</span><span class="s1">&#39;agents&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
-<span class="go">&#39;agents&#39;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Registry</span><span class="p">(</span><span class="s1">'agents'</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+<span class="go">'agents'</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -139,10 +139,10 @@ via <code class="docutils literal notranslate"><span class="pre">importlib.metad
 <dt class="sig sig-object py" id="skill.registry.Registry.register">
 <span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">T</span></span></span><a class="reference internal" href="../../_modules/skill/registry.html#Registry.register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.registry.Registry.register" title="Link to this definition"></a></dt>
 <dd><p>Register an item and return it (usable as a decorator factory).</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">(</span><span class="s1">&#39;demo&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">(</span><span class="s1">'demo'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">'x'</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
 <span class="go">&lt;function ...&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;x&#39;</span> <span class="ow">in</span> <span class="n">r</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">'x'</span> <span class="ow">in</span> <span class="n">r</span>
 <span class="go">True</span>
 </pre></div>
 </div>

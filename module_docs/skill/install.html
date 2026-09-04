@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.install &mdash; skill 0.1.11 documentation</title>
+  <title>skill.install &mdash; skill 0.1.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=1e825a29"></script>
+      <script src="../../_static/documentation_options.js?v=297ad043"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -114,8 +114,8 @@ GitHub into the user’s agent host.</p>
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">skill.install.</span></span><span class="sig-name descname"><span class="pre">AgentTarget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'skill.md'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">needs_translation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/skill/install.html#AgentTarget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skill.install.AgentTarget" title="Link to this definition"></a></dt>
 <dd><p>Describes where an agent expects skills to be installed.</p>
 <p>Path templates support <code class="docutils literal notranslate"><span class="pre">{home}</span></code>, <code class="docutils literal notranslate"><span class="pre">{project}</span></code>, and <code class="docutils literal notranslate"><span class="pre">{name}</span></code> placeholders.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">AgentTarget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">project_path</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{project}</span><span class="s1">/.test/</span><span class="si">{name}</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format_project_path</span><span class="p">(</span><span class="s1">&#39;/proj&#39;</span><span class="p">,</span> <span class="s1">&#39;my-skill&#39;</span><span class="p">))</span>
-<span class="go">&#39;/proj/.test/my-skill&#39;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">AgentTarget</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'test'</span><span class="p">,</span> <span class="n">project_path</span><span class="o">=</span><span class="s1">'</span><span class="si">{project}</span><span class="s1">/.test/</span><span class="si">{name}</span><span class="s1">'</span><span class="p">)</span><span class="o">.</span><span class="n">format_project_path</span><span class="p">(</span><span class="s1">'/proj'</span><span class="p">,</span> <span class="s1">'my-skill'</span><span class="p">))</span>
+<span class="go">'/proj/.test/my-skill'</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -177,8 +177,8 @@ to let users grab the skills they ship on GitHub.</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">install_from_github</span><span class="p">(</span><span class="s1">&#39;thorwhalen/skill&#39;</span><span class="p">,</span> <span class="s1">&#39;skill-package-setup&#39;</span><span class="p">)</span>
-<span class="go">[{&#39;name&#39;: &#39;skill-package-setup&#39;, &#39;repo&#39;: &#39;thorwhalen/skill&#39;, ...}]</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">install_from_github</span><span class="p">(</span><span class="s1">'thorwhalen/skill'</span><span class="p">,</span> <span class="s1">'skill-package-setup'</span><span class="p">)</span>
+<span class="go">[{'name': 'skill-package-setup', 'repo': 'thorwhalen/skill', ...}]</span>
 </pre></div>
 </div>
 </dd></dl>

@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.backends.skillsdirectory &mdash; skill 0.1.11 documentation</title>
+  <title>skill.backends.skillsdirectory &mdash; skill 0.1.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=1e825a29"></script>
+      <script src="../../../_static/documentation_options.js?v=297ad043"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -95,7 +95,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for skill.backends.skillsdirectory</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;SkillsDirectory backend for skill discovery and fetching.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""SkillsDirectory backend for skill discovery and fetching."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -106,16 +106,16 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">skill.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Skill</span><span class="p">,</span> <span class="n">SkillInfo</span><span class="p">,</span> <span class="n">SkillMeta</span>
 
-<span class="n">_SKILLSDIR_API</span> <span class="o">=</span> <span class="s2">&quot;https://www.skillsdirectory.com&quot;</span>
+<span class="n">_SKILLSDIR_API</span> <span class="o">=</span> <span class="s2">"https://www.skillsdirectory.com"</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_default_http_get</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform an HTTP GET, returning parsed JSON or raw text.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Perform an HTTP GET, returning parsed JSON or raw text."""</span>
     <span class="n">req</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span> <span class="ow">or</span> <span class="p">{})</span>
     <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="k">as</span> <span class="n">resp</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-        <span class="n">content_type</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;json&quot;</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
+        <span class="n">content_type</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"Content-Type"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"json"</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">data</span>
 
@@ -123,18 +123,18 @@
 <div class="viewcode-block" id="SkillsDirectorySource">
 <a class="viewcode-back" href="../../../module_docs/skill/backends/skillsdirectory.html#skill.backends.skillsdirectory.SkillsDirectorySource">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SkillsDirectorySource</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;SkillSource backed by skillsdirectory.com.</span>
+<span class="w">    </span><span class="sd">"""SkillSource backed by skillsdirectory.com.</span>
 
 <span class="sd">    Requires a ``SKILLSDIRECTORY_API_KEY`` environment variable or explicit *token*.</span>
 <span class="sd">    Free tier: 100 requests/day.</span>
 
-<span class="sd">    &gt;&gt;&gt; src = SkillsDirectorySource(token=&quot;my-key&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; src = SkillsDirectorySource(token="my-key")</span>
 <span class="sd">    &gt;&gt;&gt; src.name</span>
-<span class="sd">    &#39;skillsdirectory&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    'skillsdirectory'</span>
+<span class="sd">    """</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;skillsdirectory&quot;</span>
-    <span class="n">homepage</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://www.skillsdirectory.com&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"skillsdirectory"</span>
+    <span class="n">homepage</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"https://www.skillsdirectory.com"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -142,17 +142,17 @@
         <span class="n">token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">http_get</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_token</span> <span class="o">=</span> <span class="n">token</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SKILLSDIRECTORY_API_KEY&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token</span> <span class="o">=</span> <span class="n">token</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"SKILLSDIRECTORY_API_KEY"</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_token</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;SkillsDirectory requires an API key. &quot;</span>
-                <span class="s2">&quot;Set SKILLSDIRECTORY_API_KEY or pass token= to SkillsDirectorySource. &quot;</span>
-                <span class="s2">&quot;Sign up at https://www.skillsdirectory.com/login?next=/developer/keys&quot;</span>
+                <span class="s2">"SkillsDirectory requires an API key. "</span>
+                <span class="s2">"Set SKILLSDIRECTORY_API_KEY or pass token= to SkillsDirectorySource. "</span>
+                <span class="s2">"Sign up at https://www.skillsdirectory.com/login?next=/developer/keys"</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_http_get</span> <span class="o">=</span> <span class="n">http_get</span> <span class="ow">or</span> <span class="n">_default_http_get</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;x-api-key&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_token</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"x-api-key"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_token</span><span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_http_get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">())</span>
@@ -162,25 +162,25 @@
 <div class="viewcode-block" id="SkillsDirectorySource.search">
 <a class="viewcode-back" href="../../../module_docs/skill/backends/skillsdirectory.html#skill.backends.skillsdirectory.SkillsDirectorySource.search">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">max_results</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SkillInfo</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Search SkillsDirectory for skills matching *query*.&quot;&quot;&quot;</span>
-        <span class="n">q</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_SKILLSDIR_API</span><span class="si">}</span><span class="s2">/api/v1/skills?q=</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">&amp;limit=</span><span class="si">{</span><span class="n">max_results</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="sd">"""Search SkillsDirectory for skills matching *query*."""</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">_SKILLSDIR_API</span><span class="si">}</span><span class="s2">/api/v1/skills?q=</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">&amp;limit=</span><span class="si">{</span><span class="n">max_results</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;skills&quot;</span><span class="p">,</span> <span class="p">[]):</span>
-            <span class="n">slug</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;slug&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="n">author</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;author&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="n">canonical_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">slug</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">author</span> <span class="k">else</span> <span class="n">slug</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"skills"</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">slug</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"slug"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+            <span class="n">author</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"author"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+            <span class="n">canonical_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">slug</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">author</span> <span class="k">else</span> <span class="n">slug</span>
             <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">SkillInfo</span><span class="p">(</span>
                     <span class="n">canonical_key</span><span class="o">=</span><span class="n">canonical_key</span><span class="p">,</span>
-                    <span class="n">name</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">slug</span><span class="p">),</span>
-                    <span class="n">description</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
-                    <span class="n">source</span><span class="o">=</span><span class="s2">&quot;skillsdirectory&quot;</span><span class="p">,</span>
-                    <span class="n">url</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_SKILLSDIR_API</span><span class="si">}</span><span class="s2">/skills/</span><span class="si">{</span><span class="n">slug</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="n">slug</span><span class="p">),</span>
+                    <span class="n">description</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"description"</span><span class="p">,</span> <span class="s2">""</span><span class="p">),</span>
+                    <span class="n">source</span><span class="o">=</span><span class="s2">"skillsdirectory"</span><span class="p">,</span>
+                    <span class="n">url</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"url"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">_SKILLSDIR_API</span><span class="si">}</span><span class="s2">/skills/</span><span class="si">{</span><span class="n">slug</span><span class="si">}</span><span class="s2">"</span><span class="p">),</span>
                     <span class="n">owner</span><span class="o">=</span><span class="n">author</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
@@ -188,21 +188,21 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Skill</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch a skill by key (e.g. ``author/slug``).</span>
+<span class="w">        </span><span class="sd">"""Fetch a skill by key (e.g. ``author/slug``).</span>
 
 <span class="sd">        If the API response includes a ``content`` field (SKILL.md text),</span>
 <span class="sd">        it is parsed directly.  Otherwise a Skill is synthesized from metadata.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">parts</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"/"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">slug</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_SKILLSDIR_API</span><span class="si">}</span><span class="s2">/api/v1/skills/</span><span class="si">{</span><span class="n">slug</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">_SKILLSDIR_API</span><span class="si">}</span><span class="s2">/api/v1/skills/</span><span class="si">{</span><span class="n">slug</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="k">except</span> <span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 
         <span class="c1"># If content is available, parse it as SKILL.md</span>
-        <span class="n">content</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">)</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"content"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">content</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Skill</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
 
@@ -222,26 +222,26 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_synthesize_skill</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Skill</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a Skill object from SkillsDirectory metadata.&quot;&quot;&quot;</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;slug&quot;</span><span class="p">,</span> <span class="s2">&quot;unknown&quot;</span><span class="p">))</span>
-        <span class="n">description</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">body_parts</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;# </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="sd">"""Create a Skill object from SkillsDirectory metadata."""</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"slug"</span><span class="p">,</span> <span class="s2">"unknown"</span><span class="p">))</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"description"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="n">body_parts</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"# </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">""</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">description</span><span class="p">:</span>
             <span class="n">body_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
-            <span class="n">body_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">author</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;author&quot;</span><span class="p">)</span>
+            <span class="n">body_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+        <span class="n">author</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"author"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">author</span><span class="p">:</span>
-            <span class="n">body_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;**Author:** </span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">tags</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">body_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"**Author:** </span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">,</span> <span class="p">[])</span>
         <span class="k">if</span> <span class="n">tags</span><span class="p">:</span>
-            <span class="n">body_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;**Tags:** </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">body_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"**Tags:** </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Skill</span><span class="p">(</span>
             <span class="n">meta</span><span class="o">=</span><span class="n">SkillMeta</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">),</span>
-            <span class="n">body</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">body_parts</span><span class="p">),</span>
+            <span class="n">body</span><span class="o">=</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">body_parts</span><span class="p">),</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;SkillsDirectorySource(token=***)&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"SkillsDirectorySource(token=***)"</span></div>
 
 </pre></div>
 

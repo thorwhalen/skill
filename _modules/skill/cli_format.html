@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.cli_format &mdash; skill 0.1.11 documentation</title>
+  <title>skill.cli_format &mdash; skill 0.1.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=1e825a29"></script>
+      <script src="../../_static/documentation_options.js?v=297ad043"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -94,7 +94,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for skill.cli_format</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Terminal-friendly formatting for CLI output.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Terminal-friendly formatting for CLI output."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 
@@ -102,15 +102,15 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_terminal_width</span><span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">80</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get terminal width, with a sensible fallback.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Get terminal width, with a sensible fallback."""</span>
     <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">get_terminal_size</span><span class="p">((</span><span class="n">default</span><span class="p">,</span> <span class="mi">24</span><span class="p">))</span><span class="o">.</span><span class="n">columns</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_truncate</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Truncate text to width, adding ellipsis if needed.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Truncate text to width, adding ellipsis if needed."""</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">width</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">text</span>
-    <span class="k">return</span> <span class="n">text</span><span class="p">[:</span> <span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;…&quot;</span>
+    <span class="k">return</span> <span class="n">text</span><span class="p">[:</span> <span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"…"</span>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
@@ -121,37 +121,37 @@
 <div class="viewcode-block" id="format_skill_info">
 <a class="viewcode-back" href="../../module_docs/skill/cli_format.html#skill.cli_format.format_skill_info">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">format_skill_info</span><span class="p">(</span><span class="n">info</span><span class="p">:</span> <span class="n">SkillInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a single SkillInfo as a compact one-liner.</span>
+<span class="w">    </span><span class="sd">"""Format a single SkillInfo as a compact one-liner.</span>
 
-<span class="sd">    &gt;&gt;&gt; si = SkillInfo(&#39;owner/test&#39;, &#39;test&#39;, &#39;A test skill&#39;, &#39;local&#39;, installed=True)</span>
-<span class="sd">    &gt;&gt;&gt; &#39;✓&#39; in format_skill_info(si)</span>
+<span class="sd">    &gt;&gt;&gt; si = SkillInfo('owner/test', 'test', 'A test skill', 'local', installed=True)</span>
+<span class="sd">    &gt;&gt;&gt; '✓' in format_skill_info(si)</span>
 <span class="sd">    True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">marker</span> <span class="o">=</span> <span class="s2">&quot;✓&quot;</span> <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">installed</span> <span class="k">else</span> <span class="s2">&quot; &quot;</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">marker</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">canonical_key</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">source</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+<span class="sd">    """</span>
+    <span class="n">marker</span> <span class="o">=</span> <span class="s2">"✓"</span> <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">installed</span> <span class="k">else</span> <span class="s2">" "</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">marker</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">canonical_key</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">source</span><span class="si">}</span><span class="s2">)"</span></div>
 
 
 
 <div class="viewcode-block" id="format_skill_info_table">
 <a class="viewcode-back" href="../../module_docs/skill/cli_format.html#skill.cli_format.format_skill_info_table">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">format_skill_info_table</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">SkillInfo</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a list of SkillInfo as an aligned, readable table.</span>
+<span class="w">    </span><span class="sd">"""Format a list of SkillInfo as an aligned, readable table.</span>
 
 <span class="sd">    Shows URL on a second line when available.</span>
 
 <span class="sd">    &gt;&gt;&gt; items = [</span>
-<span class="sd">    ...     SkillInfo(&#39;alice/lint&#39;, &#39;lint&#39;, &#39;Lint Python code&#39;, &#39;local&#39;, installed=True),</span>
-<span class="sd">    ...     SkillInfo(&#39;bob/react-tips&#39;, &#39;react-tips&#39;, &#39;React best practices guide&#39;, &#39;github&#39;,</span>
-<span class="sd">    ...               url=&#39;https://github.com/bob/react-tips&#39;),</span>
+<span class="sd">    ...     SkillInfo('alice/lint', 'lint', 'Lint Python code', 'local', installed=True),</span>
+<span class="sd">    ...     SkillInfo('bob/react-tips', 'react-tips', 'React best practices guide', 'github',</span>
+<span class="sd">    ...               url='https://github.com/bob/react-tips'),</span>
 <span class="sd">    ... ]</span>
 <span class="sd">    &gt;&gt;&gt; out = format_skill_info_table(items)</span>
-<span class="sd">    &gt;&gt;&gt; &#39;✓&#39; in out and &#39;alice/lint&#39; in out</span>
+<span class="sd">    &gt;&gt;&gt; '✓' in out and 'alice/lint' in out</span>
 <span class="sd">    True</span>
-<span class="sd">    &gt;&gt;&gt; &#39;https://github.com/bob/react-tips&#39; in out</span>
+<span class="sd">    &gt;&gt;&gt; 'https://github.com/bob/react-tips' in out</span>
 <span class="sd">    True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">items</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;  (no results)&quot;</span>
+        <span class="k">return</span> <span class="s2">"  (no results)"</span>
 
     <span class="n">term_width</span> <span class="o">=</span> <span class="n">_terminal_width</span><span class="p">()</span>
 
@@ -160,24 +160,24 @@
     <span class="n">source_width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">source</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
 
     <span class="c1"># Description gets whatever space remains</span>
-    <span class="c1">#   layout: &quot;M KEY  DESC  (SOURCE)&quot;</span>
+    <span class="c1">#   layout: "M KEY  DESC  (SOURCE)"</span>
     <span class="c1">#   M = 1 char marker, 1 space, KEY, 2 spaces, DESC, 2 spaces, (SOURCE)</span>
     <span class="n">fixed</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">key_width</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">source_width</span> <span class="o">+</span> <span class="mi">2</span>  <span class="c1"># parens</span>
     <span class="n">desc_width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">term_width</span> <span class="o">-</span> <span class="n">fixed</span><span class="p">)</span>
 
     <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
-        <span class="n">marker</span> <span class="o">=</span> <span class="s2">&quot;✓&quot;</span> <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">installed</span> <span class="k">else</span> <span class="s2">&quot; &quot;</span>
+        <span class="n">marker</span> <span class="o">=</span> <span class="s2">"✓"</span> <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">installed</span> <span class="k">else</span> <span class="s2">" "</span>
         <span class="n">key</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">canonical_key</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">key_width</span><span class="p">)</span>
         <span class="n">desc</span> <span class="o">=</span> <span class="n">_truncate</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="n">desc_width</span><span class="p">)</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">desc_width</span><span class="p">)</span>
         <span class="n">source</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">source</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">marker</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">marker</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">url</span><span class="p">:</span>
             <span class="c1"># Indent URL under the description column</span>
-            <span class="n">indent</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">key_width</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">indent</span><span class="si">}{</span><span class="n">info</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">indent</span> <span class="o">=</span> <span class="s2">" "</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">key_width</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">indent</span><span class="si">}{</span><span class="n">info</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
 
 
 
@@ -194,54 +194,54 @@
     <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">dep_warnings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a full Skill for terminal display.</span>
+<span class="w">    </span><span class="sd">"""Format a full Skill for terminal display.</span>
 
 <span class="sd">    &gt;&gt;&gt; from skill.base import SkillMeta</span>
-<span class="sd">    &gt;&gt;&gt; s = Skill(meta=SkillMeta(name=&#39;test&#39;, description=&#39;A test&#39;), body=&#39;# Hello&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; &#39;Name:&#39; in format_skill(s)</span>
+<span class="sd">    &gt;&gt;&gt; s = Skill(meta=SkillMeta(name='test', description='A test'), body='# Hello')</span>
+<span class="sd">    &gt;&gt;&gt; 'Name:' in format_skill(s)</span>
 <span class="sd">    True</span>
-<span class="sd">    &gt;&gt;&gt; &#39;WARNING&#39; in format_skill(s, dep_warnings=[&#39;Missing dependencies: alice/foo&#39;])</span>
+<span class="sd">    &gt;&gt;&gt; 'WARNING' in format_skill(s, dep_warnings=['Missing dependencies: alice/foo'])</span>
 <span class="sd">    True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">m</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">meta</span>
     <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="sa">f</span><span class="s2">&quot;Name:          </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="sa">f</span><span class="s2">&quot;Description:   </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">"Name:          </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">"Description:   </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
     <span class="p">]</span>
     <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">license</span><span class="p">:</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;License:       </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">license</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"License:       </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">license</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">compatibility</span><span class="p">:</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Compatibility: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">compatibility</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Compatibility: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">compatibility</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">url</span><span class="p">:</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;URL:           </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"URL:           </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">source_path</span><span class="p">:</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Path:          </span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">source_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Path:          </span><span class="si">{</span><span class="n">skill</span><span class="o">.</span><span class="n">source_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">skill</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
-        <span class="n">res_parts</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">skill</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Resources:     </span><span class="si">{</span><span class="n">res_parts</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">res_parts</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">)"</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">skill</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Resources:     </span><span class="si">{</span><span class="n">res_parts</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">allowed_tools</span><span class="p">:</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tools:         </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">allowed_tools</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tools:         </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">allowed_tools</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-    <span class="n">deps</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dependencies&quot;</span><span class="p">)</span>
+    <span class="n">deps</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"dependencies"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">deps</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">deps</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">deps</span> <span class="o">=</span> <span class="p">[</span><span class="n">deps</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">deps</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dependencies:  </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">deps</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Dependencies:  </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">deps</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Dependency warnings</span>
     <span class="k">if</span> <span class="n">dep_warnings</span><span class="p">:</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">dep_warnings</span><span class="p">:</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  WARNING: </span><span class="si">{</span><span class="n">w</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  WARNING: </span><span class="si">{</span><span class="n">w</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Body preview</span>
     <span class="n">body</span> <span class="o">=</span> <span class="n">skill</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">body</span><span class="p">:</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
 
 
 
@@ -253,26 +253,26 @@
 <div class="viewcode-block" id="format_sources">
 <a class="viewcode-back" href="../../module_docs/skill/cli_format.html#skill.cli_format.format_sources">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">format_sources</span><span class="p">(</span><span class="n">sources</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a list of source dicts for terminal display.</span>
+<span class="w">    </span><span class="sd">"""Format a list of source dicts for terminal display.</span>
 
-<span class="sd">    &gt;&gt;&gt; out = format_sources([{&#39;name&#39;: &#39;github&#39;, &#39;homepage&#39;: &#39;https://github.com&#39;, &#39;enabled&#39;: True}])</span>
-<span class="sd">    &gt;&gt;&gt; &#39;github&#39; in out and &#39;https://github.com&#39; in out</span>
+<span class="sd">    &gt;&gt;&gt; out = format_sources([{'name': 'github', 'homepage': 'https://github.com', 'enabled': True}])</span>
+<span class="sd">    &gt;&gt;&gt; 'github' in out and 'https://github.com' in out</span>
 <span class="sd">    True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">sources</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;  (no sources configured)&quot;</span>
+        <span class="k">return</span> <span class="s2">"  (no sources configured)"</span>
 
     <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
-        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;✓&quot;</span> <span class="k">if</span> <span class="n">src</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;✗&quot;</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">src</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-        <span class="n">homepage</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;homepage&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">"✓"</span> <span class="k">if</span> <span class="n">src</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"enabled"</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="k">else</span> <span class="s2">"✗"</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">src</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+        <span class="n">homepage</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"homepage"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
         <span class="k">if</span> <span class="n">homepage</span><span class="p">:</span>
-            <span class="n">line</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">homepage</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">line</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">homepage</span><span class="si">}</span><span class="s2">"</span>
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
 
 
 
@@ -283,22 +283,22 @@
 
 <div class="viewcode-block" id="format_path_dict">
 <a class="viewcode-back" href="../../module_docs/skill/cli_format.html#skill.cli_format.format_path_dict">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">format_path_dict</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">verb</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Installed&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a {name: path} dict as readable output.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">format_path_dict</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">verb</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Installed"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Format a {name: path} dict as readable output.</span>
 
 <span class="sd">    &gt;&gt;&gt; from pathlib import Path</span>
-<span class="sd">    &gt;&gt;&gt; out = format_path_dict({&#39;claude-code&#39;: Path(&#39;/a/b&#39;)}, verb=&#39;Installed&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; &#39;claude-code&#39; in out</span>
+<span class="sd">    &gt;&gt;&gt; out = format_path_dict({'claude-code': Path('/a/b')}, verb='Installed')</span>
+<span class="sd">    &gt;&gt;&gt; 'claude-code' in out</span>
 <span class="sd">    True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">d</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;  (none)&quot;</span>
+        <span class="k">return</span> <span class="s2">"  (none)"</span>
 
     <span class="n">key_width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">d</span><span class="p">)</span>
     <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">key_width</span><span class="p">)</span><span class="si">}</span><span class="s2">  → </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">name</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">key_width</span><span class="p">)</span><span class="si">}</span><span class="s2">  → </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
 
 </pre></div>
 

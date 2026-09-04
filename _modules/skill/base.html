@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.base &mdash; skill 0.1.11 documentation</title>
+  <title>skill.base &mdash; skill 0.1.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=1e825a29"></script>
+      <script src="../../_static/documentation_options.js?v=297ad043"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -94,7 +94,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for skill.base</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Core data model and SKILL.md parsing.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Core data model and SKILL.md parsing."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
@@ -111,26 +111,26 @@
 <div class="viewcode-block" id="parse_frontmatter">
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.parse_frontmatter">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_frontmatter</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse YAML frontmatter delimited by ``---`` from markdown content.</span>
+<span class="w">    </span><span class="sd">"""Parse YAML frontmatter delimited by ``---`` from markdown content.</span>
 
-<span class="sd">    &gt;&gt;&gt; meta, body = parse_frontmatter(&quot;---\\nname: test\\ndescription: A test\\n---\\n# Hello&quot;)</span>
-<span class="sd">    &gt;&gt;&gt; meta[&#39;name&#39;]</span>
-<span class="sd">    &#39;test&#39;</span>
+<span class="sd">    &gt;&gt;&gt; meta, body = parse_frontmatter("---\\nname: test\\ndescription: A test\\n---\\n# Hello")</span>
+<span class="sd">    &gt;&gt;&gt; meta['name']</span>
+<span class="sd">    'test'</span>
 <span class="sd">    &gt;&gt;&gt; body.strip()</span>
-<span class="sd">    &#39;# Hello&#39;</span>
-<span class="sd">    &gt;&gt;&gt; parse_frontmatter(&quot;no frontmatter here&quot;)</span>
-<span class="sd">    ({}, &#39;no frontmatter here&#39;)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    '# Hello'</span>
+<span class="sd">    &gt;&gt;&gt; parse_frontmatter("no frontmatter here")</span>
+<span class="sd">    ({}, 'no frontmatter here')</span>
+<span class="sd">    """</span>
     <span class="n">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">content</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">content</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"---"</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{},</span> <span class="n">content</span>
     <span class="c1"># Find the closing ---</span>
-    <span class="n">end</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"---"</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">end</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{},</span> <span class="n">content</span>
     <span class="n">yaml_str</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="n">end</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="n">body</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="n">end</span> <span class="o">+</span> <span class="mi">3</span> <span class="p">:]</span>
-    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">body</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">):</span>
         <span class="n">body</span> <span class="o">=</span> <span class="n">body</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
     <span class="n">meta</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">yaml_str</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
     <span class="k">return</span> <span class="n">meta</span><span class="p">,</span> <span class="n">body</span></div>
@@ -140,17 +140,17 @@
 <div class="viewcode-block" id="render_frontmatter">
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.render_frontmatter">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">render_frontmatter</span><span class="p">(</span><span class="n">meta</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Render a dict as YAML frontmatter block.</span>
+<span class="w">    </span><span class="sd">"""Render a dict as YAML frontmatter block.</span>
 
-<span class="sd">    &gt;&gt;&gt; print(render_frontmatter({&#39;name&#39;: &#39;test&#39;, &#39;description&#39;: &#39;A test&#39;}))</span>
+<span class="sd">    &gt;&gt;&gt; print(render_frontmatter({'name': 'test', 'description': 'A test'}))</span>
 <span class="sd">    ---</span>
 <span class="sd">    name: test</span>
 <span class="sd">    description: A test</span>
 <span class="sd">    ---</span>
 <span class="sd">    &lt;BLANKLINE&gt;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">yaml_str</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;---</span><span class="se">\n</span><span class="si">{</span><span class="n">yaml_str</span><span class="si">}</span><span class="se">\n</span><span class="s2">---</span><span class="se">\n</span><span class="s2">&quot;</span></div>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"---</span><span class="se">\n</span><span class="si">{</span><span class="n">yaml_str</span><span class="si">}</span><span class="se">\n</span><span class="s2">---</span><span class="se">\n</span><span class="s2">"</span></div>
 
 
 
@@ -160,17 +160,17 @@
 
 
 <span class="c1">#: Top-level frontmatter keys ``SkillMeta`` models as named fields. Anything else</span>
-<span class="c1">#: is an unknown/namespaced key (e.g. another tool&#39;s ``coact:`` block) and is kept</span>
+<span class="c1">#: is an unknown/namespaced key (e.g. another tool's ``coact:`` block) and is kept</span>
 <span class="c1">#: verbatim in :attr:`SkillMeta.extra` so it survives a parse→render round-trip.</span>
 <span class="n">KNOWN_FRONTMATTER_KEYS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
     <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;description&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;audience&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;license&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;compatibility&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;metadata&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;allowed-tools&quot;</span><span class="p">,</span>
+        <span class="s2">"name"</span><span class="p">,</span>
+        <span class="s2">"description"</span><span class="p">,</span>
+        <span class="s2">"audience"</span><span class="p">,</span>
+        <span class="s2">"license"</span><span class="p">,</span>
+        <span class="s2">"compatibility"</span><span class="p">,</span>
+        <span class="s2">"metadata"</span><span class="p">,</span>
+        <span class="s2">"allowed-tools"</span><span class="p">,</span>
     <span class="p">}</span>
 <span class="p">)</span>
 
@@ -179,19 +179,19 @@
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.SkillMeta">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SkillMeta</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parsed YAML frontmatter from a SKILL.md file.</span>
+<span class="w">    </span><span class="sd">"""Parsed YAML frontmatter from a SKILL.md file.</span>
 
-<span class="sd">    &gt;&gt;&gt; m = SkillMeta(name=&#39;test&#39;, description=&#39;A test skill&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; m = SkillMeta(name='test', description='A test skill')</span>
 <span class="sd">    &gt;&gt;&gt; m.name</span>
-<span class="sd">    &#39;test&#39;</span>
+<span class="sd">    'test'</span>
 
 <span class="sd">    Unknown/namespaced top-level keys are preserved in :attr:`extra` and re-emitted</span>
-<span class="sd">    on render, so a tool&#39;s additive frontmatter block isn&#39;t silently dropped:</span>
+<span class="sd">    on render, so a tool's additive frontmatter block isn't silently dropped:</span>
 
-<span class="sd">    &gt;&gt;&gt; m = SkillMeta(name=&#39;t&#39;, description=&#39;d&#39;, extra={&#39;coact&#39;: {&#39;model&#39;: &#39;sonnet&#39;}})</span>
-<span class="sd">    &gt;&gt;&gt; m.to_dict()[&#39;coact&#39;]</span>
-<span class="sd">    {&#39;model&#39;: &#39;sonnet&#39;}</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; m = SkillMeta(name='t', description='d', extra={'coact': {'model': 'sonnet'}})</span>
+<span class="sd">    &gt;&gt;&gt; m.to_dict()['coact']</span>
+<span class="sd">    {'model': 'sonnet'}</span>
+<span class="sd">    """</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
@@ -206,25 +206,25 @@
 <div class="viewcode-block" id="SkillMeta.to_dict">
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.SkillMeta.to_dict">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert to a dict suitable for YAML frontmatter, omitting None values.</span>
+<span class="w">        </span><span class="sd">"""Convert to a dict suitable for YAML frontmatter, omitting None values.</span>
 
 <span class="sd">        Named fields render first (stable order); preserved :attr:`extra` keys</span>
 <span class="sd">        follow, so namespaced blocks survive ``parse_skill_md`` → ``render_skill_md``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">}</span>
+<span class="sd">        """</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">audience</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;audience&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">audience</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"audience"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">audience</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">license</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;license&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">license</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"license"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">license</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">compatibility</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;compatibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compatibility</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"compatibility"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compatibility</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"metadata"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">allowed_tools</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;allowed-tools&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">allowed_tools</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"allowed-tools"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">allowed_tools</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="c1"># never let a stray extra key shadow a named field</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;allowed_tools&quot;</span><span class="p">}:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">"allowed_tools"</span><span class="p">}:</span>
                 <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
         <span class="k">return</span> <span class="n">d</span></div>
 </div>
@@ -232,23 +232,23 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_meta_from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SkillMeta</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Construct a SkillMeta from a frontmatter dict.</span>
+<span class="w">    </span><span class="sd">"""Construct a SkillMeta from a frontmatter dict.</span>
 
-<span class="sd">    &gt;&gt;&gt; m = _meta_from_dict({&#39;name&#39;: &#39;x&#39;, &#39;description&#39;: &#39;y&#39;, &#39;license&#39;: &#39;MIT&#39;})</span>
+<span class="sd">    &gt;&gt;&gt; m = _meta_from_dict({'name': 'x', 'description': 'y', 'license': 'MIT'})</span>
 <span class="sd">    &gt;&gt;&gt; m.license</span>
-<span class="sd">    &#39;MIT&#39;</span>
+<span class="sd">    'MIT'</span>
 
-<span class="sd">    &gt;&gt;&gt; _meta_from_dict({&#39;name&#39;: &#39;x&#39;, &#39;description&#39;: &#39;y&#39;, &#39;coact&#39;: {&#39;a&#39;: 1}}).extra</span>
-<span class="sd">    {&#39;coact&#39;: {&#39;a&#39;: 1}}</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; _meta_from_dict({'name': 'x', 'description': 'y', 'coact': {'a': 1}}).extra</span>
+<span class="sd">    {'coact': {'a': 1}}</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">SkillMeta</span><span class="p">(</span>
-        <span class="n">name</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
-        <span class="n">description</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
-        <span class="n">audience</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;audience&quot;</span><span class="p">),</span>
-        <span class="n">license</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;license&quot;</span><span class="p">),</span>
-        <span class="n">compatibility</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;compatibility&quot;</span><span class="p">),</span>
-        <span class="n">metadata</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="p">{}),</span>
-        <span class="n">allowed_tools</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;allowed-tools&quot;</span><span class="p">,</span> <span class="p">[]),</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">""</span><span class="p">),</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"description"</span><span class="p">,</span> <span class="s2">""</span><span class="p">),</span>
+        <span class="n">audience</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"audience"</span><span class="p">),</span>
+        <span class="n">license</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"license"</span><span class="p">),</span>
+        <span class="n">compatibility</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"compatibility"</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"metadata"</span><span class="p">,</span> <span class="p">{}),</span>
+        <span class="n">allowed_tools</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"allowed-tools"</span><span class="p">,</span> <span class="p">[]),</span>
         <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">KNOWN_FRONTMATTER_KEYS</span><span class="p">},</span>
     <span class="p">)</span>
 
@@ -256,14 +256,14 @@
 <div class="viewcode-block" id="parse_skill_md">
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.parse_skill_md">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_skill_md</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">SkillMeta</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a SKILL.md string into (SkillMeta, body).</span>
+<span class="w">    </span><span class="sd">"""Parse a SKILL.md string into (SkillMeta, body).</span>
 
-<span class="sd">    &gt;&gt;&gt; meta, body = parse_skill_md(&quot;---\\nname: foo\\ndescription: bar\\n---\\nHello&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; meta, body = parse_skill_md("---\\nname: foo\\ndescription: bar\\n---\\nHello")</span>
 <span class="sd">    &gt;&gt;&gt; meta.name</span>
-<span class="sd">    &#39;foo&#39;</span>
+<span class="sd">    'foo'</span>
 <span class="sd">    &gt;&gt;&gt; body</span>
-<span class="sd">    &#39;Hello&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    'Hello'</span>
+<span class="sd">    """</span>
     <span class="n">raw_meta</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">parse_frontmatter</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_meta_from_dict</span><span class="p">(</span><span class="n">raw_meta</span><span class="p">),</span> <span class="n">body</span></div>
 
@@ -272,12 +272,12 @@
 <div class="viewcode-block" id="render_skill_md">
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.render_skill_md">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">render_skill_md</span><span class="p">(</span><span class="n">meta</span><span class="p">:</span> <span class="n">SkillMeta</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Render a SKILL.md string from meta and body.</span>
+<span class="w">    </span><span class="sd">"""Render a SKILL.md string from meta and body.</span>
 
-<span class="sd">    &gt;&gt;&gt; s = render_skill_md(SkillMeta(name=&#39;x&#39;, description=&#39;y&#39;), &#39;Hello&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; &#39;name: x&#39; in s and &#39;Hello&#39; in s</span>
+<span class="sd">    &gt;&gt;&gt; s = render_skill_md(SkillMeta(name='x', description='y'), 'Hello')</span>
+<span class="sd">    &gt;&gt;&gt; 'name: x' in s and 'Hello' in s</span>
 <span class="sd">    True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">render_frontmatter</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span> <span class="o">+</span> <span class="n">body</span></div>
 
 
@@ -286,23 +286,23 @@
 <span class="c1"># Resource discovery</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
-<span class="n">_RESOURCE_DIRS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;scripts&quot;</span><span class="p">,</span> <span class="s2">&quot;references&quot;</span><span class="p">,</span> <span class="s2">&quot;assets&quot;</span><span class="p">)</span>
+<span class="n">_RESOURCE_DIRS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"scripts"</span><span class="p">,</span> <span class="s2">"references"</span><span class="p">,</span> <span class="s2">"assets"</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="discover_resources">
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.discover_resources">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">discover_resources</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scan a skill directory for bundled resource subdirectories.</span>
+<span class="w">    </span><span class="sd">"""Scan a skill directory for bundled resource subdirectories.</span>
 
 <span class="sd">    &gt;&gt;&gt; import tempfile</span>
 <span class="sd">    &gt;&gt;&gt; with tempfile.TemporaryDirectory() as d:</span>
 <span class="sd">    ...     p = Path(d)</span>
-<span class="sd">    ...     (p / &#39;scripts&#39;).mkdir()</span>
-<span class="sd">    ...     (p / &#39;scripts&#39; / &#39;run.py&#39;).touch()</span>
+<span class="sd">    ...     (p / 'scripts').mkdir()</span>
+<span class="sd">    ...     (p / 'scripts' / 'run.py').touch()</span>
 <span class="sd">    ...     r = discover_resources(p)</span>
-<span class="sd">    ...     r[&#39;scripts&#39;]</span>
-<span class="sd">    [&#39;run.py&#39;]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    ...     r['scripts']</span>
+<span class="sd">    ['run.py']</span>
+<span class="sd">    """</span>
     <span class="n">resources</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">dirname</span> <span class="ow">in</span> <span class="n">_RESOURCE_DIRS</span><span class="p">:</span>
         <span class="n">subdir</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="n">dirname</span>
@@ -321,12 +321,12 @@
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.Skill">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Skill</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A fully parsed skill: frontmatter + body + resource manifest.</span>
+<span class="w">    </span><span class="sd">"""A fully parsed skill: frontmatter + body + resource manifest.</span>
 
-<span class="sd">    &gt;&gt;&gt; s = Skill(meta=SkillMeta(name=&#39;test&#39;, description=&#39;A test&#39;), body=&#39;# Hello&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; s = Skill(meta=SkillMeta(name='test', description='A test'), body='# Hello')</span>
 <span class="sd">    &gt;&gt;&gt; s.meta.name</span>
-<span class="sd">    &#39;test&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    'test'</span>
+<span class="sd">    """</span>
 
     <span class="n">meta</span><span class="p">:</span> <span class="n">SkillMeta</span>
     <span class="n">body</span><span class="p">:</span> <span class="nb">str</span>
@@ -336,14 +336,14 @@
 <div class="viewcode-block" id="Skill.from_path">
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.Skill.from_path">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Skill&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load a Skill from a directory containing SKILL.md.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Skill"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Load a Skill from a directory containing SKILL.md.</span>
 
 <span class="sd">        ``path`` should be the skill directory (containing SKILL.md).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">skill_md</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;SKILL.md&quot;</span>
+<span class="sd">        """</span>
+        <span class="n">skill_md</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="s2">"SKILL.md"</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">skill_md</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No SKILL.md found in </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"No SKILL.md found in </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">meta</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">parse_skill_md</span><span class="p">(</span><span class="n">skill_md</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
         <span class="n">resources</span> <span class="o">=</span> <span class="n">discover_resources</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="n">resources</span><span class="p">,</span> <span class="n">source_path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span></div>
@@ -352,13 +352,13 @@
 <div class="viewcode-block" id="Skill.from_string">
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.Skill.from_string">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Skill&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse a Skill from a SKILL.md string (no resource discovery).</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Skill"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Parse a Skill from a SKILL.md string (no resource discovery).</span>
 
-<span class="sd">        &gt;&gt;&gt; s = Skill.from_string(&quot;---\\nname: x\\ndescription: y\\n---\\nbody&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; s = Skill.from_string("---\\nname: x\\ndescription: y\\n---\\nbody")</span>
 <span class="sd">        &gt;&gt;&gt; s.meta.name</span>
-<span class="sd">        &#39;x&#39;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        'x'</span>
+<span class="sd">        """</span>
         <span class="n">meta</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">parse_skill_md</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">)</span></div>
 
@@ -366,16 +366,16 @@
 <div class="viewcode-block" id="Skill.to_string">
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.Skill.to_string">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Render this skill as a SKILL.md string.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Render this skill as a SKILL.md string."""</span>
         <span class="k">return</span> <span class="n">render_skill_md</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Skill.write_to">
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.Skill.write_to">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">write_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write this skill to a directory, creating SKILL.md and resource dirs.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Write this skill to a directory, creating SKILL.md and resource dirs."""</span>
         <span class="n">path</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;SKILL.md&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+        <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">"SKILL.md"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="n">dirname</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 </div>
@@ -386,12 +386,12 @@
 <a class="viewcode-back" href="../../module_docs/skill/base.html#skill.base.SkillInfo">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SkillInfo</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lightweight metadata for search results (no body).</span>
+<span class="w">    </span><span class="sd">"""Lightweight metadata for search results (no body).</span>
 
-<span class="sd">    &gt;&gt;&gt; si = SkillInfo(canonical_key=&#39;owner/test&#39;, name=&#39;test&#39;, description=&#39;A test&#39;, source=&#39;local&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; si = SkillInfo(canonical_key='owner/test', name='test', description='A test', source='local')</span>
 <span class="sd">    &gt;&gt;&gt; si.canonical_key</span>
-<span class="sd">    &#39;owner/test&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    'owner/test'</span>
+<span class="sd">    """</span>
 
     <span class="n">canonical_key</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
@@ -402,8 +402,8 @@
     <span class="n">installed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="n">marker</span> <span class="o">=</span> <span class="s2">&quot;✓&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">installed</span> <span class="k">else</span> <span class="s2">&quot; &quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">marker</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">canonical_key</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+        <span class="n">marker</span> <span class="o">=</span> <span class="s2">"✓"</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">installed</span> <span class="k">else</span> <span class="s2">" "</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">marker</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">canonical_key</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="si">}</span><span class="s2">)"</span></div>
 
 </pre></div>
 

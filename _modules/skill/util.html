@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.util &mdash; skill 0.1.11 documentation</title>
+  <title>skill.util &mdash; skill 0.1.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=1e825a29"></script>
+      <script src="../../_static/documentation_options.js?v=297ad043"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -94,7 +94,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for skill.util</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Pure helpers with zero internal imports.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Pure helpers with zero internal imports."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
@@ -107,19 +107,19 @@
 <a class="viewcode-back" href="../../module_docs/skill/util.html#skill.util.ParsedKey">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">ParsedKey</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A normalized skill key.</span>
+<span class="w">    </span><span class="sd">"""A normalized skill key.</span>
 
-<span class="sd">    &gt;&gt;&gt; ParsedKey.from_string(&#39;owner/skill-name&#39;)</span>
-<span class="sd">    ParsedKey(owner=&#39;owner&#39;, name=&#39;skill-name&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; ParsedKey.from_string(&#39;Owner/Skill-Name&#39;)</span>
-<span class="sd">    ParsedKey(owner=&#39;owner&#39;, name=&#39;skill-name&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; ParsedKey.from_string(&#39;my-skill&#39;)</span>
-<span class="sd">    ParsedKey(owner=&#39;_local&#39;, name=&#39;my-skill&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; ParsedKey.from_string(&#39;owner/repo/skill-name&#39;)</span>
-<span class="sd">    ParsedKey(owner=&#39;owner&#39;, name=&#39;skill-name&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; str(ParsedKey(owner=&#39;owner&#39;, name=&#39;skill-name&#39;))</span>
-<span class="sd">    &#39;owner/skill-name&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; ParsedKey.from_string('owner/skill-name')</span>
+<span class="sd">    ParsedKey(owner='owner', name='skill-name')</span>
+<span class="sd">    &gt;&gt;&gt; ParsedKey.from_string('Owner/Skill-Name')</span>
+<span class="sd">    ParsedKey(owner='owner', name='skill-name')</span>
+<span class="sd">    &gt;&gt;&gt; ParsedKey.from_string('my-skill')</span>
+<span class="sd">    ParsedKey(owner='_local', name='my-skill')</span>
+<span class="sd">    &gt;&gt;&gt; ParsedKey.from_string('owner/repo/skill-name')</span>
+<span class="sd">    ParsedKey(owner='owner', name='skill-name')</span>
+<span class="sd">    &gt;&gt;&gt; str(ParsedKey(owner='owner', name='skill-name'))</span>
+<span class="sd">    'owner/skill-name'</span>
+<span class="sd">    """</span>
 
     <span class="n">owner</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
@@ -127,53 +127,53 @@
 <div class="viewcode-block" id="ParsedKey.from_string">
 <a class="viewcode-back" href="../../module_docs/skill/util.html#skill.util.ParsedKey.from_string">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ParsedKey&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse a raw key string into a normalized ParsedKey.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ParsedKey"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Parse a raw key string into a normalized ParsedKey.</span>
 
 <span class="sd">        Supports 1-part (name only), 2-part (owner/name), and 3-part</span>
 <span class="sd">        (owner/repo/name) keys. All parts are lowercased.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">parts</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="s2">&quot;_local&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="s2">"_local"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="c1"># owner/repo/name -&gt; we keep owner and name, drop repo</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid key format: </span><span class="si">{</span><span class="n">raw</span><span class="si">!r}</span><span class="s2"> (expected 1-3 parts)&quot;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Invalid key format: </span><span class="si">{</span><span class="n">raw</span><span class="si">!r}</span><span class="s2"> (expected 1-3 parts)"</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span></div>
 
 
 
-<span class="n">_ENV_VAR_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\$\{([^}]+)\}|\$([A-Za-z_][A-Za-z0-9_]*)&quot;</span><span class="p">)</span>
+<span class="n">_ENV_VAR_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\$\{([^}]+)\}|\$([A-Za-z_][A-Za-z0-9_]*)"</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="resolve_env_vars">
 <a class="viewcode-back" href="../../module_docs/skill/util.html#skill.util.resolve_env_vars">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">resolve_env_vars</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve ``$VAR`` and ``${VAR}`` references from environment variables.</span>
+<span class="w">    </span><span class="sd">"""Resolve ``$VAR`` and ``${VAR}`` references from environment variables.</span>
 
-<span class="sd">    &gt;&gt;&gt; import os; os.environ[&#39;_SKILL_TEST&#39;] = &#39;hello&#39;</span>
-<span class="sd">    &gt;&gt;&gt; resolve_env_vars(&#39;key=$_SKILL_TEST&#39;)</span>
-<span class="sd">    &#39;key=hello&#39;</span>
-<span class="sd">    &gt;&gt;&gt; resolve_env_vars(&#39;${_SKILL_TEST}/world&#39;)</span>
-<span class="sd">    &#39;hello/world&#39;</span>
-<span class="sd">    &gt;&gt;&gt; resolve_env_vars(&#39;no vars here&#39;)</span>
-<span class="sd">    &#39;no vars here&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; import os; os.environ['_SKILL_TEST'] = 'hello'</span>
+<span class="sd">    &gt;&gt;&gt; resolve_env_vars('key=$_SKILL_TEST')</span>
+<span class="sd">    'key=hello'</span>
+<span class="sd">    &gt;&gt;&gt; resolve_env_vars('${_SKILL_TEST}/world')</span>
+<span class="sd">    'hello/world'</span>
+<span class="sd">    &gt;&gt;&gt; resolve_env_vars('no vars here')</span>
+<span class="sd">    'no vars here'</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_replace</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
         <span class="n">var_name</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">val</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">var_name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Environment variable </span><span class="si">{</span><span class="n">var_name</span><span class="si">!r}</span><span class="s2"> is not set. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Set it with: export </span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s2">=&lt;value&gt;&quot;</span>
+                <span class="sa">f</span><span class="s2">"Environment variable </span><span class="si">{</span><span class="n">var_name</span><span class="si">!r}</span><span class="s2"> is not set. "</span>
+                <span class="sa">f</span><span class="s2">"Set it with: export </span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s2">=&lt;value&gt;"</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">val</span>
 
@@ -183,15 +183,15 @@
 
 <span class="n">_PROJECT_MARKERS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
     <span class="p">{</span>
-        <span class="s2">&quot;.git&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;pyproject.toml&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;setup.py&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;setup.cfg&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;package.json&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Cargo.toml&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;go.mod&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Makefile&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;pom.xml&quot;</span><span class="p">,</span>
+        <span class="s2">".git"</span><span class="p">,</span>
+        <span class="s2">"pyproject.toml"</span><span class="p">,</span>
+        <span class="s2">"setup.py"</span><span class="p">,</span>
+        <span class="s2">"setup.cfg"</span><span class="p">,</span>
+        <span class="s2">"package.json"</span><span class="p">,</span>
+        <span class="s2">"Cargo.toml"</span><span class="p">,</span>
+        <span class="s2">"go.mod"</span><span class="p">,</span>
+        <span class="s2">"Makefile"</span><span class="p">,</span>
+        <span class="s2">"pom.xml"</span><span class="p">,</span>
     <span class="p">}</span>
 <span class="p">)</span>
 
@@ -199,18 +199,18 @@
 <div class="viewcode-block" id="find_project_root">
 <a class="viewcode-back" href="../../module_docs/skill/util.html#skill.util.find_project_root">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">find_project_root</span><span class="p">(</span><span class="n">start</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Walk up from ``start`` looking for a project root marker.</span>
+<span class="w">    </span><span class="sd">"""Walk up from ``start`` looking for a project root marker.</span>
 
 <span class="sd">    &gt;&gt;&gt; import tempfile</span>
 <span class="sd">    &gt;&gt;&gt; d = Path(tempfile.mkdtemp()).resolve()</span>
-<span class="sd">    &gt;&gt;&gt; p = d / &#39;sub&#39; / &#39;deep&#39;</span>
+<span class="sd">    &gt;&gt;&gt; p = d / 'sub' / 'deep'</span>
 <span class="sd">    &gt;&gt;&gt; p.mkdir(parents=True)</span>
-<span class="sd">    &gt;&gt;&gt; (d / &#39;.git&#39;).mkdir()</span>
+<span class="sd">    &gt;&gt;&gt; (d / '.git').mkdir()</span>
 <span class="sd">    &gt;&gt;&gt; find_project_root(p) == d</span>
 <span class="sd">    True</span>
-<span class="sd">    &gt;&gt;&gt; find_project_root(Path(&#39;/nonexistent/path/that/does/not/exist&#39;)) is None</span>
+<span class="sd">    &gt;&gt;&gt; find_project_root(Path('/nonexistent/path/that/does/not/exist')) is None</span>
 <span class="sd">    True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">current</span> <span class="o">=</span> <span class="p">(</span><span class="n">start</span> <span class="ow">or</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">())</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">any</span><span class="p">((</span><span class="n">current</span> <span class="o">/</span> <span class="n">marker</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">for</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">_PROJECT_MARKERS</span><span class="p">):</span>
@@ -225,19 +225,19 @@
 <div class="viewcode-block" id="atomic_write">
 <a class="viewcode-back" href="../../module_docs/skill/util.html#skill.util.atomic_write">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">atomic_write</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write ``content`` to ``path`` atomically via temp-then-rename.</span>
+<span class="w">    </span><span class="sd">"""Write ``content`` to ``path`` atomically via temp-then-rename.</span>
 
 <span class="sd">    &gt;&gt;&gt; import tempfile</span>
 <span class="sd">    &gt;&gt;&gt; with tempfile.TemporaryDirectory() as d:</span>
-<span class="sd">    ...     p = Path(d) / &#39;test.txt&#39;</span>
-<span class="sd">    ...     atomic_write(p, &#39;hello&#39;)</span>
+<span class="sd">    ...     p = Path(d) / 'test.txt'</span>
+<span class="sd">    ...     atomic_write(p, 'hello')</span>
 <span class="sd">    ...     p.read_text()</span>
-<span class="sd">    &#39;hello&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    'hello'</span>
+<span class="sd">    """</span>
     <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">fd</span><span class="p">,</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.tmp&quot;</span><span class="p">)</span>
+    <span class="n">fd</span><span class="p">,</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">".tmp"</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">os</span><span class="o">.</span><span class="n">fdopen</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">os</span><span class="o">.</span><span class="n">fdopen</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
         <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>

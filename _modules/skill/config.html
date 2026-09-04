@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>skill.config &mdash; skill 0.1.11 documentation</title>
+  <title>skill.config &mdash; skill 0.1.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=1e825a29"></script>
+      <script src="../../_static/documentation_options.js?v=297ad043"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -94,7 +94,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for skill.config</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Configuration management via platformdirs and TOML.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Configuration management via platformdirs and TOML."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">asdict</span>
@@ -104,17 +104,17 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">skill.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_env_vars</span><span class="p">,</span> <span class="n">atomic_write</span>
 
-<span class="n">_APP_NAME</span> <span class="o">=</span> <span class="s2">&quot;skill&quot;</span>
+<span class="n">_APP_NAME</span> <span class="o">=</span> <span class="s2">"skill"</span>
 
 
 <div class="viewcode-block" id="data_dir">
 <a class="viewcode-back" href="../../module_docs/skill/config.html#skill.config.data_dir">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">data_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the platform-specific data directory for skill.</span>
+<span class="w">    </span><span class="sd">"""Return the platform-specific data directory for skill.</span>
 
 <span class="sd">    &gt;&gt;&gt; isinstance(data_dir(), Path)</span>
 <span class="sd">    True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">platformdirs</span><span class="o">.</span><span class="n">user_data_dir</span><span class="p">(</span><span class="n">_APP_NAME</span><span class="p">))</span></div>
 
 
@@ -122,11 +122,11 @@
 <div class="viewcode-block" id="config_dir">
 <a class="viewcode-back" href="../../module_docs/skill/config.html#skill.config.config_dir">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">config_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the platform-specific config directory for skill.</span>
+<span class="w">    </span><span class="sd">"""Return the platform-specific config directory for skill.</span>
 
 <span class="sd">    &gt;&gt;&gt; isinstance(config_dir(), Path)</span>
 <span class="sd">    True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">platformdirs</span><span class="o">.</span><span class="n">user_config_dir</span><span class="p">(</span><span class="n">_APP_NAME</span><span class="p">))</span></div>
 
 
@@ -134,11 +134,11 @@
 <div class="viewcode-block" id="cache_dir">
 <a class="viewcode-back" href="../../module_docs/skill/config.html#skill.config.cache_dir">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">cache_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the platform-specific cache directory for skill.</span>
+<span class="w">    </span><span class="sd">"""Return the platform-specific cache directory for skill.</span>
 
 <span class="sd">    &gt;&gt;&gt; isinstance(cache_dir(), Path)</span>
 <span class="sd">    True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">platformdirs</span><span class="o">.</span><span class="n">user_cache_dir</span><span class="p">(</span><span class="n">_APP_NAME</span><span class="p">))</span></div>
 
 
@@ -146,24 +146,24 @@
 <div class="viewcode-block" id="skills_dir">
 <a class="viewcode-back" href="../../module_docs/skill/config.html#skill.config.skills_dir">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">skills_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the canonical skills storage directory.</span>
+<span class="w">    </span><span class="sd">"""Return the canonical skills storage directory.</span>
 
 <span class="sd">    &gt;&gt;&gt; skills_dir().name</span>
-<span class="sd">    &#39;skills&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">data_dir</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;skills&quot;</span></div>
+<span class="sd">    'skills'</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">data_dir</span><span class="p">()</span> <span class="o">/</span> <span class="s2">"skills"</span></div>
 
 
 
 <div class="viewcode-block" id="config_path">
 <a class="viewcode-back" href="../../module_docs/skill/config.html#skill.config.config_path">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">config_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the path to the config TOML file.</span>
+<span class="w">    </span><span class="sd">"""Return the path to the config TOML file.</span>
 
 <span class="sd">    &gt;&gt;&gt; config_path().name</span>
-<span class="sd">    &#39;config.toml&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">config_dir</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;config.toml&quot;</span></div>
+<span class="sd">    'config.toml'</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">config_dir</span><span class="p">()</span> <span class="o">/</span> <span class="s2">"config.toml"</span></div>
 
 
 
@@ -171,20 +171,20 @@
 <a class="viewcode-back" href="../../module_docs/skill/config.html#skill.config.SkillConfig">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SkillConfig</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Root configuration schema with sensible defaults for zero-config first run.</span>
+<span class="w">    </span><span class="sd">"""Root configuration schema with sensible defaults for zero-config first run.</span>
 
 <span class="sd">    &gt;&gt;&gt; c = SkillConfig()</span>
 <span class="sd">    &gt;&gt;&gt; c.default_agent_targets</span>
-<span class="sd">    [&#39;claude-code&#39;]</span>
+<span class="sd">    ['claude-code']</span>
 <span class="sd">    &gt;&gt;&gt; c.install_method</span>
-<span class="sd">    &#39;symlink&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    'symlink'</span>
+<span class="sd">    """</span>
 
-    <span class="n">default_agent_targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;claude-code&quot;</span><span class="p">])</span>
-    <span class="n">default_scope</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;project&quot;</span>
-    <span class="n">install_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;symlink&quot;</span>
-    <span class="n">ai_provider_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;anthropic:claude-sonnet-4-20250514&quot;</span>
-    <span class="n">ai_api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;$ANTHROPIC_API_KEY&quot;</span>
+    <span class="n">default_agent_targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">"claude-code"</span><span class="p">])</span>
+    <span class="n">default_scope</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"project"</span>
+    <span class="n">install_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"symlink"</span>
+    <span class="n">ai_provider_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"anthropic:claude-sonnet-4-20250514"</span>
+    <span class="n">ai_api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"$ANTHROPIC_API_KEY"</span>
     <span class="n">github_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">smithery_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">composio_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
@@ -195,42 +195,42 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_load_toml</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a TOML file, returning an empty dict if it doesn&#39;t exist.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Load a TOML file, returning an empty dict if it doesn't exist."""</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="k">return</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">tomllib</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">tomli</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tomllib</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_serialize_toml</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Serialize a flat dict to minimal TOML.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Serialize a flat dict to minimal TOML."""</span>
     <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">v</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">v</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">items</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">v</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> = [</span><span class="si">{</span><span class="n">items</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">v</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> = [</span><span class="si">{</span><span class="n">items</span><span class="si">}</span><span class="s2">]"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
 
 
 <div class="viewcode-block" id="load_config">
 <a class="viewcode-back" href="../../module_docs/skill/config.html#skill.config.load_config">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_config</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SkillConfig</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load config from TOML, falling back to defaults for missing fields.</span>
+<span class="w">    </span><span class="sd">"""Load config from TOML, falling back to defaults for missing fields.</span>
 
-<span class="sd">    &gt;&gt;&gt; c = load_config(Path(&#39;/nonexistent/config.toml&#39;))</span>
+<span class="sd">    &gt;&gt;&gt; c = load_config(Path('/nonexistent/config.toml'))</span>
 <span class="sd">    &gt;&gt;&gt; c.default_scope</span>
-<span class="sd">    &#39;project&#39;</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    'project'</span>
+<span class="sd">    """</span>
     <span class="n">raw</span> <span class="o">=</span> <span class="n">_load_toml</span><span class="p">(</span><span class="n">path</span> <span class="ow">or</span> <span class="n">config_path</span><span class="p">())</span>
     <span class="c1"># Flatten nested tables (e.g., [defaults] -&gt; prefix with section name)</span>
     <span class="n">flat</span> <span class="o">=</span> <span class="p">{}</span>
@@ -253,15 +253,15 @@
 <div class="viewcode-block" id="save_config">
 <a class="viewcode-back" href="../../module_docs/skill/config.html#skill.config.save_config">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">save_config</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">SkillConfig</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save config to TOML.</span>
+<span class="w">    </span><span class="sd">"""Save config to TOML.</span>
 
 <span class="sd">    &gt;&gt;&gt; import tempfile</span>
 <span class="sd">    &gt;&gt;&gt; with tempfile.TemporaryDirectory() as d:</span>
-<span class="sd">    ...     p = Path(d) / &#39;config.toml&#39;</span>
+<span class="sd">    ...     p = Path(d) / 'config.toml'</span>
 <span class="sd">    ...     save_config(SkillConfig(), path=p)</span>
 <span class="sd">    ...     p.exists()</span>
 <span class="sd">    True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">atomic_write</span><span class="p">(</span><span class="n">path</span> <span class="ow">or</span> <span class="n">config_path</span><span class="p">(),</span> <span class="n">_serialize_toml</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">config</span><span class="p">)))</span></div>
 
 </pre></div>
