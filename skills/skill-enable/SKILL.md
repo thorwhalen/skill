@@ -157,6 +157,7 @@ skill link-skills "$(python -c 'import your_pkg, os; print(os.path.join(your_pkg
 # your_pkg/__init__.py or your_pkg/skills.py
 from pathlib import Path
 
+
 def skills_dir() -> Path:
     """Return the path to this package's bundled skills directory."""
     return Path(__file__).parent / "data" / "skills"
@@ -165,10 +166,11 @@ def skills_dir() -> Path:
 Then a CLI installer:
 
 ```python
-def install_skills(target: str = ''):
+def install_skills(target: str = ""):
     """Install this package's bundled AI agent skills."""
     from skill import link_skills
     from your_pkg import skills_dir
+
     link_skills(str(skills_dir()), target=target)
 ```
 

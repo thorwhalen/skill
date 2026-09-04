@@ -120,7 +120,7 @@ from skill import validate
 import subprocess
 
 # Validate all skills
-for skill_dir in Path('.claude/skills').iterdir():
+for skill_dir in Path(".claude/skills").iterdir():
     if skill_dir.is_dir():
         issues = validate(str(skill_dir))
         if issues:

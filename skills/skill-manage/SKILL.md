@@ -27,13 +27,13 @@ and more):
 from skill import search
 
 # Local + remote search
-results = search('react best practices', max_results=10)
+results = search("react best practices", max_results=10)
 
 # Local only (faster, no network)
-results = search('testing', local_only=True)
+results = search("testing", local_only=True)
 
 # Specific backends only
-results = search('deployment', backends=['github', 'smithery'])
+results = search("deployment", backends=["github", "smithery"])
 ```
 
 CLI:
@@ -72,11 +72,11 @@ Read the full contents of an installed skill:
 ```python
 from skill import show
 
-s = show('owner/skill-name')
-print(s.meta.name)        # 'skill-name'
+s = show("owner/skill-name")
+print(s.meta.name)  # 'skill-name'
 print(s.meta.description)  # one-liner
-print(s.body)              # full instructions
-print(s.resources)         # {'scripts': ['run.py'], 'references': ['guide.md']}
+print(s.body)  # full instructions
+print(s.resources)  # {'scripts': ['run.py'], 'references': ['guide.md']}
 ```
 
 CLI:
@@ -92,16 +92,16 @@ Install from the local store into an agent target:
 from skill import install
 
 # Install into project-local Claude Code skills
-paths = install('owner/skill-name', scope='project')
+paths = install("owner/skill-name", scope="project")
 
 # Install globally
-paths = install('owner/skill-name', scope='global')
+paths = install("owner/skill-name", scope="global")
 
 # Install into multiple agents
-paths = install('owner/skill-name', agent_targets=['claude-code', 'cursor'])
+paths = install("owner/skill-name", agent_targets=["claude-code", "cursor"])
 
 # Copy instead of symlink
-paths = install('owner/skill-name', copy=True)
+paths = install("owner/skill-name", copy=True)
 ```
 
 CLI:
@@ -116,7 +116,7 @@ skill install owner/skill-name --agent-targets claude-code cursor
 ```python
 from skill import uninstall
 
-removed = uninstall('owner/skill-name')
+removed = uninstall("owner/skill-name")
 ```
 
 CLI:
@@ -132,13 +132,13 @@ Bulk-link all skills from a project or directory:
 from skill import link_skills
 
 # From a project root (auto-discovers .claude/skills/ or {pkg}/data/skills/)
-linked = link_skills('/path/to/project')
+linked = link_skills("/path/to/project")
 
 # Into a specific target
-linked = link_skills('/path/to/project', target='~/.claude/skills')
+linked = link_skills("/path/to/project", target="~/.claude/skills")
 
 # Force overwrite existing
-linked = link_skills('/path/to/project', target='.claude/skills', force=True)
+linked = link_skills("/path/to/project", target=".claude/skills", force=True)
 ```
 
 CLI:
@@ -153,7 +153,7 @@ skill link-skills /path/to/project --target ~/.claude/skills --force
 from skill import sources
 
 for src in sources():
-    status = "enabled" if src['enabled'] else "disabled"
+    status = "enabled" if src["enabled"] else "disabled"
     print(f"{src['name']}: {status} ({src.get('homepage', 'N/A')})")
 ```
 

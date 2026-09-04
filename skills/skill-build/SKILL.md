@@ -144,7 +144,8 @@ After writing each skill, validate it:
 
 ```python
 from skill import validate
-issues = validate('.claude/skills/{name}')
+
+issues = validate(".claude/skills/{name}")
 ```
 
 Or via CLI:
@@ -171,7 +172,8 @@ skills", write:
 
 ```python
 from skill import search
-results = search('react best practices', max_results=5)
+
+results = search("react best practices", max_results=5)
 for r in results:
     print(f"{r.canonical_key}: {r.description}")
 ```

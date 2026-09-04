@@ -109,6 +109,7 @@ import os
 import sys
 from pathlib import Path
 
+
 def _create_link(source: Path, target: Path) -> str:
     """Create a symlink (or junction) from target to source.
 
@@ -117,7 +118,7 @@ def _create_link(source: Path, target: Path) -> str:
     target.parent.mkdir(parents=True, exist_ok=True)
 
     # Remove existing link/directory at target
-    if target.is_symlink() or (sys.platform == 'win32' and target.is_junction()):
+    if target.is_symlink() or (sys.platform == "win32" and target.is_junction()):
         target.unlink()
     elif target.is_dir():
         # Non-symlink directory exists — don't clobber it silently
@@ -129,23 +130,25 @@ def _create_link(source: Path, target: Path) -> str:
     # Try symlink first
     try:
         os.symlink(source, target, target_is_directory=True)
-        return 'symlink'
+        return "symlink"
     except OSError:
-        if sys.platform != 'win32':
+        if sys.platform != "win32":
             raise  # On Unix, symlink failure is a real error
 
     # Windows fallback: directory junction (no admin required)
     try:
         import _winapi
+
         _winapi.CreateJunction(str(source), str(target))
-        return 'junction'
+        return "junction"
     except (ImportError, OSError):
         pass
 
     # Last resort: full copy
     import shutil
+
     shutil.copytree(source, target, dirs_exist_ok=True)
-    return 'copy'
+    return "copy"
 ```
 
 **`pathlib` vs `os` choice**: We use `os.symlink()` directly because `pathlib.Path.symlink_to()` has an inverted argument order that was a source of confusion (it was even deprecated in Python 3.12 in favor of `Path.symlink_to(target)` being renamed). Using `os.symlink(src, dst)` is clearer and consistent with the `os` module's well-documented semantics [7].
@@ -191,7 +194,7 @@ Note that even for project-scope installations, the canonical source remains in 
 **Dangling symlinks** (canonical skill deleted, symlinks remain): Detect and clean up via a `skill doctor` command:
 
 ```python
-def find_dangling_links(agent_skills_dir: Path) -> 'Iterator[Path]':
+def find_dangling_links(agent_skills_dir: Path) -> "Iterator[Path]":
     """Yield dangling symlinks in an agent's skills directory."""
     if not agent_skills_dir.exists():
         return
@@ -229,14 +232,16 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
+
 @dataclass
 class Skill:
     """Parsed representation of a skill folder."""
+
     name: str
     description: str
-    body: str                          # Markdown body of SKILL.md
-    path: Path                         # Canonical path on disk
-    owner: Optional[str] = None        # GitHub owner or '_local'
+    body: str  # Markdown body of SKILL.md
+    path: Path  # Canonical path on disk
+    owner: Optional[str] = None  # GitHub owner or '_local'
     frontmatter: dict = field(default_factory=dict)  # Full YAML frontmatter
     has_scripts: bool = False
     has_references: bool = False
@@ -246,13 +251,14 @@ class Skill:
 @dataclass
 class SkillInfo:
     """Lightweight metadata for search results (no body content)."""
-    id: str                            # Canonical key: "owner/skill-name"
+
+    id: str  # Canonical key: "owner/skill-name"
     name: str
     description: str
-    source: str                        # 'github', 'skills_sh', 'agensi', 'local'
-    url: Optional[str] = None          # Remote URL (for fetch)
+    source: str  # 'github', 'skills_sh', 'agensi', 'local'
+    url: Optional[str] = None  # Remote URL (for fetch)
     author: Optional[str] = None
-    last_fetched: Optional[str] = None # ISO datetime
+    last_fetched: Optional[str] = None  # ISO datetime
 
 
 class LocalSkillStore(MutableMapping):
@@ -268,9 +274,9 @@ class LocalSkillStore(MutableMapping):
 
     def _key_to_path(self, key: str) -> Path:
         """Convert 'owner/name' to DATA_DIR/skills/owner/name/."""
-        parts = key.split('/', 1)
+        parts = key.split("/", 1)
         if len(parts) == 1:
-            return self._root / '_local' / parts[0]
+            return self._root / "_local" / parts[0]
         return self._root / parts[0] / parts[1]
 
     def _path_to_key(self, path: Path) -> str:
@@ -280,7 +286,7 @@ class LocalSkillStore(MutableMapping):
 
     def __getitem__(self, key: str) -> Skill:
         path = self._key_to_path(key)
-        skill_md = path / 'SKILL.md'
+        skill_md = path / "SKILL.md"
         if not skill_md.exists():
             raise KeyError(key)
         return _parse_skill(path)
@@ -294,6 +300,7 @@ class LocalSkillStore(MutableMapping):
         if not path.exists():
             raise KeyError(key)
         import shutil
+
         shutil.rmtree(path)
 
     def __iter__(self) -> Iterator[str]:
@@ -301,14 +308,14 @@ class LocalSkillStore(MutableMapping):
             if not owner_dir.is_dir():
                 continue
             for skill_dir in sorted(owner_dir.iterdir()):
-                if (skill_dir / 'SKILL.md').exists():
+                if (skill_dir / "SKILL.md").exists():
                     yield self._path_to_key(skill_dir)
 
     def __len__(self) -> int:
         return sum(1 for _ in self)
 
     def __contains__(self, key) -> bool:
-        return (self._key_to_path(key) / 'SKILL.md').exists()
+        return (self._key_to_path(key) / "SKILL.md").exists()
 
 
 class RemoteSkillSource(Mapping):
@@ -423,10 +430,11 @@ Following the Vercel CLI's `skillFolderHash` pattern [6], we store a content has
 ```python
 import hashlib
 
+
 def _skill_folder_hash(path: Path) -> str:
     """Compute a content hash over all files in a skill folder."""
     hasher = hashlib.sha256()
-    for file in sorted(path.rglob('*')):
+    for file in sorted(path.rglob("*")):
         if file.is_file():
             hasher.update(str(file.relative_to(path)).encode())
             hasher.update(file.read_bytes())
@@ -506,15 +514,28 @@ Before creating any agent directory (`.claude/`, `.cursor/`, etc.) in a project,
 
 ```python
 _PROJECT_MARKERS = {
-    '.git', 'pyproject.toml', 'setup.py', 'setup.cfg',
-    'package.json', 'Cargo.toml', 'go.mod', 'Makefile',
-    'CMakeLists.txt', 'pom.xml', 'build.gradle',
-    'Gemfile', 'requirements.txt', '.hg', '.svn',
+    ".git",
+    "pyproject.toml",
+    "setup.py",
+    "setup.cfg",
+    "package.json",
+    "Cargo.toml",
+    "go.mod",
+    "Makefile",
+    "CMakeLists.txt",
+    "pom.xml",
+    "build.gradle",
+    "Gemfile",
+    "requirements.txt",
+    ".hg",
+    ".svn",
 }
+
 
 def _is_project_root(path: Path) -> bool:
     """Heuristic: does this directory look like a project root?"""
     return any((path / marker).exists() for marker in _PROJECT_MARKERS)
+
 
 def _ensure_project_root(path: Path, *, force: bool = False) -> None:
     """Raise or warn if path doesn't look like a project root."""
@@ -537,17 +558,20 @@ Skill installation follows a write-to-temp-then-rename pattern for the canonical
 import tempfile
 import shutil
 
+
 def _atomic_write_skill(target: Path, source_dir: Path) -> None:
     """Atomically write a skill folder to the canonical store."""
-    tmp = Path(tempfile.mkdtemp(
-        dir=target.parent,
-        prefix=f'.{target.name}.',
-    ))
+    tmp = Path(
+        tempfile.mkdtemp(
+            dir=target.parent,
+            prefix=f".{target.name}.",
+        )
+    )
     try:
         shutil.copytree(source_dir, tmp, dirs_exist_ok=True)
         # Atomic rename (same filesystem)
         if target.exists():
-            backup = target.with_suffix('.bak')
+            backup = target.with_suffix(".bak")
             target.rename(backup)
             tmp.rename(target)
             shutil.rmtree(backup)
@@ -603,6 +627,7 @@ The lock file stores the full source URL (including repo and path within repo) f
 ```python
 import re
 
+
 def normalize_key(raw: str) -> str:
     """Normalize a skill identifier to canonical 'owner/name' form.
 
@@ -614,14 +639,14 @@ def normalize_key(raw: str) -> str:
     'vercel-labs/react-best-practices'
     """
     raw = raw.strip().lower()
-    raw = re.sub(r'\s+', '-', raw)     # spaces → hyphens
-    raw = re.sub(r'-{2,}', '-', raw)   # collapse multiple hyphens
-    raw = raw.strip('-/')              # strip leading/trailing
+    raw = re.sub(r"\s+", "-", raw)  # spaces → hyphens
+    raw = re.sub(r"-{2,}", "-", raw)  # collapse multiple hyphens
+    raw = raw.strip("-/")  # strip leading/trailing
 
-    parts = raw.split('/', 1)
+    parts = raw.split("/", 1)
     if len(parts) == 1:
-        return f'_local/{parts[0]}'
-    return f'{parts[0]}/{parts[1]}'
+        return f"_local/{parts[0]}"
+    return f"{parts[0]}/{parts[1]}"
 ```
 
 ---
@@ -642,6 +667,7 @@ The `user_cache_dir` on macOS is `~/Library/Caches/skill/`, which *is* separate 
 
 ```python
 from platformdirs import user_data_path, user_cache_path
+
 
 def _config_path() -> Path:
     """Config path — uses data_dir on macOS to avoid ~/Library/Preferences."""
@@ -685,6 +711,7 @@ All directory resolution logic is centralized in a single module, ensuring consi
 
 SSOT for canonical store, config, cache, and agent target paths.
 """
+
 from pathlib import Path
 from functools import cached_property
 from platformdirs import PlatformDirs
@@ -698,7 +725,7 @@ class SkillPaths:
     PosixPath('/home/user/.local/share/skill/skills')
     """
 
-    def __init__(self, *, app_name: str = 'skill'):
+    def __init__(self, *, app_name: str = "skill"):
         self._dirs = PlatformDirs(app_name)
 
     @cached_property
@@ -709,12 +736,12 @@ class SkillPaths:
     @cached_property
     def skills_dir(self) -> Path:
         """Canonical skill storage directory."""
-        return self.data_dir / 'skills'
+        return self.data_dir / "skills"
 
     @cached_property
     def config_path(self) -> Path:
         """Config file path (uses data_dir to avoid macOS Preferences issue)."""
-        return self.data_dir / 'config.json'
+        return self.data_dir / "config.json"
 
     @cached_property
     def cache_dir(self) -> Path:
@@ -724,12 +751,12 @@ class SkillPaths:
     @cached_property
     def index_path(self) -> Path:
         """Metadata index cache."""
-        return self.cache_dir / 'index.json'
+        return self.cache_dir / "index.json"
 
     @cached_property
     def lock_path(self) -> Path:
         """Lock file tracking installations."""
-        return self.data_dir / 'skill-lock.json'
+        return self.data_dir / "skill-lock.json"
 ```
 
 ---
@@ -742,47 +769,50 @@ Agent targets are defined declaratively, enabling easy addition of new agents:
 from dataclasses import dataclass
 from pathlib import Path
 
+
 @dataclass(frozen=True)
 class AgentTarget:
     """Definition of an agent target's directory layout."""
+
     name: str
-    global_skills_dir: Path        # e.g., Path.home() / '.claude' / 'skills'
-    project_skills_dir: str        # Relative to project root, e.g., '.claude/skills'
-    supports_skill_md: bool = True # Whether agent reads SKILL.md natively
+    global_skills_dir: Path  # e.g., Path.home() / '.claude' / 'skills'
+    project_skills_dir: str  # Relative to project root, e.g., '.claude/skills'
+    supports_skill_md: bool = True  # Whether agent reads SKILL.md natively
     needs_translation: bool = False
-    translation_format: str = ''   # e.g., 'mdc', 'copilot-md', 'windsurf-md'
+    translation_format: str = ""  # e.g., 'mdc', 'copilot-md', 'windsurf-md'
+
 
 AGENT_TARGETS = {
-    'claude-code': AgentTarget(
-        name='claude-code',
-        global_skills_dir=Path.home() / '.claude' / 'skills',
-        project_skills_dir='.claude/skills',
+    "claude-code": AgentTarget(
+        name="claude-code",
+        global_skills_dir=Path.home() / ".claude" / "skills",
+        project_skills_dir=".claude/skills",
     ),
-    'cursor': AgentTarget(
-        name='cursor',
-        global_skills_dir=Path.home() / '.cursor' / 'skills',
-        project_skills_dir='.cursor/skills',
+    "cursor": AgentTarget(
+        name="cursor",
+        global_skills_dir=Path.home() / ".cursor" / "skills",
+        project_skills_dir=".cursor/skills",
         needs_translation=True,
-        translation_format='mdc',
+        translation_format="mdc",
     ),
-    'copilot': AgentTarget(
-        name='copilot',
-        global_skills_dir=Path.home() / '.github',  # Not truly skill-based
-        project_skills_dir='.github',
+    "copilot": AgentTarget(
+        name="copilot",
+        global_skills_dir=Path.home() / ".github",  # Not truly skill-based
+        project_skills_dir=".github",
         needs_translation=True,
-        translation_format='copilot-md',
+        translation_format="copilot-md",
     ),
-    'windsurf': AgentTarget(
-        name='windsurf',
-        global_skills_dir=Path.home() / '.windsurf' / 'rules',
-        project_skills_dir='.windsurf/rules',
+    "windsurf": AgentTarget(
+        name="windsurf",
+        global_skills_dir=Path.home() / ".windsurf" / "rules",
+        project_skills_dir=".windsurf/rules",
         needs_translation=True,
-        translation_format='windsurf-md',
+        translation_format="windsurf-md",
     ),
-    'amp': AgentTarget(
-        name='amp',
-        global_skills_dir=Path.home() / '.agents' / 'skills',
-        project_skills_dir='.agents/skills',
+    "amp": AgentTarget(
+        name="amp",
+        global_skills_dir=Path.home() / ".agents" / "skills",
+        project_skills_dir=".agents/skills",
     ),
 }
 ```

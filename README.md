@@ -17,16 +17,16 @@ pip install skill
 from skill import search, create, install, validate
 
 # Create a skill locally
-skill = create('my-skill', description='My custom coding rules')
+skill = create("my-skill", description="My custom coding rules")
 
 # Validate it
-issues = validate('/path/to/skill-dir')
+issues = validate("/path/to/skill-dir")
 
 # Search for skills
-results = search('react best practices', local_only=True)
+results = search("react best practices", local_only=True)
 
 # Install to an agent target
-install('_local/my-skill', agent_targets=['claude-code'], scope='project')
+install("_local/my-skill", agent_targets=["claude-code"], scope="project")
 ```
 
 ### Link skills from a project
@@ -39,13 +39,13 @@ in one shot:
 from skill import link_skills
 
 # Point at a project root — it finds the skills automatically
-link_skills('/path/to/my-project')
+link_skills("/path/to/my-project")
 
 # Or point at the skills folder directly
-link_skills('/path/to/my-project/my_pkg/data/skills')
+link_skills("/path/to/my-project/my_pkg/data/skills")
 
 # Symlink into a specific target instead of ~/.claude/skills
-link_skills('/path/to/my-project', target='/other/project/.claude/skills')
+link_skills("/path/to/my-project", target="/other/project/.claude/skills")
 ```
 
 Each skill is validated before linking — invalid skills are skipped with a
@@ -134,11 +134,14 @@ Register at runtime:
 ```python
 from skill.install import agent_targets, AgentTarget
 
-agent_targets.register('windsurf', AgentTarget(
-    name='windsurf',
-    project_path='{project}/.windsurf/rules/{name}.md',
-    format='skill.md',
-))
+agent_targets.register(
+    "windsurf",
+    AgentTarget(
+        name="windsurf",
+        project_path="{project}/.windsurf/rules/{name}.md",
+        format="skill.md",
+    ),
+)
 ```
 
 Or via entry points in your `pyproject.toml`:

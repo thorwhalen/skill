@@ -36,12 +36,15 @@ An `AgentTarget` describes where an AI agent expects skills to be installed.
 ```python
 from skill.install import agent_targets, AgentTarget
 
-agent_targets.register('windsurf', AgentTarget(
-    name='windsurf',
-    global_path='{home}/.windsurf/rules/{name}.md',
-    project_path='{project}/.windsurf/rules/{name}.md',
-    format='skill.md',  # native SKILL.md, no translation needed
-))
+agent_targets.register(
+    "windsurf",
+    AgentTarget(
+        name="windsurf",
+        global_path="{home}/.windsurf/rules/{name}.md",
+        project_path="{project}/.windsurf/rules/{name}.md",
+        format="skill.md",  # native SKILL.md, no translation needed
+    ),
+)
 ```
 
 If `format` is something other than `'skill.md'`, set `needs_translation=True` and ensure a matching translator is registered.
@@ -60,19 +63,21 @@ The function receives a `Skill` and returns the translated content as a string. 
 from skill.translate import translators
 from skill.base import Skill
 
+
 def to_windsurf(skill: Skill) -> str:
     """Translate SKILL.md to Windsurf rule format."""
     lines = [
-        '---',
-        f'trigger: model_decision',
-        f'description: {skill.meta.description}',
-        '---',
-        '',
+        "---",
+        f"trigger: model_decision",
+        f"description: {skill.meta.description}",
+        "---",
+        "",
         skill.body,
     ]
-    return '\n'.join(lines)
+    return "\n".join(lines)
 
-translators.register('windsurf_md', to_windsurf)
+
+translators.register("windsurf_md", to_windsurf)
 ```
 
 ### Backends (Skill Sources)
@@ -105,21 +110,22 @@ class SkillSource(Protocol):
 ```python
 from skill.search import backends
 
+
 class SmitherySource:
-    name = 'smithery'
+    name = "smithery"
 
     def __getitem__(self, key):
         # Fetch from Smithery API...
         ...
 
-    def __contains__(self, key):
-        ...
+    def __contains__(self, key): ...
 
     def search(self, query, *, max_results=10):
         # Search Smithery API...
         ...
 
-backends.register('smithery', SmitherySource())
+
+backends.register("smithery", SmitherySource())
 ```
 
 ### Validators
@@ -136,13 +142,15 @@ Returns an empty list if the skill passes the check. Each string in the returned
 from skill.create import validators
 from skill.base import Skill
 
+
 def check_body_length(skill: Skill) -> list[str]:
     word_count = len(skill.body.split())
     if word_count > 5000:
-        return [f'Body exceeds 5000 words ({word_count})']
+        return [f"Body exceeds 5000 words ({word_count})"]
     return []
 
-validators.register('body_length', check_body_length)
+
+validators.register("body_length", check_body_length)
 ```
 
 ---

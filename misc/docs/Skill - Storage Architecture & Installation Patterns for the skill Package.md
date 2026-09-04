@@ -74,14 +74,17 @@ The canonical store holds the *current* version. Version tracking is handled by 
 @dataclass
 class SkillMeta:
     """Cached metadata for a locally stored skill."""
+
     name: str
     owner: str
     description: str
-    source_url: str | None = None       # e.g., "https://github.com/anthropics/skills"
-    source_ref: str | None = None       # git tree SHA or commit hash at fetch time
-    content_hash: str | None = None     # SHA-256 of the skill directory contents
-    fetched_at: str | None = None       # ISO 8601 timestamp
-    installed_targets: list[str] = field(default_factory=list)  # ["claude-code", "cursor"]
+    source_url: str | None = None  # e.g., "https://github.com/anthropics/skills"
+    source_ref: str | None = None  # git tree SHA or commit hash at fetch time
+    content_hash: str | None = None  # SHA-256 of the skill directory contents
+    fetched_at: str | None = None  # ISO 8601 timestamp
+    installed_targets: list[str] = field(
+        default_factory=list
+    )  # ["claude-code", "cursor"]
 ```
 
 When updating a skill, the old version is replaced atomically (see §4.2). A future v2 could add `skills/owner/name/@versions/v1.2.0/` for pinning, but this adds complexity with no immediate payoff — the ecosystem itself has no versioning standard yet.
@@ -213,10 +216,13 @@ class AgentTarget:
     """Describes where an agent expects to find skills/rules."""
 
     name: str
-    global_path: str | None = None    # Template with {home}, {name}
-    project_path: str | None = None   # Template with {project}, {name}
-    format: str = "skill.md"          # "skill.md" | "mdc" | "copilot_md" | "windsurf_md" | "agents_md"
+    global_path: str | None = None  # Template with {home}, {name}
+    project_path: str | None = None  # Template with {project}, {name}
+    format: str = (
+        "skill.md"  # "skill.md" | "mdc" | "copilot_md" | "windsurf_md" | "agents_md"
+    )
     needs_translation: bool = False
+
 
 AGENT_TARGETS: dict[str, AgentTarget] = {
     "claude-code": AgentTarget(
@@ -291,8 +297,14 @@ def _ensure_agent_dir(target_path: Path, *, scope: str = "project") -> None:
 def _check_project_root(path: Path) -> None:
     """Warn if we don't appear to be in a project root."""
     project_markers = {
-        "pyproject.toml", "package.json", "Cargo.toml",
-        "go.mod", "Makefile", ".git", "pom.xml", "build.gradle",
+        "pyproject.toml",
+        "package.json",
+        "Cargo.toml",
+        "go.mod",
+        "Makefile",
+        ".git",
+        "pom.xml",
+        "build.gradle",
     }
     # Walk up to find project root
     candidate = path
@@ -302,6 +314,7 @@ def _check_project_root(path: Path) -> None:
         candidate = candidate.parent
 
     import warnings
+
     warnings.warn(
         f"No project root markers found above {path}. "
         f"This may not be a project directory. "
@@ -354,18 +367,15 @@ def find_dangling_links(agent_target: str | None = None) -> list[Path]:
     >>> # Returns list of Path objects that are symlinks pointing to nonexistent targets.
     """
     dangling = []
-    targets = (
-        [AGENT_TARGETS[agent_target]] if agent_target
-        else AGENT_TARGETS.values()
-    )
+    targets = [AGENT_TARGETS[agent_target]] if agent_target else AGENT_TARGETS.values()
     for target_spec in targets:
         for template in [target_spec.global_path, target_spec.project_path]:
             if template is None:
                 continue
             # Expand {home}, find all matching directories
-            base = Path(template.split("{name}")[0].format(
-                home=Path.home(), project="."
-            ))
+            base = Path(
+                template.split("{name}")[0].format(home=Path.home(), project=".")
+            )
             if not base.exists():
                 continue
             for child in base.iterdir():
@@ -461,6 +471,7 @@ class LocalSkillStore(MutableMapping):
         if not path.exists():
             raise KeyError(key)
         import shutil
+
         shutil.rmtree(path)
 
     def __iter__(self) -> Iterator[str]:
@@ -626,14 +637,14 @@ Stored at `CACHE_DIR/index.json`:
 class CachedSkillEntry:
     """Lightweight metadata for a known (possibly not-installed) skill."""
 
-    canonical_key: str              # "anthropics/frontend-design"
-    name: str                       # "frontend-design"
-    description: str                # From SKILL.md frontmatter
-    owner: str                      # "anthropics"
-    source_url: str                 # "https://github.com/anthropics/skills"
-    source_type: str                # "github" | "smithery" | "awesome-list"
-    last_fetched: str               # ISO 8601
-    installed: bool = False         # Is this in the local store?
+    canonical_key: str  # "anthropics/frontend-design"
+    name: str  # "frontend-design"
+    description: str  # From SKILL.md frontmatter
+    owner: str  # "anthropics"
+    source_url: str  # "https://github.com/anthropics/skills"
+    source_type: str  # "github" | "smithery" | "awesome-list"
+    last_fetched: str  # ISO 8601
+    installed: bool = False  # Is this in the local store?
     install_count: int | None = None  # From skills.sh if available
 ```
 
@@ -702,6 +713,7 @@ class MetadataCache:
     def upsert(self, entry: CachedSkillEntry) -> None:
         """Insert or update a cache entry."""
         from dataclasses import asdict
+
         data = self._load()
         data["skills"][entry.canonical_key] = asdict(entry)
         data["_updated_at"] = time.time()
@@ -753,10 +765,12 @@ def _atomic_install(source: Path, destination: Path) -> None:
     >>> # (doctest omitted — filesystem side-effects)
     """
     destination.parent.mkdir(parents=True, exist_ok=True)
-    tmp = Path(tempfile.mkdtemp(
-        dir=destination.parent,
-        prefix=f".{destination.name}_installing_",
-    ))
+    tmp = Path(
+        tempfile.mkdtemp(
+            dir=destination.parent,
+            prefix=f".{destination.name}_installing_",
+        )
+    )
     try:
         # Copy full skill tree to temp
         actual_tmp = tmp / destination.name
@@ -794,11 +808,22 @@ def _atomic_symlink(source: Path, destination: Path) -> None:
 ### 5.2 Project Root Detection
 
 ```python
-_PROJECT_MARKERS = frozenset({
-    ".git", "pyproject.toml", "package.json", "Cargo.toml",
-    "go.mod", "Makefile", "CMakeLists.txt", "pom.xml",
-    "build.gradle", "composer.json", "Gemfile", ".hg",
-})
+_PROJECT_MARKERS = frozenset(
+    {
+        ".git",
+        "pyproject.toml",
+        "package.json",
+        "Cargo.toml",
+        "go.mod",
+        "Makefile",
+        "CMakeLists.txt",
+        "pom.xml",
+        "build.gradle",
+        "composer.json",
+        "Gemfile",
+        ".hg",
+    }
+)
 
 
 def _find_project_root(start: Path | None = None) -> Path | None:
@@ -884,9 +909,11 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class ParsedKey:
     """Parsed components of a canonical skill key."""
+
     owner: str
     name: str
     repo: str | None = None
+
 
 _NAME_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 
@@ -1032,22 +1059,24 @@ def install(
 
         # 2. Resolve target path
         template = (
-            target_spec.project_path if scope == "project"
-            else target_spec.global_path
+            target_spec.project_path if scope == "project" else target_spec.global_path
         )
         if template is None:
             import warnings
+
             warnings.warn(
                 f"{target_name} does not support {scope}-level installation. Skipping.",
                 UserWarning,
             )
             continue
 
-        target_path = Path(template.format(
-            home=Path.home(),
-            project=project or ".",
-            name=_agent_target_name(key, target_spec),
-        ))
+        target_path = Path(
+            template.format(
+                home=Path.home(),
+                project=project or ".",
+                name=_agent_target_name(key, target_spec),
+            )
+        )
 
         # 3. Safety checks
         if scope == "project":
@@ -1056,6 +1085,7 @@ def install(
         existing = _check_existing(target_path)
         if existing not in ("none", "our_symlink") and not force:
             import warnings
+
             warnings.warn(
                 f"Skipping {target_path} — {existing} already exists. "
                 f"Use force=True to overwrite.",
@@ -1067,6 +1097,7 @@ def install(
         if target_spec.needs_translation:
             # Translate and copy (can't symlink a different format)
             from skill.translate import translate
+
             translated = translate(skill, target_format=target_spec.format)
             translated.write_to(target_path)
         elif method == "symlink":

@@ -106,36 +106,48 @@ color_output = true
 from pydantic import BaseModel, Field
 from typing import Literal
 
+
 class AIConfig(BaseModel):
     """AI service configuration."""
+
     provider_model: str = "anthropic:claude-sonnet-4-20250514"
     api_key: str = "$ANTHROPIC_API_KEY"
     provider_model_fast: str | None = None
 
+
 class BackendsConfig(BaseModel):
     """Remote search backend toggles."""
+
     github: bool = True
     skills_sh: bool = True
     agensi: bool = False
 
+
 class DefaultsConfig(BaseModel):
     """Installation defaults."""
+
     agent_targets: list[str] = Field(default_factory=lambda: ["claude-code"])
     scope: Literal["project", "global"] = "project"
     install_method: Literal["symlink", "copy"] = "symlink"
 
+
 class SearchConfig(BaseModel):
     """Search behavior."""
+
     index_cache_ttl: int = 3600
     semantic_search_enabled: bool = True
 
+
 class BehaviorConfig(BaseModel):
     """UX behavior."""
+
     confirm_directory_creation: bool = True
     color_output: bool = True
 
+
 class SkillConfig(BaseModel):
     """Root config schema for the skill package."""
+
     defaults: DefaultsConfig = Field(default_factory=DefaultsConfig)
     ai: AIConfig = Field(default_factory=AIConfig)
     backends: BackendsConfig = Field(default_factory=BackendsConfig)
@@ -161,11 +173,12 @@ The convention: any string value in the config that starts with `$` is resolved 
 import os
 import re
 
+
 def _resolve_env_vars(value: str) -> str:
     """Resolve $VAR_NAME and ${VAR_NAME} references in config values."""
     if not isinstance(value, str):
         return value
-    
+
     def _replace(match):
         var_name = match.group(1) or match.group(2)
         result = os.environ.get(var_name)
@@ -175,8 +188,8 @@ def _resolve_env_vars(value: str) -> str:
                 f"Set it with: export {var_name}=your-key-here"
             )
         return result
-    
-    return re.sub(r'\$\{(\w+)\}|\$(\w+)', _replace, value)
+
+    return re.sub(r"\$\{(\w+)\}|\$(\w+)", _replace, value)
 ```
 
 **Both `$VAR` and `${VAR}` are supported.** The `${VAR}` form allows embedding in longer strings (e.g., `"Bearer ${MY_TOKEN}"`), while `$VAR` is the simple case. No `env:VAR_NAME` prefix — it adds vocabulary without adding value.
@@ -220,23 +233,27 @@ Borrowed from the landscape survey's observation that **AI-optional** is a core 
 # skill/ai.py
 """AI service facade. All AI features degrade gracefully when deps are missing."""
 
+
 def _check_ai_available():
     """Check if an AI backend is available, with helpful install instructions."""
     try:
         import aisuite
+
         return True
     except ImportError:
         pass
     try:
         import aix
+
         return True
     except ImportError:
         pass
     return False
 
+
 def chat(prompt: str, *, model: str | None = None, **kwargs) -> str:
     """Send a chat prompt to the configured AI provider.
-    
+
     >>> # Requires: pip install skill[ai] and a configured API key
     """
     if not _check_ai_available():
@@ -295,7 +312,7 @@ The first-run experience should follow the **"pit of success"** pattern — `ski
 """skill/ai.py — AI service facade for the skill package.
 
 Provides a thin, backend-agnostic interface for LLM operations needed by skill:
-- chat(): simple prompt → response (for semantic search, linting, creation)  
+- chat(): simple prompt → response (for semantic search, linting, creation)
 - complete_structured(): prompt → Pydantic model (for structured search results)
 
 All functions accept an optional `model` override; default comes from config.
@@ -309,52 +326,58 @@ from typing import TypeVar, TYPE_CHECKING
 if TYPE_CHECKING:
     from pydantic import BaseModel
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 # ---------------------------------------------------------------------------
 # Backend resolution
 # ---------------------------------------------------------------------------
 
+
 def _resolve_config():
     """Load AI config from skill's config file, with env var resolution."""
     from skill.config import load_config
+
     cfg = load_config()
     return cfg.ai
 
 
 def _get_backend():
     """Resolve the AI backend in priority order.
-    
+
     Priority: aix → aisuite → direct anthropic SDK → direct openai SDK.
     """
     # Try aix first (Thor's ecosystem)
     try:
         from aix import chat as _aix_chat
-        return 'aix'
+
+        return "aix"
     except ImportError:
         pass
-    
+
     # Try aisuite
     try:
         import aisuite
-        return 'aisuite'
+
+        return "aisuite"
     except ImportError:
         pass
-    
+
     # Try direct SDKs
     try:
         import anthropic
-        return 'anthropic'
+
+        return "anthropic"
     except ImportError:
         pass
-    
+
     try:
         import openai
-        return 'openai'
+
+        return "openai"
     except ImportError:
         pass
-    
+
     return None
 
 
@@ -375,6 +398,7 @@ def _ensure_backend():
 # Public API
 # ---------------------------------------------------------------------------
 
+
 def chat(
     prompt: str,
     *,
@@ -384,7 +408,7 @@ def chat(
 ) -> str:
     """Send a prompt and get a text response.
 
-    Uses the configured provider_model from skill's config, 
+    Uses the configured provider_model from skill's config,
     or the `model` override if given.
 
     >>> chat("What is 2+2?")  # doctest: +SKIP
@@ -394,18 +418,20 @@ def chat(
     cfg = _resolve_config()
     provider_model = model or cfg.provider_model
     api_key = _resolve_env_var(cfg.api_key)
-    
+
     messages = []
     if system:
         messages.append({"role": "system", "content": system})
     messages.append({"role": "user", "content": prompt})
-    
-    if backend == 'aix':
+
+    if backend == "aix":
         from aix import chat as aix_chat
+
         return aix_chat(prompt, model=provider_model)
-    
-    elif backend == 'aisuite':
+
+    elif backend == "aisuite":
         import aisuite as ai
+
         client = ai.Client()
         response = client.chat.completions.create(
             model=provider_model,
@@ -413,10 +439,15 @@ def chat(
             temperature=temperature,
         )
         return response.choices[0].message.content
-    
-    elif backend == 'anthropic':
+
+    elif backend == "anthropic":
         import anthropic
-        _, model_name = provider_model.split(":", 1) if ":" in provider_model else ("anthropic", provider_model)
+
+        _, model_name = (
+            provider_model.split(":", 1)
+            if ":" in provider_model
+            else ("anthropic", provider_model)
+        )
         client = anthropic.Anthropic(api_key=api_key)
         response = client.messages.create(
             model=model_name,
@@ -425,10 +456,15 @@ def chat(
             messages=[{"role": "user", "content": prompt}],
         )
         return response.content[0].text
-    
-    elif backend == 'openai':
+
+    elif backend == "openai":
         import openai
-        _, model_name = provider_model.split(":", 1) if ":" in provider_model else ("openai", provider_model)
+
+        _, model_name = (
+            provider_model.split(":", 1)
+            if ":" in provider_model
+            else ("openai", provider_model)
+        )
         client = openai.OpenAI(api_key=api_key)
         response = client.chat.completions.create(
             model=model_name,
@@ -446,9 +482,9 @@ def complete_structured(
     model: str | None = None,
 ) -> T:
     """Send a prompt and parse the response into a Pydantic model.
-    
+
     Uses instructor if available, falls back to JSON-mode + manual parsing.
-    
+
     >>> from pydantic import BaseModel
     >>> class SkillMatch(BaseModel):
     ...     name: str
@@ -458,6 +494,7 @@ def complete_structured(
     """
     try:
         import instructor
+
         cfg = _resolve_config()
         provider_model = model or cfg.provider_model
         client = instructor.from_provider(provider_model)
@@ -471,6 +508,7 @@ def complete_structured(
     except ImportError:
         # Fallback: ask for JSON, parse manually
         import json
+
         json_prompt = (
             f"{prompt}\n\nRespond ONLY with a JSON object matching this schema:\n"
             f"{response_model.model_json_schema()}"

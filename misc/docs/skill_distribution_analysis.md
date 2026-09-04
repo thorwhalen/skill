@@ -390,9 +390,9 @@ generalized to a registered convention so each language can add its own
 fallback:
 
 ```python
-package_data_conventions = Registry('package_data_conventions')
-package_data_conventions.register('python', PythonPackageDataConvention())
-package_data_conventions.register('npm', NpmPackageDataConvention())
+package_data_conventions = Registry("package_data_conventions")
+package_data_conventions.register("python", PythonPackageDataConvention())
+package_data_conventions.register("npm", NpmPackageDataConvention())
 # etc., via entry points
 ```
 
