@@ -1,0 +1,24 @@
+skill.backends
+==============
+
+.. automodule:: skill.backends
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      LocalDirSource
+      SkillSource
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   awesome_list
+   composio
+   github
+   skillsdirectory
+   smithery

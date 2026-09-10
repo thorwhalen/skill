@@ -1,0 +1,24 @@
+skill.config
+============
+
+.. automodule:: skill.config
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cache_dir
+      config_dir
+      config_path
+      data_dir
+      load_config
+      save_config
+      skills_dir
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      SkillConfig
+   

@@ -1,0 +1,12 @@
+skill.stores
+============
+
+.. automodule:: skill.stores
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      LocalSkillStore
+   

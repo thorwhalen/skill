@@ -1,4 +1,0 @@
-skill.__main__
-==============
-.. automodule:: skill.__main__
-   :members:

@@ -1,0 +1,20 @@
+skill.util
+==========
+
+.. automodule:: skill.util
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      atomic_write
+      find_project_root
+      resolve_env_vars
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ParsedKey
+   

@@ -1,0 +1,6 @@
+skill.install
+=============
+
+.. currentmodule:: skill
+
+.. autofunction:: install

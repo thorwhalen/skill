@@ -1,0 +1,12 @@
+skill.backends.composio
+=======================
+
+.. automodule:: skill.backends.composio
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ComposioSkillSource
+   

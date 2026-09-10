@@ -1,0 +1,12 @@
+skill.backends.skillsdirectory
+==============================
+
+.. automodule:: skill.backends.skillsdirectory
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      SkillsDirectorySource
+   

@@ -1,4 +1,0 @@
-skill.config
-============
-.. automodule:: skill.config
-   :members:

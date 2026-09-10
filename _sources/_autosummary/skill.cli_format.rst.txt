@@ -1,0 +1,16 @@
+skill.cli\_format
+=================
+
+.. automodule:: skill.cli_format
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      format_path_dict
+      format_skill
+      format_skill_info
+      format_skill_info_table
+      format_sources
+   

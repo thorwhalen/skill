@@ -1,0 +1,12 @@
+skill.backends.smithery
+=======================
+
+.. automodule:: skill.backends.smithery
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      SmitherySkillSource
+   

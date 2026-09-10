@@ -1,0 +1,33 @@
+﻿skill
+=====
+
+.. automodule:: skill
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      list_skills
+      show
+      sources
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   ai
+   backends
+   base
+   cli_format
+   completion
+   config
+   create
+   install
+   registry
+   search
+   stores
+   translate
+   util

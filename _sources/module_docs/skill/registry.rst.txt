@@ -1,4 +1,0 @@
-skill.registry
-==============
-.. automodule:: skill.registry
-   :members:

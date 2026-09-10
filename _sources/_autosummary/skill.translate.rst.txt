@@ -1,0 +1,21 @@
+skill.translate
+===============
+
+.. automodule:: skill.translate
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      translators
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      from_mdc
+      to_copilot_instructions
+      to_mdc
+      translate
+   

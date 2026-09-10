@@ -1,4 +1,0 @@
-skill.stores
-============
-.. automodule:: skill.stores
-   :members:

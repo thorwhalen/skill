@@ -1,0 +1,12 @@
+skill.backends.awesome\_list
+============================
+
+.. automodule:: skill.backends.awesome_list
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      AwesomeListSource
+   

@@ -1,0 +1,12 @@
+skill.registry
+==============
+
+.. automodule:: skill.registry
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Registry
+   

@@ -1,0 +1,13 @@
+skill.ai
+========
+
+.. automodule:: skill.ai
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      chat
+      is_ai_available
+   

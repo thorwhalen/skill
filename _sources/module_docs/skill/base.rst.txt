@@ -1,4 +1,0 @@
-skill.base
-==========
-.. automodule:: skill.base
-   :members:

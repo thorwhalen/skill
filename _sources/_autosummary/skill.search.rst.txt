@@ -1,0 +1,6 @@
+skill.search
+============
+
+.. currentmodule:: skill
+
+.. autofunction:: search

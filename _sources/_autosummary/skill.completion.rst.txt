@@ -1,0 +1,14 @@
+skill.completion
+================
+
+.. automodule:: skill.completion
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      install_completion
+      is_completion_registered
+      maybe_hint_completion
+   

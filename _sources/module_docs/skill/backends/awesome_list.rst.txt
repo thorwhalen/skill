@@ -1,4 +1,0 @@
-skill.backends.awesome_list
-===========================
-.. automodule:: skill.backends.awesome_list
-   :members:

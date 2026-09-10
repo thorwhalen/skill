@@ -1,0 +1,30 @@
+skill.base
+==========
+
+.. automodule:: skill.base
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      KNOWN_FRONTMATTER_KEYS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      discover_resources
+      parse_frontmatter
+      parse_skill_md
+      render_frontmatter
+      render_skill_md
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Skill
+      SkillInfo
+      SkillMeta
+   

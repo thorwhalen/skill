@@ -1,0 +1,12 @@
+skill.backends.github
+=====================
+
+.. automodule:: skill.backends.github
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GitHubSkillSource
+   

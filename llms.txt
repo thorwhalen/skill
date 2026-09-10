@@ -1,0 +1,33 @@
+# skill
+
+> AI Agent Skill Search and Management
+
+
+## Pages
+
+- [skill](index.html.md): AI Agent Skill Search and Management
+- [API reference](api.html.md): | [`skill`](_autosummary/skill.html.md#module-skill)   | AI Agent Skill Search and Management.   |
+- [skill](_autosummary/skill.html.md): AI Agent Skill Search and Management.
+- [skill.ai](_autosummary/skill.ai.html.md): Optional AI facade for semantic search and LLM-powered features.
+- [skill.backends](_autosummary/skill.backends.html.md): Backend protocols and local filesystem backend.
+- [skill.backends.awesome_list](_autosummary/skill.backends.awesome_list.html.md): Awesome-claude-skills curated list backend for skill discovery.
+- [skill.backends.composio](_autosummary/skill.backends.composio.html.md): Composio backend for skill discovery and fetching.
+- [skill.backends.github](_autosummary/skill.backends.github.html.md): GitHub backend for skill discovery and fetching.
+- [skill.backends.skillsdirectory](_autosummary/skill.backends.skillsdirectory.html.md): SkillsDirectory backend for skill discovery and fetching.
+- [skill.backends.smithery](_autosummary/skill.backends.smithery.html.md): Smithery backend for skill discovery and fetching.
+- [skill.base](_autosummary/skill.base.html.md): Core data model and SKILL.md parsing.
+- [skill.cli_format](_autosummary/skill.cli_format.html.md): Terminal-friendly formatting for CLI output.
+- [skill.completion](_autosummary/skill.completion.html.md): Shell completion setup and diagnostics.
+- [skill.config](_autosummary/skill.config.html.md): Configuration management via platformdirs and TOML.
+- [skill.create](_autosummary/skill.create.html.md): Create a new skill and store it locally.
+- [skill.install](_autosummary/skill.install.html.md): Install a skill into one or more agent target directories.
+- [skill.registry](_autosummary/skill.registry.html.md): Generic plugin registry with entry point discovery.
+- [skill.search](_autosummary/skill.search.html.md): Search for skills across local index and remote backends.
+- [skill.stores](_autosummary/skill.stores.html.md): Storage layer: LocalSkillStore and SourcedSkillStore via dol.
+- [skill.translate](_autosummary/skill.translate.html.md): Format translators: SKILL.md <-> agent-specific formats.
+- [skill.util](_autosummary/skill.util.html.md): Pure helpers with zero internal imports.
+- [For AI agents](ai-agents.html.md): `skill` ships artifacts for coding agents alongside its code. This page lists
+
+---
+
+For more comprehensive documentation, see [skill.md](skill.md)

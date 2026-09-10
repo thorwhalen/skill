@@ -1,0 +1,6 @@
+skill.create
+============
+
+.. currentmodule:: skill
+
+.. autofunction:: create
