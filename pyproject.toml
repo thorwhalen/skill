@@ -108,7 +108,7 @@ doctest_optionflags = [
 ]
 
 [tool.wads.ci]
-project_name = ""
+project_name = "skill"
 
 [tool.wads.ci.commands]
 pre_test = []
@@ -120,10 +120,12 @@ format = []
 [tool.wads.ci.env]
 required_envvars = []
 test_envvars = []
-extra_envvars = []
+extra_envvars = ["UV_PUBLISH_TOKEN"]
 
 [tool.wads.ci.env.defaults]
 
+[tool.wads.ci.env.secret_aliases]
+UV_PUBLISH_TOKEN = "PYPI_PASSWORD"
 [tool.wads.ci.quality.ruff]
 enabled = true
 
