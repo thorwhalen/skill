@@ -31,7 +31,7 @@ via `importlib.metadata` entry points under the group
 0
 ```
 
-#### *property* name *: [str](https://docs.python.org/3/library/stdtypes.html#str)*
+#### *property* name *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
 
 Registry name (also used to derive the entry point group).
 

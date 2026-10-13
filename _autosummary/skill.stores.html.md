@@ -30,18 +30,18 @@ directory containing `SKILL.md` and optional resource subdirectories.
 Read source metadata for a skill, or empty dict if none.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/library/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 #### list_info()
 
 Return SkillInfo for all locally stored skills.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/library/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
 
 #### set_source_meta(key, , url=None, source=None)
 
 Store source metadata (URL, origin) alongside a skill.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/library/constants.html#None)
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)

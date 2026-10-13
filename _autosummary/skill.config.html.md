@@ -20,7 +20,7 @@ Configuration management via platformdirs and TOML.
 
 ### *class* skill.config.SkillConfig(default_agent_targets=<factory>, default_scope='project', install_method='symlink', ai_provider_model='anthropic:claude-sonnet-4-20250514', ai_api_key='$ANTHROPIC_API_KEY', github_enabled=True, smithery_enabled=True, composio_enabled=True, awesome_list_enabled=True, skillsdirectory_enabled=True, search_cache_ttl=3600)
 
-Bases: [`object`](https://docs.python.org/3/library/functions.html#object)
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Root configuration schema with sensible defaults for zero-config first run.
 
@@ -98,7 +98,7 @@ Load config from TOML, falling back to defaults for missing fields.
 Save config to TOML.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/library/constants.html#None)
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> import tempfile

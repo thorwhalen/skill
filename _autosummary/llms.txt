@@ -1,0 +1,30 @@
+# skill
+
+> AI Agent Skill Search and Management
+
+
+## Pages in this subsection
+
+- [skill](skill.html.md): AI Agent Skill Search and Management.
+- [skill.ai](skill.ai.html.md): Optional AI facade for semantic search and LLM-powered features.
+- [skill.backends](skill.backends.html.md): Backend protocols and local filesystem backend.
+- [skill.backends.awesome_list](skill.backends.awesome_list.html.md): Awesome-claude-skills curated list backend for skill discovery.
+- [skill.backends.composio](skill.backends.composio.html.md): Composio backend for skill discovery and fetching.
+- [skill.backends.github](skill.backends.github.html.md): GitHub backend for skill discovery and fetching.
+- [skill.backends.skillsdirectory](skill.backends.skillsdirectory.html.md): SkillsDirectory backend for skill discovery and fetching.
+- [skill.backends.smithery](skill.backends.smithery.html.md): Smithery backend for skill discovery and fetching.
+- [skill.base](skill.base.html.md): Core data model and SKILL.md parsing.
+- [skill.cli_format](skill.cli_format.html.md): Terminal-friendly formatting for CLI output.
+- [skill.completion](skill.completion.html.md): Shell completion setup and diagnostics.
+- [skill.config](skill.config.html.md): Configuration management via platformdirs and TOML.
+- [skill.create](skill.create.html.md): Create a new skill and store it locally.
+- [skill.install](skill.install.html.md): Install a skill into one or more agent target directories.
+- [skill.registry](skill.registry.html.md): Generic plugin registry with entry point discovery.
+- [skill.search](skill.search.html.md): Search for skills across local index and remote backends.
+- [skill.stores](skill.stores.html.md): Storage layer: LocalSkillStore and SourcedSkillStore via dol.
+- [skill.translate](skill.translate.html.md): Format translators: SKILL.md &lt;-&gt; agent-specific formats.
+- [skill.util](skill.util.html.md): Pure helpers with zero internal imports.
+
+## Optional
+
+- [Top-level llms.txt](../llms.txt): Complete documentation index.

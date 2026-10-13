@@ -21,7 +21,7 @@ Raises ImportError with actionable install instructions if no
 provider is available.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/library/stdtypes.html#str)
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### skill.ai.is_ai_available()
 
@@ -31,7 +31,7 @@ Returns True if any supported provider can be imported and
 an API key is configured (or detectable from environment).
 
 * **Return type:**
-  [`bool`](https://docs.python.org/3/library/functions.html#bool)
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ```pycon
 >>> isinstance(is_ai_available(), bool)

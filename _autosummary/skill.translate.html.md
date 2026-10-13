@@ -40,7 +40,7 @@ Produces a Markdown section suitable for appending to
 beyond `applyTo`, no progressive disclosure, no resources.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/library/stdtypes.html#str)
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> from skill.base import SkillMeta
@@ -60,7 +60,7 @@ Lossy: `allowed-tools`, `license`, bundled resources, and progressive
 disclosure semantics are lost.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/library/stdtypes.html#str)
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> from skill.base import SkillMeta
@@ -77,7 +77,7 @@ True
 Translate a Skill to the specified target format.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/library/stdtypes.html#str)
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> from skill.base import SkillMeta
@@ -86,6 +86,6 @@ Translate a Skill to the specified target format.
 True
 ```
 
-### skill.translate.translators *: [Registry](skill.registry.html.md#skill.registry.Registry)[[Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[Skill](skill.base.html.md#skill.base.Skill)], [str](https://docs.python.org/3/library/stdtypes.html#str)]]* *= Registry('translators', keys=['mdc', 'copilot_md'])*
+### skill.translate.translators *: [Registry](skill.registry.html.md#skill.registry.Registry)[[Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[Skill](skill.base.html.md#skill.base.Skill)], [str](https://docs.python.org/3/builtins/stdtypes.html#str)]]* *= Registry('translators', keys=['mdc', 'copilot_md'])*
 
 Registry of format translators (Skill -> target format string).

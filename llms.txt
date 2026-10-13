@@ -6,7 +6,7 @@
 ## Pages
 
 - [skill](index.html.md): AI Agent Skill Search and Management
-- [API reference](api.html.md): | [`skill`](_autosummary/skill.html.md#module-skill)   | AI Agent Skill Search and Management.   |
+- [API reference](api.html.md): | &#96;skill&#96;   | AI Agent Skill Search and Management.   |
 - [skill](_autosummary/skill.html.md): AI Agent Skill Search and Management.
 - [skill.ai](_autosummary/skill.ai.html.md): Optional AI facade for semantic search and LLM-powered features.
 - [skill.backends](_autosummary/skill.backends.html.md): Backend protocols and local filesystem backend.
@@ -24,10 +24,15 @@
 - [skill.registry](_autosummary/skill.registry.html.md): Generic plugin registry with entry point discovery.
 - [skill.search](_autosummary/skill.search.html.md): Search for skills across local index and remote backends.
 - [skill.stores](_autosummary/skill.stores.html.md): Storage layer: LocalSkillStore and SourcedSkillStore via dol.
-- [skill.translate](_autosummary/skill.translate.html.md): Format translators: SKILL.md <-> agent-specific formats.
+- [skill.translate](_autosummary/skill.translate.html.md): Format translators: SKILL.md &lt;-&gt; agent-specific formats.
 - [skill.util](_autosummary/skill.util.html.md): Pure helpers with zero internal imports.
-- [For AI agents](ai-agents.html.md): `skill` ships artifacts for coding agents alongside its code. This page lists
+- [For AI agents](ai-agents.html.md): &#96;skill&#96; ships artifacts for coding agents alongside its code. This page lists
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-13 01:41 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
 
----
+## Optional
 
-For more comprehensive documentation, see [skill.md](skill.md)
+- [skill.md](skill.md): Complete documentation in a single file.
+
+## Build
+
+- [build_info.json](build_info.json): build provenance (commit, version, tool versions, whether the docs match the package)

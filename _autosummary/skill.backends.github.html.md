@@ -9,7 +9,7 @@ GitHub backend for skill discovery and fetching.
 
 ### *class* skill.backends.github.GitHubSkillSource(, token=None, http_get=None)
 
-Bases: [`object`](https://docs.python.org/3/library/functions.html#object)
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 SkillSource backed by the GitHub API.
 
@@ -29,7 +29,7 @@ True
 List all skills in a GitHub repo using the Trees API.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/library/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
 
 #### search(query, , max_results=10)
 
@@ -38,4 +38,4 @@ Search GitHub for SKILL.md files matching query.
 Uses the Code Search API: `filename:SKILL.md {query}`.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/library/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]

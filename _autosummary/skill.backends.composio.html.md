@@ -9,7 +9,7 @@ Composio backend for skill discovery and fetching.
 
 ### *class* skill.backends.composio.ComposioSkillSource(, token=None, http_get=None)
 
-Bases: [`object`](https://docs.python.org/3/library/functions.html#object)
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 SkillSource backed by the Composio API (v3).
 
@@ -26,4 +26,4 @@ Requires a `COMPOSIO_API_KEY` environment variable or explicit *token*.
 Search Composio for tools matching *query*.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/library/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]

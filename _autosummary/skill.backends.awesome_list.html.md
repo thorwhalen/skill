@@ -9,7 +9,7 @@ Awesome-claude-skills curated list backend for skill discovery.
 
 ### *class* skill.backends.awesome_list.AwesomeListSource(, http_get=None)
 
-Bases: [`object`](https://docs.python.org/3/library/functions.html#object)
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 SkillSource backed by the awesome-claude-skills curated list.
 
@@ -27,4 +27,4 @@ Fetches and parses the README from
 Search the curated list for skills matching *query*.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/library/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]

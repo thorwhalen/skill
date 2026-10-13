@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "built_at": "2026-10-13T01:41:31Z",
+  "package": {
+    "name": "skill",
+    "version": "0.1.14",
+    "display_name": "skill",
+    "source": "pyproject.toml"
+  },
+  "git": {
+    "available": true,
+    "commit": "f96fd5d0dd02e72c200a958a5bf11f266b8690f0",
+    "short_commit": "f96fd5d",
+    "branch": "master",
+    "tags": [],
+    "dirty": false,
+    "remote_url": "https://github.com/thorwhalen/skill",
+    "commit_url": "https://github.com/thorwhalen/skill/commit/f96fd5d0dd02e72c200a958a5bf11f266b8690f0",
+    "error": null
+  },
+  "ci": {
+    "provider": "github",
+    "repository": "thorwhalen/skill",
+    "sha": "f96fd5d0dd02e72c200a958a5bf11f266b8690f0",
+    "sha_in_history": true,
+    "ref": "refs/heads/master",
+    "ref_name": "master",
+    "run_id": "38333229971",
+    "run_url": "https://github.com/thorwhalen/skill/actions/runs/38333229971",
+    "server_url": "https://github.com"
+  },
+  "tools": {
+    "epythet": "0.2.12",
+    "sphinx": "9.1.0",
+    "docutils": "0.22.4",
+    "python": "3.12.15"
+  },
+  "config": {
+    "theme": "auto",
+    "html_theme": "sphinxawesome_theme",
+    "accent": "#006c71",
+    "mode": "auto",
+    "api_generator": "autosummary",
+    "ignore": [
+      "tests/",
+      "scrap/",
+      "examples/"
+    ],
+    "agent_outputs": true,
+    "aggregates": [
+      "md"
+    ],
+    "ai_artifacts": true,
+    "provenance": true,
+    "docs_dir": "docsrc"
+  },
+  "site": {
+    "modules_documented": 19,
+    "objects_documented": 70
+  },
+  "pypi": {
+    "checked": true,
+    "latest": "0.1.15",
+    "relation": "behind",
+    "error": null
+  },
+  "reproduce": "git clone https://github.com/thorwhalen/skill && cd skill\ngit checkout f96fd5d0dd02e72c200a958a5bf11f266b8690f0\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "warnings": [],
+  "alignment": {
+    "aligned": false,
+    "notes": [
+      "The documented version (0.1.14) is behind the latest release on PyPI (0.1.15): `pip install skill` gives newer code than these docs describe."
+    ]
+  }
+}

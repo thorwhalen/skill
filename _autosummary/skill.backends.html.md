@@ -10,7 +10,7 @@ Backend protocols and local filesystem backend.
 
 ### *class* skill.backends.LocalDirSource(root)
 
-Bases: [`object`](https://docs.python.org/3/library/functions.html#object)
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 SkillSource backed by an arbitrary local directory of skills.
 
@@ -37,7 +37,7 @@ True
 Keyword search over skill names and descriptions.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/library/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
 
 ```pycon
 >>> import tempfile

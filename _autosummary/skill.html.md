@@ -38,7 +38,7 @@ from skill.create import validators
 List locally installed skills, optionally filtered by agent target.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/library/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
 
 ```pycon
 >>> isinstance(list_skills(), list)
@@ -59,7 +59,7 @@ Raises KeyError if the skill is not found locally.
 List registered search backends with their name, homepage, and status.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/library/stdtypes.html#list)[[`dict`](https://docs.python.org/3/library/stdtypes.html#dict)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 
 ```pycon
 >>> isinstance(sources(), list)

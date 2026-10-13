@@ -31,7 +31,7 @@ verbatim in [`SkillMeta.extra`](#skill.base.SkillMeta.extra) so it survives a pa
 
 ### *class* skill.base.Skill(meta, body, resources=<factory>, source_path=None)
 
-Bases: [`object`](https://docs.python.org/3/library/functions.html#object)
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A fully parsed skill: frontmatter + body + resource manifest.
 
@@ -68,18 +68,18 @@ Parse a Skill from a SKILL.md string (no resource discovery).
 Render this skill as a SKILL.md string.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/library/stdtypes.html#str)
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 #### write_to(path)
 
 Write this skill to a directory, creating SKILL.md and resource dirs.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/library/constants.html#None)
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### *class* skill.base.SkillInfo(canonical_key, name, description, source, url=None, owner=None, installed=False)
 
-Bases: [`object`](https://docs.python.org/3/library/functions.html#object)
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Lightweight metadata for search results (no body).
 
@@ -91,7 +91,7 @@ Lightweight metadata for search results (no body).
 
 ### *class* skill.base.SkillMeta(name, description, audience=None, license=None, compatibility=None, metadata=<factory>, allowed_tools=<factory>, extra=<factory>)
 
-Bases: [`object`](https://docs.python.org/3/library/functions.html#object)
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Parsed YAML frontmatter from a SKILL.md file.
 
@@ -110,7 +110,7 @@ on render, so a tool’s additive frontmatter block isn’t silently dropped:
 {'model': 'sonnet'}
 ```
 
-#### extra *: [dict](https://docs.python.org/3/library/stdtypes.html#dict)[[str](https://docs.python.org/3/library/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]*
+#### extra *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]*
 
 Unknown/namespaced top-level frontmatter keys, kept verbatim for round-trip.
 
@@ -122,14 +122,14 @@ Named fields render first (stable order); preserved [`extra`](#skill.base.SkillM
 follow, so namespaced blocks survive `parse_skill_md` → `render_skill_md`.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/library/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### skill.base.discover_resources(path)
 
 Scan a skill directory for bundled resource subdirectories.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/library/stdtypes.html#dict)[[`str`](https://docs.python.org/3/library/stdtypes.html#str), [`list`](https://docs.python.org/3/library/stdtypes.html#list)[[`str`](https://docs.python.org/3/library/stdtypes.html#str)]]
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 ```pycon
 >>> import tempfile
@@ -147,7 +147,7 @@ Scan a skill directory for bundled resource subdirectories.
 Parse YAML frontmatter delimited by `---` from markdown content.
 
 * **Return type:**
-  [`tuple`](https://docs.python.org/3/library/stdtypes.html#tuple)[[`dict`](https://docs.python.org/3/library/stdtypes.html#dict), [`str`](https://docs.python.org/3/library/stdtypes.html#str)]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ```pycon
 >>> meta, body = parse_frontmatter("---\nname: test\ndescription: A test\n---\n# Hello")
@@ -164,7 +164,7 @@ Parse YAML frontmatter delimited by `---` from markdown content.
 Parse a SKILL.md string into (SkillMeta, body).
 
 * **Return type:**
-  [`tuple`](https://docs.python.org/3/library/stdtypes.html#tuple)[[`SkillMeta`](#skill.base.SkillMeta), [`str`](https://docs.python.org/3/library/stdtypes.html#str)]
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`SkillMeta`](#skill.base.SkillMeta), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ```pycon
 >>> meta, body = parse_skill_md("---\nname: foo\ndescription: bar\n---\nHello")
@@ -179,7 +179,7 @@ Parse a SKILL.md string into (SkillMeta, body).
 Render a dict as YAML frontmatter block.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/library/stdtypes.html#str)
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> print(render_frontmatter({'name': 'test', 'description': 'A test'}))
@@ -194,7 +194,7 @@ description: A test
 Render a SKILL.md string from meta and body.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/library/stdtypes.html#str)
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> s = render_skill_md(SkillMeta(name='x', description='y'), 'Hello')

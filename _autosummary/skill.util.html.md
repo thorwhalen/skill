@@ -16,7 +16,7 @@ Pure helpers with zero internal imports.
 
 ### *class* skill.util.ParsedKey(owner, name)
 
-Bases: [`object`](https://docs.python.org/3/library/functions.html#object)
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A normalized skill key.
 
@@ -48,7 +48,7 @@ Supports 1-part (name only), 2-part (owner/name), and 3-part
 Write `content` to `path` atomically via temp-then-rename.
 
 * **Return type:**
-  [`None`](https://docs.python.org/3/library/constants.html#None)
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> import tempfile
@@ -64,7 +64,7 @@ Write `content` to `path` atomically via temp-then-rename.
 Walk up from `start` looking for a project root marker.
 
 * **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path) | [`None`](https://docs.python.org/3/library/constants.html#None)
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> import tempfile
@@ -83,7 +83,7 @@ True
 Resolve `$VAR` and `${VAR}` references from environment variables.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/library/stdtypes.html#str)
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> import os; os.environ['_SKILL_TEST'] = 'hello'

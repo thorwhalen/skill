@@ -16,7 +16,7 @@ Terminal-friendly formatting for CLI output.
 Format a {name: path} dict as readable output.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/library/stdtypes.html#str)
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> from pathlib import Path
@@ -30,7 +30,7 @@ True
 Format a full Skill for terminal display.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/library/stdtypes.html#str)
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> from skill.base import SkillMeta
@@ -46,7 +46,7 @@ True
 Format a single SkillInfo as a compact one-liner.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/library/stdtypes.html#str)
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> si = SkillInfo('owner/test', 'test', 'A test skill', 'local', installed=True)
@@ -61,7 +61,7 @@ Format a list of SkillInfo as an aligned, readable table.
 Shows URL on a second line when available.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/library/stdtypes.html#str)
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> items = [
@@ -81,7 +81,7 @@ True
 Format a list of source dicts for terminal display.
 
 * **Return type:**
-  [`str`](https://docs.python.org/3/library/stdtypes.html#str)
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> out = format_sources([{'name': 'github', 'homepage': 'https://github.com', 'enabled': True}])

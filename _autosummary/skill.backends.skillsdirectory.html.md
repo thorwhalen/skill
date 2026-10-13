@@ -9,7 +9,7 @@ SkillsDirectory backend for skill discovery and fetching.
 
 ### *class* skill.backends.skillsdirectory.SkillsDirectorySource(, token=None, http_get=None)
 
-Bases: [`object`](https://docs.python.org/3/library/functions.html#object)
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 SkillSource backed by skillsdirectory.com.
 
@@ -27,4 +27,4 @@ Free tier: 100 requests/day.
 Search SkillsDirectory for skills matching *query*.
 
 * **Return type:**
-  [`list`](https://docs.python.org/3/library/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
