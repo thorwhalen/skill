@@ -120,12 +120,10 @@ format = []
 [tool.wads.ci.env]
 required_envvars = []
 test_envvars = []
-extra_envvars = ["UV_PUBLISH_TOKEN"]
+extra_envvars = []
 
 [tool.wads.ci.env.defaults]
 
-[tool.wads.ci.env.secret_aliases]
-UV_PUBLISH_TOKEN = "PYPI_PASSWORD"
 [tool.wads.ci.quality.ruff]
 enabled = true
 
