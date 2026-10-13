@@ -1,258 +1,55 @@
-name: Continuous Integration (uv)
+# wads CI — calls the reusable workflow hosted in i2mint/wads.
+#
+# All configuration comes from this repo's pyproject.toml [tool.wads.ci.*].
+# To customize the workflow itself (rare), replace this file with the
+# full inline template `wads/data/github_ci_uv.yml` from i2mint/wads.
+#
+# Pinning: `@master` floats with wads. If you need version stability for
+# a release-sensitive repo, change `@master` to a wads tag (e.g. `@0.2.15`;
+# tags have no `v` prefix).
+# CI failure does not block a published release — it blocks the publish
+# step itself — so floating master is generally safe.
+#
+# Permissions: GitHub validates that the caller grants AT LEAST the
+# permissions any job in the called workflow requests — at workflow-parse
+# time, not at run-time, even if the job would be skipped via `if:`.
+# The reusable workflow needs:
+#   contents: write   for the publish job's version-bump push-back
+#                     and for the github-pages job's gh-pages branch push
+#   pages: write      for the github-pages job's REST API Pages config
+# Both default to `write` on org-account GITHUB_TOKEN and need to be
+# granted explicitly on personal-account callers (where the default is
+# read-only). No `id-token: write` needed — the publish-github-pages
+# action uses peaceiris/actions-gh-pages (branch-based) + REST API,
+# not the OIDC `actions/deploy-pages` flow.
+name: Continuous Integration
 on: [push, pull_request]
-
-# Note: Environment variables (PROJECT_NAME and vars from [tool.wads.ci.env])
-# are set by the read-ci-config action in the setup job and made available
-# to all subsequent jobs via GITHUB_ENV
-
 jobs:
-  # First job: Read configuration from pyproject.toml
-  setup:
-    name: Read Configuration
-    runs-on: ubuntu-latest
-    outputs:
-      project-name: ${{ steps.config.outputs.project-name }}
-      python-versions: ${{ steps.config.outputs.python-versions }}
-      pytest-args: ${{ steps.config.outputs.pytest-args }}
-      coverage-enabled: ${{ steps.config.outputs.coverage-enabled }}
-      exclude-paths: ${{ steps.config.outputs.exclude-paths }}
-      test-on-windows: ${{ steps.config.outputs.test-on-windows }}
-      build-sdist: ${{ steps.config.outputs.build-sdist }}
-      build-wheel: ${{ steps.config.outputs.build-wheel }}
-      metrics-enabled: ${{ steps.config.outputs.metrics-enabled }}
-      metrics-config-path: ${{ steps.config.outputs.metrics-config-path }}
-      metrics-storage-branch: ${{ steps.config.outputs.metrics-storage-branch }}
-      metrics-python-version: ${{ steps.config.outputs.metrics-python-version }}
-      metrics-force-run: ${{ steps.config.outputs.metrics-force-run }}
-
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up uv
-        uses: astral-sh/setup-uv@v7
-
-      - name: Set up Python
-        run: uv python install 3.11
-
-      - name: Read CI Config
-        id: config
-        uses: i2mint/wads/actions/read-ci-config@master
-        with:
-          pyproject-path: .
-
-  # Second job: Validation using the config
-  validation:
-    name: Validation
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
-    needs: setup
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ${{ fromJson(needs.setup.outputs.python-versions) }}
-
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up uv
-        uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-
-      - name: Set up Python ${{ matrix.python-version }}
-        run: |
-          uv python install ${{ matrix.python-version }}
-          uv venv --python ${{ matrix.python-version }}
-
-      - name: Install System Dependencies
-        uses: i2mint/wads/actions/install-system-deps@master
-        with:
-          pyproject-path: .
-
-      - name: Install Dependencies
-        run: |
-          source .venv/bin/activate
-          uv pip install -e ".[dev]"
-
-      - name: Format Source Code
-        run: uvx ruff format .
-
-      - name: Lint Validation
-        run: uvx ruff check --output-format=github ${{ needs.setup.outputs.project-name }}
-
-      - name: Run Tests
-        run: |
-          source .venv/bin/activate
-          PYTEST_ARGS="${{ needs.setup.outputs.pytest-args }}"
-          EXCLUDE="${{ needs.setup.outputs.exclude-paths }}"
-          COVERAGE="${{ needs.setup.outputs.coverage-enabled }}"
-          ROOT_DIR="${{ needs.setup.outputs.project-name }}"
-
-          CMD="python -m pytest"
-
-          # Add coverage flags
-          if [ "$COVERAGE" = "true" ]; then
-            uv pip install pytest-cov
-            CMD="$CMD --cov=$ROOT_DIR --cov-report=term-missing"
-          fi
-
-          # Add doctest flags
-          CMD="$CMD --doctest-modules"
-          CMD="$CMD -o doctest_optionflags='ELLIPSIS IGNORE_EXCEPTION_DETAIL'"
-
-          # Add exclude paths
-          if [ -n "$EXCLUDE" ]; then
-            IFS=',' read -ra PATHS <<< "$EXCLUDE"
-            for path in "${PATHS[@]}"; do
-              path=$(echo "$path" | xargs)
-              CMD="$CMD --ignore=$path"
-            done
-          fi
-
-          # Add extra pytest args
-          if [ -n "$PYTEST_ARGS" ]; then
-            CMD="$CMD $PYTEST_ARGS"
-          fi
-
-          echo "Running: $CMD"
-          eval $CMD
-
-      - name: Track Code Metrics
-        if: needs.setup.outputs.metrics-enabled == 'true'
-        uses: i2mint/umpyre/actions/track-metrics@master
-        continue-on-error: true
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          config-path: ${{ needs.setup.outputs.metrics-config-path }}
-          storage-branch: ${{ needs.setup.outputs.metrics-storage-branch }}
-          python-version: ${{ needs.setup.outputs.metrics-python-version }}
-          force-run: ${{ needs.setup.outputs.metrics-force-run }}
-
-  # Optional Windows testing (if enabled in config)
-  windows-validation:
-    name: Windows Tests
-    if: "!contains(github.event.head_commit.message, '[skip ci]') && needs.setup.outputs.test-on-windows == 'true'"
-    needs: setup
-    runs-on: windows-latest
-    continue-on-error: true
-
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up uv
-        uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-
-      - name: Set up Python
-        run: |
-          uv python install ${{ fromJson(needs.setup.outputs.python-versions)[0] }}
-          uv venv
-
-      - name: Install System Dependencies
-        uses: i2mint/wads/actions/install-system-deps@master
-        with:
-          pyproject-path: .
-
-      - name: Install Dependencies
-        run: |
-          .venv\Scripts\activate
-          uv pip install -e ".[dev]"
-
-      - name: Run tests
-        id: test
-        continue-on-error: true
-        run: |
-          .venv\Scripts\activate
-          pytest
-
-      - name: Report test results
-        if: always()
-        run: |
-          if ("${{ steps.test.outcome }}" -eq "failure") {
-            echo "::warning::Windows tests failed but workflow continues"
-            echo "## ⚠️ Windows Tests Failed" >> $env:GITHUB_STEP_SUMMARY
-            echo "Tests failed on Windows but this is informational only." >> $env:GITHUB_STEP_SUMMARY
-          } else {
-            echo "## ✅ Windows Tests Passed" >> $env:GITHUB_STEP_SUMMARY
-          }
-
-  # Publishing job
-  publish:
-    name: Publish
-    permissions:
-      contents: write
-    if: "!contains(github.event.head_commit.message, '[skip ci]') && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')"
-    needs: [setup, validation]
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up uv
-        uses: astral-sh/setup-uv@v7
-
-      - name: Set up Python
-        run: uv python install ${{ fromJson(needs.setup.outputs.python-versions)[0] }}
-
-      - name: Format Source Code
-        run: uvx ruff format .
-
-      - name: Update Version Number
-        id: version
-        uses: i2mint/isee/actions/bump-version-number@master
-
-      - name: Build Distribution
-        run: |
-          BUILD_ARGS=""
-          if [ "${{ needs.setup.outputs.build-sdist }}" = "false" ]; then
-            BUILD_ARGS="$BUILD_ARGS --no-sdist"
-          fi
-          if [ "${{ needs.setup.outputs.build-wheel }}" = "false" ]; then
-            BUILD_ARGS="$BUILD_ARGS --no-wheel"
-          fi
-          uv build $BUILD_ARGS
-
-      - name: Publish to PyPI
-        env:
-          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_PASSWORD }}
-        run: uv publish dist/*
-
-      - name: Force SSH for git remote
-        run: |
-          git remote set-url origin git@github.com:${{ github.repository }}.git
-
-      - name: Commit Changes
-        uses: i2mint/wads/actions/git-commit@master
-        with:
-          commit-message: "**CI** Formatted code + Updated version to ${{ env.VERSION }} [skip ci]"
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          push: true
-
-      - name: Tag Repository
-        uses: i2mint/wads/actions/git-tag@master
-        with:
-          tag: ${{ env.VERSION }}
-          message: "Release version ${{ env.VERSION }}"
-          push: true
-
-  # Optional GitHub Pages
-  github-pages:
-    name: Publish GitHub Pages
+  ci:
+    uses: i2mint/wads/.github/workflows/uv-ci.yml@master
     permissions:
       contents: write
       pages: write
-      id-token: write
-    if: "!contains(github.event.head_commit.message, '[skip ci]') && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)"
-    needs: publish
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: i2mint/epythet/actions/publish-github-pages@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          ignore: "tests/,scrap/,examples/"
-          # WP5 pilot: opt into epythet v2 ahead of the fleet default (i2mint/epythet#16)
-          epythet-spec: "epythet>=0.2,<0.3"
+    # Transport (named): passes ONLY the secrets listed below — PYPI_PASSWORD
+    # (for the publish job) plus the secret behind each env var declared in
+    # [tool.wads.ci.env]. `wads-secrets add VAR_NAME` declares a var and adds
+    # its secret here. Every listed name must be declared by the reusable
+    # workflow (the superset in wads/ci_secrets.py) or GitHub rejects this
+    # workflow at parse time; a missing name is a one-line addition there.
+    # (Cross-owner `secrets: inherit` does not propagate secrets, so it
+    # cannot replace this list.)
+    #
+    # Opt-in alternative: `wads-migrate ci-to-stub --transport json` passes
+    # this repo's WHOLE secrets context — every secret it can read, including
+    # org-level ones — as one WADS_CI_SECRETS_JSON secret. GitHub's
+    # malicious-workflow scanner may hold runs that do that: `action_required`,
+    # zero jobs, no log (i2mint/wads#74, #101).
+    #
+    # *Which* of these become job env vars — and which are required — is
+    # driven entirely by [tool.wads.ci.env] in pyproject.toml; nothing is
+    # exported unless declared there. Non-sensitive values don't need a secret:
+    # use [tool.wads.ci.env].defaults (committed literals) or a repository
+    # *variable* (`gh variable set NAME`) — declared names fall back to
+    # repo variables automatically.
+    secrets:
+      PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
