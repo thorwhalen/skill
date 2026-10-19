@@ -15,9 +15,6 @@ Terminal-friendly formatting for CLI output.
 
 Format a {name: path} dict as readable output.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> from pathlib import Path
 >>> out = format_path_dict({'claude-code': Path('/a/b')}, verb='Installed')
@@ -25,12 +22,12 @@ Format a {name: path} dict as readable output.
 True
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### skill.cli_format.format_skill(skill, , url=None, dep_warnings=None)
 
 Format a full Skill for terminal display.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> from skill.base import SkillMeta
@@ -41,12 +38,12 @@ True
 True
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### skill.cli_format.format_skill_info(info)
 
 Format a single SkillInfo as a compact one-liner.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> si = SkillInfo('owner/test', 'test', 'A test skill', 'local', installed=True)
@@ -54,14 +51,14 @@ Format a single SkillInfo as a compact one-liner.
 True
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### skill.cli_format.format_skill_info_table(items)
 
 Format a list of SkillInfo as an aligned, readable table.
 
 Shows URL on a second line when available.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> items = [
@@ -76,15 +73,18 @@ True
 True
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### skill.cli_format.format_sources(sources)
 
 Format a list of source dicts for terminal display.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> out = format_sources([{'name': 'github', 'homepage': 'https://github.com', 'enabled': True}])
 >>> 'github' in out and 'https://github.com' in out
 True
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)

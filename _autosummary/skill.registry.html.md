@@ -44,9 +44,6 @@ Registry name (also used to derive the entry point group).
 
 Register an item and return it (usable as a decorator factory).
 
-* **Return type:**
-  [`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`T`)
-
 ```pycon
 >>> r = Registry('demo')
 >>> r.register('x', lambda: 1)
@@ -54,3 +51,6 @@ Register an item and return it (usable as a decorator factory).
 >>> 'x' in r
 True
 ```
+
+* **Return type:**
+  `T`

@@ -47,9 +47,6 @@ Supports 1-part (name only), 2-part (owner/name), and 3-part
 
 Write `content` to `path` atomically via temp-then-rename.
 
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
-
 ```pycon
 >>> import tempfile
 >>> with tempfile.TemporaryDirectory() as d:
@@ -59,12 +56,12 @@ Write `content` to `path` atomically via temp-then-rename.
 'hello'
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### skill.util.find_project_root(start=None)
 
 Walk up from `start` looking for a project root marker.
-
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> import tempfile
@@ -78,12 +75,12 @@ True
 True
 ```
 
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### skill.util.resolve_env_vars(value)
 
 Resolve `$VAR` and `${VAR}` references from environment variables.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> import os; os.environ['_SKILL_TEST'] = 'hello'
@@ -94,3 +91,6 @@ Resolve `$VAR` and `${VAR}` references from environment variables.
 >>> resolve_env_vars('no vars here')
 'no vars here'
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)

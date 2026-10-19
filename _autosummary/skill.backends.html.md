@@ -36,9 +36,6 @@ True
 
 Keyword search over skill names and descriptions.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
-
 ```pycon
 >>> import tempfile
 >>> from skill.base import Skill, SkillMeta
@@ -52,6 +49,9 @@ True
 >>> results[0].name
 'python-lint'
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](skill.base.html.md#skill.base.SkillInfo)]
 
 ### *class* skill.backends.SkillSource(\*args, \*\*kwargs)
 

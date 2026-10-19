@@ -30,10 +30,10 @@ Check if an AI provider is available.
 Returns True if any supported provider can be imported and
 an API key is configured (or detectable from environment).
 
-* **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
-
 ```pycon
 >>> isinstance(is_ai_available(), bool)
 True
 ```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)

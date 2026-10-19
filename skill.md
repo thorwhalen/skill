@@ -1,4 +1,4 @@
-> built 2026-10-13 01:41 UTC from f96fd5d (master) · skill 0.1.14. Details: build_info.json
+> built 2026-10-19 11:18 UTC from d96cee5 (master) · skill 0.1.15. Details: build_info.json
 
 # index.html.md
 
@@ -195,13 +195,13 @@ Check if an AI provider is available.
 Returns True if any supported provider can be imported and
 an API key is configured (or detectable from environment).
 
-* **Return type:**
-  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
-
 ```pycon
 >>> isinstance(is_ai_available(), bool)
 True
 ```
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 
 # _autosummary/skill.backends.awesome_list.html.md
@@ -356,9 +356,6 @@ True
 
 Keyword search over skill names and descriptions.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](_autosummary/skill.base.html.md#skill.base.SkillInfo)]
-
 ```pycon
 >>> import tempfile
 >>> from skill.base import Skill, SkillMeta
@@ -372,6 +369,9 @@ True
 >>> results[0].name
 'python-lint'
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](_autosummary/skill.base.html.md#skill.base.SkillInfo)]
 
 ### *class* skill.backends.SkillSource(\*args, \*\*kwargs)
 
@@ -493,7 +493,7 @@ Top-level frontmatter keys `SkillMeta` models as named fields. Anything else
 is an unknown/namespaced key (e.g. another tool’s `coact:` block) and is kept
 verbatim in [`SkillMeta.extra`](_autosummary/skill.base.html.md#skill.base.SkillMeta.extra) so it survives a parse→render round-trip.
 
-### *class* skill.base.Skill(meta, body, resources=<factory>, source_path=None)
+### *class* skill.base.Skill(meta, body, resources=dict(), source_path=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -518,14 +518,14 @@ Load a Skill from a directory containing SKILL.md.
 
 Parse a Skill from a SKILL.md string (no resource discovery).
 
-* **Return type:**
-  [`Skill`](_autosummary/skill.base.html.md#skill.base.Skill)
-
 ```pycon
 >>> s = Skill.from_string("---\nname: x\ndescription: y\n---\nbody")
 >>> s.meta.name
 'x'
 ```
+
+* **Return type:**
+  [`Skill`](_autosummary/skill.base.html.md#skill.base.Skill)
 
 #### to_string()
 
@@ -553,7 +553,7 @@ Lightweight metadata for search results (no body).
 'owner/test'
 ```
 
-### *class* skill.base.SkillMeta(name, description, audience=None, license=None, compatibility=None, metadata=<factory>, allowed_tools=<factory>, extra=<factory>)
+### *class* skill.base.SkillMeta(name, description, audience=None, license=None, compatibility=None, metadata=dict(), allowed_tools=list(), extra=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -592,9 +592,6 @@ follow, so namespaced blocks survive `parse_skill_md` → `render_skill_md`.
 
 Scan a skill directory for bundled resource subdirectories.
 
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
-
 ```pycon
 >>> import tempfile
 >>> with tempfile.TemporaryDirectory() as d:
@@ -606,12 +603,12 @@ Scan a skill directory for bundled resource subdirectories.
 ['run.py']
 ```
 
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
+
 ### skill.base.parse_frontmatter(content)
 
 Parse YAML frontmatter delimited by `---` from markdown content.
-
-* **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ```pycon
 >>> meta, body = parse_frontmatter("---\nname: test\ndescription: A test\n---\n# Hello")
@@ -623,12 +620,12 @@ Parse YAML frontmatter delimited by `---` from markdown content.
 ({}, 'no frontmatter here')
 ```
 
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
 ### skill.base.parse_skill_md(content)
 
 Parse a SKILL.md string into (SkillMeta, body).
-
-* **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`SkillMeta`](_autosummary/skill.base.html.md#skill.base.SkillMeta), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ```pycon
 >>> meta, body = parse_skill_md("---\nname: foo\ndescription: bar\n---\nHello")
@@ -638,12 +635,12 @@ Parse a SKILL.md string into (SkillMeta, body).
 'Hello'
 ```
 
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`SkillMeta`](_autosummary/skill.base.html.md#skill.base.SkillMeta), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
 ### skill.base.render_frontmatter(meta)
 
 Render a dict as YAML frontmatter block.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> print(render_frontmatter({'name': 'test', 'description': 'A test'}))
@@ -653,18 +650,21 @@ description: A test
 ---
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### skill.base.render_skill_md(meta, body)
 
 Render a SKILL.md string from meta and body.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> s = render_skill_md(SkillMeta(name='x', description='y'), 'Hello')
 >>> 'name: x' in s and 'Hello' in s
 True
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 
 # _autosummary/skill.cli_format.html.md
@@ -686,9 +686,6 @@ Terminal-friendly formatting for CLI output.
 
 Format a {name: path} dict as readable output.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> from pathlib import Path
 >>> out = format_path_dict({'claude-code': Path('/a/b')}, verb='Installed')
@@ -696,12 +693,12 @@ Format a {name: path} dict as readable output.
 True
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### skill.cli_format.format_skill(skill, , url=None, dep_warnings=None)
 
 Format a full Skill for terminal display.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> from skill.base import SkillMeta
@@ -712,12 +709,12 @@ True
 True
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### skill.cli_format.format_skill_info(info)
 
 Format a single SkillInfo as a compact one-liner.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> si = SkillInfo('owner/test', 'test', 'A test skill', 'local', installed=True)
@@ -725,14 +722,14 @@ Format a single SkillInfo as a compact one-liner.
 True
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### skill.cli_format.format_skill_info_table(items)
 
 Format a list of SkillInfo as an aligned, readable table.
 
 Shows URL on a second line when available.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> items = [
@@ -747,18 +744,21 @@ True
 True
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### skill.cli_format.format_sources(sources)
 
 Format a list of source dicts for terminal display.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> out = format_sources([{'name': 'github', 'homepage': 'https://github.com', 'enabled': True}])
 >>> 'github' in out and 'https://github.com' in out
 True
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 
 # _autosummary/skill.completion.html.md
@@ -844,56 +844,53 @@ Root configuration schema with sensible defaults for zero-config first run.
 
 Return the platform-specific cache directory for skill.
 
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
-
 ```pycon
 >>> isinstance(cache_dir(), Path)
 True
 ```
 
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
+
 ### skill.config.config_dir()
 
 Return the platform-specific config directory for skill.
-
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
 ```pycon
 >>> isinstance(config_dir(), Path)
 True
 ```
 
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
+
 ### skill.config.config_path()
 
 Return the path to the config TOML file.
-
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
 ```pycon
 >>> config_path().name
 'config.toml'
 ```
 
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
+
 ### skill.config.data_dir()
 
 Return the platform-specific data directory for skill.
-
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
 ```pycon
 >>> isinstance(data_dir(), Path)
 True
 ```
 
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
+
 ### skill.config.load_config(path=None)
 
 Load config from TOML, falling back to defaults for missing fields.
-
-* **Return type:**
-  [`SkillConfig`](_autosummary/skill.config.html.md#skill.config.SkillConfig)
 
 ```pycon
 >>> c = load_config(Path('/nonexistent/config.toml'))
@@ -901,12 +898,12 @@ Load config from TOML, falling back to defaults for missing fields.
 'project'
 ```
 
+* **Return type:**
+  [`SkillConfig`](_autosummary/skill.config.html.md#skill.config.SkillConfig)
+
 ### skill.config.save_config(config, , path=None)
 
 Save config to TOML.
-
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> import tempfile
@@ -917,17 +914,20 @@ Save config to TOML.
 True
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### skill.config.skills_dir()
 
 Return the canonical skills storage directory.
-
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
 ```pycon
 >>> skills_dir().name
 'skills'
 ```
+
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
 
 # _autosummary/skill.create.html.md
@@ -937,9 +937,6 @@ Return the canonical skills storage directory.
 ### skill.create(name, , description='', body='', owner='_local', store=None)
 
 Create a new skill and store it locally.
-
-* **Return type:**
-  [`Skill`](_autosummary/skill.base.html.md#skill.base.Skill)
 
 ```pycon
 >>> import tempfile
@@ -951,6 +948,9 @@ Create a new skill and store it locally.
 >>> '_local/my-skill' in store
 True
 ```
+
+* **Return type:**
+  [`Skill`](_autosummary/skill.base.html.md#skill.base.Skill)
 
 
 # _autosummary/skill.html.md
@@ -994,13 +994,13 @@ from skill.create import validators
 
 List locally installed skills, optionally filtered by agent target.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](_autosummary/skill.base.html.md#skill.base.SkillInfo)]
-
 ```pycon
 >>> isinstance(list_skills(), list)
 True
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](_autosummary/skill.base.html.md#skill.base.SkillInfo)]
 
 ### skill.show(key)
 
@@ -1015,13 +1015,13 @@ Raises KeyError if the skill is not found locally.
 
 List registered search backends with their name, homepage, and status.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
-
 ```pycon
 >>> isinstance(sources(), list)
 True
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 
 ### Modules
 
@@ -1112,9 +1112,6 @@ Registry name (also used to derive the entry point group).
 
 Register an item and return it (usable as a decorator factory).
 
-* **Return type:**
-  [`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`T`)
-
 ```pycon
 >>> r = Registry('demo')
 >>> r.register('x', lambda: 1)
@@ -1122,6 +1119,9 @@ Register an item and return it (usable as a decorator factory).
 >>> 'x' in r
 True
 ```
+
+* **Return type:**
+  `T`
 
 
 # _autosummary/skill.search.html.md
@@ -1135,13 +1135,13 @@ Search for skills across local index and remote backends.
 With `local_only=True`, only searches locally installed skills.
 Otherwise, searches both local and remote, with local results first.
 
-* **Return type:**
-  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](_autosummary/skill.base.html.md#skill.base.SkillInfo)]
-
 ```pycon
 >>> isinstance(search('test', local_only=True, max_results=0), list)
 True
 ```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillInfo`](_autosummary/skill.base.html.md#skill.base.SkillInfo)]
 
 
 # _autosummary/skill.stores.html.md
@@ -1218,9 +1218,6 @@ Format translators: SKILL.md <-> agent-specific formats.
 
 Import a Cursor `.mdc` file as a Skill.
 
-* **Return type:**
-  [`Skill`](_autosummary/skill.base.html.md#skill.base.Skill)
-
 ```pycon
 >>> content = "---\ndescription: Do things\nglobs: '*.py'\nalwaysApply: false\n---\n# Rules"
 >>> s = from_mdc(content)
@@ -1230,6 +1227,9 @@ Import a Cursor `.mdc` file as a Skill.
 '*.py'
 ```
 
+* **Return type:**
+  [`Skill`](_autosummary/skill.base.html.md#skill.base.Skill)
+
 ### skill.translate.to_copilot_instructions(skill)
 
 Translate a Skill to GitHub Copilot instructions format.
@@ -1237,9 +1237,6 @@ Translate a Skill to GitHub Copilot instructions format.
 Produces a Markdown section suitable for appending to
 `.github/copilot-instructions.md`. Lossy: no frontmatter support
 beyond `applyTo`, no progressive disclosure, no resources.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> from skill.base import SkillMeta
@@ -1251,15 +1248,15 @@ True
 True
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### skill.translate.to_mdc(skill)
 
 Translate a Skill to Cursor `.mdc` format.
 
 Lossy: `allowed-tools`, `license`, bundled resources, and progressive
 disclosure semantics are lost.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> from skill.base import SkillMeta
@@ -1271,12 +1268,12 @@ True
 True
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### skill.translate.translate(skill, , target_format)
 
 Translate a Skill to the specified target format.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> from skill.base import SkillMeta
@@ -1284,6 +1281,9 @@ Translate a Skill to the specified target format.
 >>> 'alwaysApply' in translate(s, target_format='mdc')
 True
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### skill.translate.translators *: [Registry](_autosummary/skill.registry.html.md#skill.registry.Registry)[[Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[Skill](_autosummary/skill.base.html.md#skill.base.Skill)], [str](https://docs.python.org/3/builtins/stdtypes.html#str)]]* *= Registry('translators', keys=['mdc', 'copilot_md'])*
 
@@ -1341,9 +1341,6 @@ Supports 1-part (name only), 2-part (owner/name), and 3-part
 
 Write `content` to `path` atomically via temp-then-rename.
 
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
-
 ```pycon
 >>> import tempfile
 >>> with tempfile.TemporaryDirectory() as d:
@@ -1353,12 +1350,12 @@ Write `content` to `path` atomically via temp-then-rename.
 'hello'
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### skill.util.find_project_root(start=None)
 
 Walk up from `start` looking for a project root marker.
-
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> import tempfile
@@ -1372,12 +1369,12 @@ True
 True
 ```
 
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### skill.util.resolve_env_vars(value)
 
 Resolve `$VAR` and `${VAR}` references from environment variables.
-
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ```pycon
 >>> import os; os.environ['_SKILL_TEST'] = 'hello'
@@ -1389,6 +1386,9 @@ Resolve `$VAR` and `${VAR}` references from environment variables.
 'no vars here'
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 
 # about-this-build.html.md
 
@@ -1396,18 +1396,16 @@ Resolve `$VAR` and `${VAR}` references from environment variables.
 
 # About this build
 
-This documentation was built on **2026-10-13 01:41 UTC** from commit <a href="https://github.com/thorwhalen/skill/commit/f96fd5d0dd02e72c200a958a5bf11f266b8690f0"><code>f96fd5d</code></a> on branch <code>master</code>, for **skill 0.1.14** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-19 11:18 UTC** from commit <a href="https://github.com/thorwhalen/skill/commit/d96cee5c793f9be33b5664d2303da7891d945192"><code>d96cee5</code></a> on branch <code>master</code>, for **skill 0.1.15** (from <code>pyproject.toml</code>).
 
-#### WARNING
-The documentation and the package may be misaligned:
-
-- The documented version (0.1.14) is behind the latest release on PyPI (0.1.15): `pip install skill` gives newer code than these docs describe.
+#### NOTE
+Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/skill/commit/f96fd5d0dd02e72c200a958a5bf11f266b8690f0"><code>f96fd5d0dd02e72c200a958a5bf11f266b8690f0</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/skill/commit/d96cee5c793f9be33b5664d2303da7891d945192"><code>d96cee5c793f9be33b5664d2303da7891d945192</code></a> |
 | Branch              | <code>master</code>                                                                                                                                     |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -1418,15 +1416,15 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/skill</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/skill/actions/runs/38333229971">38333229971</a>     |
+| Run          | <a href="https://github.com/thorwhalen/skill/actions/runs/39243522611">39243522611</a>     |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>f96fd5d0dd02e72c200a958a5bf11f266b8690f0</code> (in the history of the built commit) |
+| Event commit | <code>d96cee5c793f9be33b5664d2303da7891d945192</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.12  |
+| epythet  | 0.2.17  |
 | Sphinx   | 9.1.0   |
 | docutils | 0.22.4  |
 | Python   | 3.12.15 |
@@ -1445,14 +1443,14 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/skill/0.1.15/">0.1.15</a>, newer than the documented version (0.1.14).
+Latest release: <a href="https://pypi.org/project/skill/0.1.15/">0.1.15</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/skill && cd skill
-git checkout f96fd5d0dd02e72c200a958a5bf11f266b8690f0
-pip install "epythet==0.2.12"
+git checkout d96cee5c793f9be33b5664d2303da7891d945192
+pip install "epythet==0.2.17"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

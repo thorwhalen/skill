@@ -36,56 +36,53 @@ Root configuration schema with sensible defaults for zero-config first run.
 
 Return the platform-specific cache directory for skill.
 
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
-
 ```pycon
 >>> isinstance(cache_dir(), Path)
 True
 ```
 
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
+
 ### skill.config.config_dir()
 
 Return the platform-specific config directory for skill.
-
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
 ```pycon
 >>> isinstance(config_dir(), Path)
 True
 ```
 
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
+
 ### skill.config.config_path()
 
 Return the path to the config TOML file.
-
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
 ```pycon
 >>> config_path().name
 'config.toml'
 ```
 
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
+
 ### skill.config.data_dir()
 
 Return the platform-specific data directory for skill.
-
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
 ```pycon
 >>> isinstance(data_dir(), Path)
 True
 ```
 
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
+
 ### skill.config.load_config(path=None)
 
 Load config from TOML, falling back to defaults for missing fields.
-
-* **Return type:**
-  [`SkillConfig`](#skill.config.SkillConfig)
 
 ```pycon
 >>> c = load_config(Path('/nonexistent/config.toml'))
@@ -93,12 +90,12 @@ Load config from TOML, falling back to defaults for missing fields.
 'project'
 ```
 
+* **Return type:**
+  [`SkillConfig`](#skill.config.SkillConfig)
+
 ### skill.config.save_config(config, , path=None)
 
 Save config to TOML.
-
-* **Return type:**
-  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ```pycon
 >>> import tempfile
@@ -109,14 +106,17 @@ Save config to TOML.
 True
 ```
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### skill.config.skills_dir()
 
 Return the canonical skills storage directory.
-
-* **Return type:**
-  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
 ```pycon
 >>> skills_dir().name
 'skills'
 ```
+
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
