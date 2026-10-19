@@ -113,6 +113,27 @@ Full commands in `references/migration-runbook.md`. Shape:
       `github-pinned`, `github-tree-sha`) are **never** hand-authored — `gh skill
       install` writes them on the consumer's machine.
 
+## Skills that should also run as subagents
+
+A skill and a subagent are the same instructions in two runtimes; Claude Code
+preloads a skill's full body into a subagent through the agent file's `skills:`
+field. So a skill that does bulky or read-heavy work, needs a tool restriction or a
+cheaper model, or already has a hand-written agent twin, **declares the twin in its
+own frontmatter** and lets opsward render and check it (opsward ADR 0009):
+
+```yaml
+metadata:
+  subagent: true              # optional: subagent-tools, subagent-model,
+                              # subagent-reply-lines, subagent-name
+```
+
+These keys are spec-legal (`metadata` takes arbitrary string pairs) and every other
+host ignores them, so the skill stays portable. `opsward generate --write` emits
+`.claude/agents/<name>.md`; `opsward maintain` reports a twin that is missing, stale
+or hand-written. Guideline skills stay inline only; a skill that is *only* ever
+delegated may use Claude's `context: fork` instead. The **opsward-subagents** skill
+applies the criterion to a repo.
+
 ## Distribution
 
 - **Primary:** `gh skill install <owner>/<repo> <name> --agent <host>` — works
@@ -130,6 +151,8 @@ Full commands in `references/migration-runbook.md`. Shape:
 - **skill-build** / **skill-creator** — author skill content.
 - **skill-docs** — README "Skills" section.
 - **skill-sync** — keep skill content in sync with the code it documents.
+- **opsward-subagents** — which skills should also run as subagents; generates
+  and checks the twins (in the `opsward` package).
 
 Full `gh skill` surface and Agent Skills spec:
 `references/canonical-layout-and-distribution.md`.
