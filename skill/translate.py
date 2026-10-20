@@ -1,8 +1,11 @@
 """Format translators: SKILL.md <-> agent-specific formats."""
 
 import json
+import re
 import warnings
 from collections.abc import Callable
+
+import yaml
 
 from skill.base import Skill, SkillMeta, parse_frontmatter, _meta_from_dict
 from skill.registry import Registry
@@ -139,6 +142,41 @@ translation_losses.register(
 )
 
 
+_MDC_GLOBS_LINE = re.compile(r"^globs:[ \t]*(\S.*?)[ \t]*$", re.MULTILINE)
+
+
+def _pop_mdc_globs(content: str) -> tuple[str, str | None]:
+    """Take the one-line ``globs:`` value out of *content*'s frontmatter, unparsed.
+
+    Cursor writes globs unquoted (``globs: **/*.py``), which strict YAML reads as
+    an alias and rejects, so the line is removed before the frontmatter is parsed.
+    Quoted or bracketed values are still read as YAML; a block list (nothing after
+    ``globs:``) is left in place for the YAML parser.
+
+    >>> _pop_mdc_globs("---\\nglobs: **/*.py, **/*.ts\\nalwaysApply: true\\n---\\nx")
+    ('---\\n\\nalwaysApply: true\\n---\\nx', '**/*.py, **/*.ts')
+    >>> _pop_mdc_globs("---\\nglobs: ['*.ts', '*.tsx']\\n---\\nx")[1]
+    '*.ts, *.tsx'
+    >>> _pop_mdc_globs("no frontmatter\\nglobs: *.py")
+    ('no frontmatter\\nglobs: *.py', None)
+    """
+    stripped = content.lstrip()
+    end = stripped.find("---", 3) if stripped.startswith("---") else -1
+    match = _MDC_GLOBS_LINE.search(stripped, 3, end) if end != -1 else None
+    if match is None:
+        return content, None
+    raw = match.group(1)
+    try:
+        parsed = yaml.safe_load(raw)
+    except yaml.YAMLError:
+        parsed = raw
+    if isinstance(parsed, list):
+        globs = _mdc_globs(parsed)
+    else:
+        globs = parsed if isinstance(parsed, str) else raw
+    return stripped[: match.start()] + stripped[match.end() :], globs
+
+
 def from_mdc(content: str) -> Skill:
     """Import a Cursor ``.mdc`` file as a Skill.
 
@@ -148,11 +186,20 @@ def from_mdc(content: str) -> Skill:
     'Do things'
     >>> s.meta.metadata.get('cursor.globs')
     '*.py'
+
+    Globs as Cursor itself writes them (unquoted, not valid YAML) are kept verbatim:
+
+    >>> from_mdc("---\\nglobs: **/*.py, **/*.ts\\n---\\nx").meta.metadata['cursor.globs']
+    '**/*.py, **/*.ts'
     """
+    content, globs = _pop_mdc_globs(content)
     raw_meta, body = parse_frontmatter(content)
+    if globs is None and "globs" in raw_meta:
+        globs = raw_meta["globs"]
+        globs = _mdc_globs(globs) if isinstance(globs, list) else str(globs)
     metadata = {}
-    if "globs" in raw_meta:
-        metadata["cursor.globs"] = str(raw_meta["globs"])
+    if globs is not None:
+        metadata["cursor.globs"] = globs
     if "alwaysApply" in raw_meta:
         metadata["cursor.alwaysApply"] = str(raw_meta["alwaysApply"])
 
