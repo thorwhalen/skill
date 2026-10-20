@@ -188,6 +188,19 @@ class TestAgentTargets:
         assert 'copilot' in AGENT_TARGETS
 
 
+def test_install_codex_links_into_agents_skills(tmp_path):
+    # thorwhalen/skill#13: Codex reads SKILL.md folders from .agents/skills natively
+    store, project = _setup_store_and_project(tmp_path)
+    result = install(
+        'alice/greet', agent_targets=['codex'], scope='project',
+        project_dir=project, store=store,
+    )
+    path = result['codex']
+    assert path == project / '.agents' / 'skills' / 'greet'
+    assert path.is_symlink() and (path / 'SKILL.md').is_file()
+    assert not AGENT_TARGETS['codex'].needs_translation
+
+
 # -- more hosts: windsurf, cline, gemini (thorwhalen/opsward#68) --
 
 
