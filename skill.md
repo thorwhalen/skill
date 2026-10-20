@@ -1,4 +1,4 @@
-> built 2026-10-19 11:18 UTC from d96cee5 (master) · skill 0.1.15. Details: build_info.json
+> built 2026-10-20 19:29 UTC from 0379648 (master) · skill 0.1.16. Details: build_info.json
 
 # index.html.md
 
@@ -32,6 +32,7 @@ results = search("react best practices", local_only=True)
 
 # Install to an agent target
 install("_local/my-skill", agent_targets=["claude-code"], scope="project")
+# built-in targets: claude-code (symlink), cursor, copilot, windsurf, cline, gemini (translated)
 ```
 
 ### Link skills from a project
@@ -1203,16 +1204,21 @@ Format translators: SKILL.md <-> agent-specific formats.
 
 ### Module Attributes
 
-| [`translators`](_autosummary/skill.translate.html.md#skill.translate.translators)   | Registry of format translators (Skill -> target format string).   |
-|----------------------------------------------------------------|-------------------------------------------------------------------|
+| [`translators`](_autosummary/skill.translate.html.md#skill.translate.translators)        | Registry of format translators (Skill -> target format string).                  |
+|---------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| [`translation_losses`](_autosummary/skill.translate.html.md#skill.translate.translation_losses) | Registry of what each lossy format drops (Skill -> lost field names), by format. |
 
 ### Functions
 
-| [`from_mdc`](_autosummary/skill.translate.html.md#skill.translate.from_mdc)(content)                   | Import a Cursor `.mdc` file as a Skill.                  |
-|--------------------------------------------------------------------------------------|----------------------------------------------------------|
-| [`to_copilot_instructions`](_autosummary/skill.translate.html.md#skill.translate.to_copilot_instructions)(skill)      | Translate a Skill to GitHub Copilot instructions format. |
-| [`to_mdc`](_autosummary/skill.translate.html.md#skill.translate.to_mdc)(skill)                       | Translate a Skill to Cursor `.mdc` format.               |
-| [`translate`](_autosummary/skill.translate.html.md#skill.translate.translate)(skill, \*, target_format) | Translate a Skill to the specified target format.        |
+| [`from_mdc`](_autosummary/skill.translate.html.md#skill.translate.from_mdc)(content)                     | Import a Cursor `.mdc` file as a Skill.                                          |
+|----------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| [`lost_fields`](_autosummary/skill.translate.html.md#skill.translate.lost_fields)(skill, \*, target_format) | What translating *skill* to *target_format* drops; `[]` for a lossless format.   |
+| [`to_cline_rule`](_autosummary/skill.translate.html.md#skill.translate.to_cline_rule)(skill)                  | Translate a Skill to a Cline rule file (Markdown; always active).                |
+| [`to_copilot_instructions`](_autosummary/skill.translate.html.md#skill.translate.to_copilot_instructions)(skill)        | Translate a Skill to GitHub Copilot instructions format.                         |
+| [`to_gemini_md`](_autosummary/skill.translate.html.md#skill.translate.to_gemini_md)(skill)                   | Translate a Skill to a section of Gemini CLI's `GEMINI.md`.                      |
+| [`to_mdc`](_autosummary/skill.translate.html.md#skill.translate.to_mdc)(skill)                         | Translate a Skill to Cursor `.mdc` format.                                       |
+| [`to_windsurf_rule`](_autosummary/skill.translate.html.md#skill.translate.to_windsurf_rule)(skill)               | Translate a Skill to a Windsurf rule, applied when the model judges it relevant. |
+| [`translate`](_autosummary/skill.translate.html.md#skill.translate.translate)(skill, \*, target_format)   | Translate a Skill to the specified target format.                                |
 
 ### skill.translate.from_mdc(content)
 
@@ -1230,6 +1236,40 @@ Import a Cursor `.mdc` file as a Skill.
 * **Return type:**
   [`Skill`](_autosummary/skill.base.html.md#skill.base.Skill)
 
+### skill.translate.lost_fields(skill, , target_format)
+
+What translating *skill* to *target_format* drops; `[]` for a lossless format.
+
+```pycon
+>>> from skill.base import SkillMeta
+>>> s = Skill(meta=SkillMeta(name='t', description='d', license='MIT'), body='x')
+>>> lost_fields(s, target_format='mdc')
+['license']
+>>> lost_fields(s, target_format='skill.md')
+[]
+```
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
+### skill.translate.to_cline_rule(skill)
+
+Translate a Skill to a Cline rule file (Markdown; always active).
+
+`metadata` key `cline.paths` becomes the `paths` frontmatter that makes the
+rule conditional. Lossy: no progressive disclosure, and `allowed-tools`,
+`license` and bundled resources are dropped.
+
+```pycon
+>>> from skill.base import SkillMeta
+>>> s = Skill(meta=SkillMeta(name='lint', description='Lint rules'), body='Use ruff.')
+>>> to_cline_rule(s).splitlines()[:3]
+['# lint', '', '> Lint rules']
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### skill.translate.to_copilot_instructions(skill)
 
 Translate a Skill to GitHub Copilot instructions format.
@@ -1246,6 +1286,23 @@ beyond `applyTo`, no progressive disclosure, no resources.
 True
 >>> 'Use ruff.' in md
 True
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### skill.translate.to_gemini_md(skill)
+
+Translate a Skill to a section of Gemini CLI’s `GEMINI.md`.
+
+Lossy: the file is always loaded (no progressive disclosure), and
+`allowed-tools`, `license` and bundled resources are dropped.
+
+```pycon
+>>> from skill.base import SkillMeta
+>>> s = Skill(meta=SkillMeta(name='lint', description='Lint rules'), body='Use ruff.')
+>>> to_gemini_md(s).splitlines()[0]
+'## lint'
 ```
 
 * **Return type:**
@@ -1271,6 +1328,29 @@ True
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
+### skill.translate.to_windsurf_rule(skill)
+
+Translate a Skill to a Windsurf rule, applied when the model judges it relevant.
+
+`metadata` keys `windsurf.trigger` (default `model_decision`) and
+`windsurf.globs` pass through. Lossy: `allowed-tools`, `license` and
+bundled resources are dropped.
+
+```pycon
+>>> from skill.base import SkillMeta
+>>> s = Skill(meta=SkillMeta(name='lint', description='Lint rules'), body='Use ruff.')
+>>> print(to_windsurf_rule(s))
+---
+trigger: model_decision
+description: Lint rules
+---
+
+Use ruff.
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### skill.translate.translate(skill, , target_format)
 
 Translate a Skill to the specified target format.
@@ -1285,7 +1365,14 @@ True
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
-### skill.translate.translators *: [Registry](_autosummary/skill.registry.html.md#skill.registry.Registry)[[Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[Skill](_autosummary/skill.base.html.md#skill.base.Skill)], [str](https://docs.python.org/3/builtins/stdtypes.html#str)]]* *= Registry('translators', keys=['mdc', 'copilot_md'])*
+### skill.translate.translation_losses *: [Registry](_autosummary/skill.registry.html.md#skill.registry.Registry)[[Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[Skill](_autosummary/skill.base.html.md#skill.base.Skill)], [list](https://docs.python.org/3/builtins/stdtypes.html#list)[[str](https://docs.python.org/3/builtins/stdtypes.html#str)]]]* *= Registry('translation_losses', keys=['mdc', 'copilot_md', 'gemini_md', 'windsurf_md', 'clinerules_md'])*
+
+Registry of what each lossy format drops (Skill -> lost field names), by format.
+
+The SSOT for lossy down-casts: translators warn from it, and linters (opsward’s
+portability check) read it without translating anything.
+
+### skill.translate.translators *: [Registry](_autosummary/skill.registry.html.md#skill.registry.Registry)[[Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[Skill](_autosummary/skill.base.html.md#skill.base.Skill)], [str](https://docs.python.org/3/builtins/stdtypes.html#str)]]* *= Registry('translators', keys=['mdc', 'copilot_md', 'gemini_md', 'windsurf_md', 'clinerules_md'])*
 
 Registry of format translators (Skill -> target format string).
 
@@ -1396,16 +1483,18 @@ Resolve `$VAR` and `${VAR}` references from environment variables.
 
 # About this build
 
-This documentation was built on **2026-10-19 11:18 UTC** from commit <a href="https://github.com/thorwhalen/skill/commit/d96cee5c793f9be33b5664d2303da7891d945192"><code>d96cee5</code></a> on branch <code>master</code>, for **skill 0.1.15** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 19:29 UTC** from commit <a href="https://github.com/thorwhalen/skill/commit/0379648ee0b2cd73a0b42efd25ac865821427855"><code>0379648</code></a> on branch <code>master</code>, for **skill 0.1.16** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.1.16) is behind the latest release on PyPI (0.1.17): `pip install skill` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/skill/commit/d96cee5c793f9be33b5664d2303da7891d945192"><code>d96cee5c793f9be33b5664d2303da7891d945192</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/skill/commit/0379648ee0b2cd73a0b42efd25ac865821427855"><code>0379648ee0b2cd73a0b42efd25ac865821427855</code></a> |
 | Branch              | <code>master</code>                                                                                                                                     |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -1416,16 +1505,16 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/skill</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/skill/actions/runs/39243522611">39243522611</a>     |
+| Run          | <a href="https://github.com/thorwhalen/skill/actions/runs/39483616711">39483616711</a>     |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>d96cee5c793f9be33b5664d2303da7891d945192</code> (in the history of the built commit) |
+| Event commit | <code>0379648ee0b2cd73a0b42efd25ac865821427855</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.17  |
-| Sphinx   | 9.1.0   |
+| epythet  | 0.2.22  |
+| Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
 | Python   | 3.12.15 |
 
@@ -1443,14 +1532,14 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/skill/0.1.15/">0.1.15</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/skill/0.1.17/">0.1.17</a>, newer than the documented version (0.1.16).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/skill && cd skill
-git checkout d96cee5c793f9be33b5664d2303da7891d945192
-pip install "epythet==0.2.17"
+git checkout 0379648ee0b2cd73a0b42efd25ac865821427855
+pip install "epythet==0.2.22"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

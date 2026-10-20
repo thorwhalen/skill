@@ -27,7 +27,7 @@
 - [skill.translate](_autosummary/skill.translate.html.md): Format translators: SKILL.md &lt;-&gt; agent-specific formats.
 - [skill.util](_autosummary/skill.util.html.md): Pure helpers with zero internal imports.
 - [For AI agents](ai-agents.html.md): &#96;skill&#96; ships artifacts for coding agents alongside its code. This page lists
-- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-19 11:18 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-20 19:29 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
 
 ## Optional
 

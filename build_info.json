@@ -1,37 +1,37 @@
 {
   "schema_version": 1,
-  "built_at": "2026-10-19T11:18:35Z",
+  "built_at": "2026-10-20T19:29:06Z",
   "package": {
     "name": "skill",
-    "version": "0.1.15",
+    "version": "0.1.16",
     "display_name": "skill",
     "source": "pyproject.toml"
   },
   "git": {
     "available": true,
-    "commit": "d96cee5c793f9be33b5664d2303da7891d945192",
-    "short_commit": "d96cee5",
+    "commit": "0379648ee0b2cd73a0b42efd25ac865821427855",
+    "short_commit": "0379648",
     "branch": "master",
     "tags": [],
     "dirty": false,
     "remote_url": "https://github.com/thorwhalen/skill",
-    "commit_url": "https://github.com/thorwhalen/skill/commit/d96cee5c793f9be33b5664d2303da7891d945192",
+    "commit_url": "https://github.com/thorwhalen/skill/commit/0379648ee0b2cd73a0b42efd25ac865821427855",
     "error": null
   },
   "ci": {
     "provider": "github",
     "repository": "thorwhalen/skill",
-    "sha": "d96cee5c793f9be33b5664d2303da7891d945192",
+    "sha": "0379648ee0b2cd73a0b42efd25ac865821427855",
     "sha_in_history": true,
     "ref": "refs/heads/master",
     "ref_name": "master",
-    "run_id": "39243522611",
-    "run_url": "https://github.com/thorwhalen/skill/actions/runs/39243522611",
+    "run_id": "39483616711",
+    "run_url": "https://github.com/thorwhalen/skill/actions/runs/39483616711",
     "server_url": "https://github.com"
   },
   "tools": {
-    "epythet": "0.2.17",
-    "sphinx": "9.1.0",
+    "epythet": "0.2.22",
+    "sphinx": "9.1.1",
     "docutils": "0.22.4",
     "python": "3.12.15"
   },
@@ -56,18 +56,20 @@
   },
   "site": {
     "modules_documented": 19,
-    "objects_documented": 70
+    "objects_documented": 75
   },
   "pypi": {
     "checked": true,
-    "latest": "0.1.15",
-    "relation": "same",
+    "latest": "0.1.17",
+    "relation": "behind",
     "error": null
   },
-  "reproduce": "git clone https://github.com/thorwhalen/skill && cd skill\ngit checkout d96cee5c793f9be33b5664d2303da7891d945192\npip install \"epythet==0.2.17\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "reproduce": "git clone https://github.com/thorwhalen/skill && cd skill\ngit checkout 0379648ee0b2cd73a0b42efd25ac865821427855\npip install \"epythet==0.2.22\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
   "warnings": [],
   "alignment": {
-    "aligned": true,
-    "notes": []
+    "aligned": false,
+    "notes": [
+      "The documented version (0.1.16) is behind the latest release on PyPI (0.1.17): `pip install skill` gives newer code than these docs describe."
+    ]
   }
 }

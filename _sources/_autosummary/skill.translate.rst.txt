@@ -9,13 +9,18 @@ skill.translate
    .. autosummary::
    
       translators
+      translation_losses
    
    .. rubric:: Functions
 
    .. autosummary::
    
       from_mdc
+      lost_fields
+      to_cline_rule
       to_copilot_instructions
+      to_gemini_md
       to_mdc
+      to_windsurf_rule
       translate
    
