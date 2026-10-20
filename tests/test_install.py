@@ -186,3 +186,59 @@ class TestAgentTargets:
 
     def test_copilot_exists(self):
         assert 'copilot' in AGENT_TARGETS
+
+
+# -- more hosts: windsurf, cline, gemini (thorwhalen/opsward#68) --
+
+
+@pytest.mark.parametrize(
+    'target, rel, expected',
+    [
+        ('windsurf', '.windsurf/rules/greet.md', 'trigger: model_decision'),
+        ('cline', '.clinerules/greet.md', '# greet'),
+        ('gemini', 'GEMINI.md', 'skill:greet'),
+    ],
+)
+def test_install_and_uninstall_new_hosts(tmp_path, target, rel, expected):
+    from skill.install import uninstall
+
+    store, project = _setup_store_and_project(tmp_path)
+    kw = dict(agent_targets=[target], scope='project', project_dir=project, store=store)
+    result = install('alice/greet', **kw)
+    assert result[target] == project / rel
+    assert expected in (project / rel).read_text()
+    uninstall('alice/greet', **kw)
+    assert not (project / rel).exists() or 'greet' not in (project / rel).read_text()
+
+
+def test_appending_never_writes_through_a_symlink(tmp_path):
+    store, project = _setup_store_and_project(tmp_path)
+    (project / 'AGENTS.md').write_text('# canonical\n')
+    (project / 'GEMINI.md').symlink_to('AGENTS.md')
+    with pytest.warns(UserWarning, match='symlink'):
+        result = install(
+            'alice/greet', agent_targets=['gemini'], scope='project',
+            project_dir=project, store=store,
+        )
+    assert result == {} and (project / 'AGENTS.md').read_text() == '# canonical\n'
+
+
+def test_uninstall_never_edits_or_deletes_a_symlinked_shared_file(tmp_path):
+    from skill.install import uninstall
+
+    store, project = _setup_store_and_project(tmp_path)
+    canonical = '# c\n<!-- skill:greet -->\nx\n<!-- /skill:greet -->\n'
+    (project / 'AGENTS.md').write_text(canonical)
+    (project / 'GEMINI.md').symlink_to('AGENTS.md')
+    kw = dict(agent_targets=['gemini'], scope='project', project_dir=project, store=store)
+    with pytest.warns(UserWarning, match='symlink'):
+        assert uninstall('alice/greet', **kw) == {}
+    assert (project / 'AGENTS.md').read_text() == canonical
+    (project / 'GEMINI.md').unlink()
+    (project / 'GEMINI.md').symlink_to('NOPE.md')  # dangling
+    with pytest.warns(UserWarning, match='symlink'):
+        uninstall('alice/greet', **kw)
+    assert (project / 'GEMINI.md').is_symlink()
+    (project / 'GEMINI.md').unlink()
+    (project / 'GEMINI.md').write_text('# mine\n')
+    assert uninstall('alice/greet', **kw) == {}  # no section: nothing removed

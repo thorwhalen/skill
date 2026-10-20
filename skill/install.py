@@ -41,6 +41,8 @@ class AgentTarget:
     project_path: str | None = None
     format: str = "skill.md"
     needs_translation: bool = False
+    # True: the translation is one ``## name`` section of a shared file (Copilot, Gemini)
+    appends: bool = False
 
     def format_global_path(self, name: str) -> Path | None:
         if self.global_path is None:
@@ -81,6 +83,35 @@ agent_targets.register(
         project_path="{project}/.github/copilot-instructions.md",
         format="copilot_md",
         needs_translation=True,
+        appends=True,
+    ),
+)
+agent_targets.register(
+    "windsurf",
+    AgentTarget(
+        name="windsurf",
+        project_path="{project}/.windsurf/rules/{name}.md",
+        format="windsurf_md",
+        needs_translation=True,
+    ),
+)
+agent_targets.register(
+    "cline",
+    AgentTarget(
+        name="cline",
+        project_path="{project}/.clinerules/{name}.md",
+        format="clinerules_md",
+        needs_translation=True,
+    ),
+)
+agent_targets.register(
+    "gemini",
+    AgentTarget(
+        name="gemini",
+        project_path="{project}/GEMINI.md",
+        format="gemini_md",
+        needs_translation=True,
+        appends=True,
     ),
 )
 
@@ -344,6 +375,15 @@ def install(
             )
             continue
 
+        if target.appends and dest.is_symlink():
+            # Typically GEMINI.md -> AGENTS.md: appending would edit the canonical
+            warnings.warn(
+                f"{dest.name} is a symlink; not appending skill {skill_name!r} "
+                f"to it for {target_name!r}",
+                stacklevel=2,
+            )
+            continue
+
         if target.needs_translation:
             # Write translated content as a file
             translator = translators.get(target.format)
@@ -354,8 +394,8 @@ def install(
                 continue
             content = translator(skill)
             dest.parent.mkdir(parents=True, exist_ok=True)
-            if target.format == "copilot_md":
-                # Copilot: append to the instructions file
+            if target.appends:
+                # A shared instructions file: append the skill as a section
                 _append_or_create(dest, content, skill_name)
             else:
                 dest.write_text(content)
@@ -435,10 +475,16 @@ def uninstall(
         if dest is None:
             continue
 
-        if target.format == "copilot_md" and dest.exists():
-            # Remove the section from copilot instructions
-            _remove_section(dest, skill_name)
-            removed[target_name] = dest
+        if target.appends:
+            # A shared instructions file: remove only the skill's section, never the
+            # file, and never through a symlink (GEMINI.md -> AGENTS.md)
+            if dest.is_symlink():
+                warnings.warn(
+                    f"{dest.name} is a symlink; not editing it for {target_name!r}",
+                    stacklevel=2,
+                )
+            elif dest.is_file() and _remove_section(dest, skill_name):
+                removed[target_name] = dest
         elif dest.exists() or dest.is_symlink():
             if dest.is_symlink() or dest.is_file():
                 dest.unlink()
@@ -631,8 +677,11 @@ def link_skills(
     return installed
 
 
-def _remove_section(path: Path, skill_name: str) -> None:
-    """Remove a skill section from a copilot instructions file."""
+def _remove_section(path: Path, skill_name: str) -> bool:
+    """Remove a skill's section from a shared instructions file (Copilot, Gemini).
+
+    Returns whether there was a section to remove.
+    """
     marker = f"<!-- skill:{skill_name} -->"
     end_marker = f"<!-- /skill:{skill_name} -->"
     content = path.read_text()
@@ -642,3 +691,5 @@ def _remove_section(path: Path, skill_name: str) -> None:
         content = content[:start] + content[end:]
         content = content.strip() + "\n" if content.strip() else ""
         path.write_text(content)
+        return True
+    return False

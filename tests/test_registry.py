@@ -97,15 +97,15 @@ class TestAgentTargetRegistration:
     def test_register_custom_target(self):
         from skill.install import agent_targets, AgentTarget
         target = AgentTarget(
-            name='windsurf',
-            project_path='{project}/.windsurf/rules/{name}.md',
+            name='acme',
+            project_path='{project}/.acme/rules/{name}.md',
             format='skill.md',
         )
-        agent_targets.register('windsurf', target)
-        assert 'windsurf' in agent_targets
-        assert agent_targets['windsurf'].name == 'windsurf'
+        agent_targets.register('acme', target)
+        assert 'acme' in agent_targets
+        assert agent_targets['acme'].name == 'acme'
         # Cleanup
-        del agent_targets['windsurf']
+        del agent_targets['acme']
 
     def test_backward_compat_alias(self):
         from skill.install import AGENT_TARGETS, agent_targets
@@ -122,15 +122,15 @@ class TestTranslatorRegistration:
         from skill.translate import translators, translate
         from skill.base import Skill, SkillMeta
 
-        def to_windsurf(skill: Skill) -> str:
+        def to_acme(skill: Skill) -> str:
             return f"# {skill.meta.name}\n{skill.body}"
 
-        translators.register('windsurf_md', to_windsurf)
+        translators.register('acme_md', to_acme)
         s = Skill(meta=SkillMeta(name='test', description='Test'), body='body')
-        result = translate(s, target_format='windsurf_md')
+        result = translate(s, target_format='acme_md')
         assert '# test' in result
         # Cleanup
-        del translators['windsurf_md']
+        del translators['acme_md']
 
 
 class TestBackendRegistration:
