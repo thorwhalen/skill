@@ -104,3 +104,17 @@ def test_lost_fields_matches_the_warning():
             translate(s, target_format=fmt)
         lost = lost_fields(s, target_format=fmt)
         assert lost and all(f in str(caught[0].message) for f in lost)
+
+
+def test_new_frontmatter_is_valid_yaml_for_hostile_values():
+    import yaml
+
+    from skill.base import Skill, SkillMeta
+    from skill.translate import to_cline_rule, to_windsurf_rule
+
+    desc = 'Use when: a > b\nsecond line'
+    s = Skill(meta=SkillMeta(name='t', description=desc, metadata={'windsurf.globs': '**/*.py', 'cline.paths': '*.md'}), body='x')
+    ws = yaml.safe_load(to_windsurf_rule(s).split('---')[1])
+    assert ws['description'] == desc and ws['globs'] == '**/*.py'
+    assert yaml.safe_load(to_cline_rule(s).split('---')[1])['paths'] == '*.md'
+    assert '> second line' in to_cline_rule(s)

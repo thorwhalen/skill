@@ -1,5 +1,6 @@
 """Format translators: SKILL.md <-> agent-specific formats."""
 
+import json
 import warnings
 from collections.abc import Callable
 
@@ -50,6 +51,24 @@ def lost_fields(skill: Skill, *, target_format: str) -> list[str]:
     """
     losses = translation_losses.get(target_format)
     return losses(skill) if losses else []
+
+
+def _yaml_scalar(value: object) -> str:
+    """*value* as a one-line YAML scalar: plain when safe, else a JSON (= YAML) string.
+
+    >>> _yaml_scalar('Lint rules'), _yaml_scalar('a: b'), _yaml_scalar('**/*.py')
+    ('Lint rules', '"a: b"', '"**/*.py"')
+    """
+    text = str(value)
+    unsafe = (
+        not text
+        or text != text.strip()
+        or "\n" in text
+        or ": " in text
+        or " #" in text
+        or text[0] in "!&*[]{}|>'\"%@`#,?-:"
+    )
+    return json.dumps(text) if unsafe else text
 
 
 def _warn_lossy(skill: Skill, *, target_format: str, label: str) -> None:
@@ -160,7 +179,8 @@ def to_copilot_instructions(skill: Skill) -> str:
 
 def _md_section(skill: Skill) -> str:
     """A skill as one ``## name`` section of a shared instructions file."""
-    return "\n".join([f"## {skill.meta.name}", "", f"> {skill.meta.description}", "", skill.body])
+    quoted = "\n".join(f"> {line}" for line in skill.meta.description.splitlines())
+    return "\n".join([f"## {skill.meta.name}", "", quoted or ">", "", skill.body])
 
 
 translators.register("copilot_md", to_copilot_instructions)
@@ -220,10 +240,11 @@ def to_windsurf_rule(skill: Skill) -> str:
     """
     _warn_lossy(skill, target_format="windsurf_md", label="a Windsurf rule")
     meta = skill.meta.metadata
-    lines = ["---", f"trigger: {meta.get('windsurf.trigger', 'model_decision')}"]
-    lines.append(f"description: {skill.meta.description}")
+    trigger = meta.get("windsurf.trigger", "model_decision")
+    lines = ["---", f"trigger: {_yaml_scalar(trigger)}"]
+    lines.append(f"description: {_yaml_scalar(skill.meta.description)}")
     if globs := meta.get("windsurf.globs"):
-        lines.append(f"globs: {globs}")
+        lines.append(f"globs: {_yaml_scalar(globs)}")
     lines += ["---", "", skill.body]
     return "\n".join(lines)
 
@@ -255,7 +276,7 @@ def to_cline_rule(skill: Skill) -> str:
     _warn_lossy(skill, target_format="clinerules_md", label="a Cline rule")
     body = _md_section(skill).replace("## ", "# ", 1)
     if paths := skill.meta.metadata.get("cline.paths"):
-        return f"---\npaths: {paths}\n---\n\n{body}"
+        return f"---\npaths: {_yaml_scalar(paths)}\n---\n\n{body}"
     return body
 
 

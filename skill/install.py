@@ -475,10 +475,16 @@ def uninstall(
         if dest is None:
             continue
 
-        if target.appends and dest.exists():
-            # Remove the skill's section from the shared instructions file
-            _remove_section(dest, skill_name)
-            removed[target_name] = dest
+        if target.appends:
+            # A shared instructions file: remove only the skill's section, never the
+            # file, and never through a symlink (GEMINI.md -> AGENTS.md)
+            if dest.is_symlink():
+                warnings.warn(
+                    f"{dest.name} is a symlink; not editing it for {target_name!r}",
+                    stacklevel=2,
+                )
+            elif dest.is_file() and _remove_section(dest, skill_name):
+                removed[target_name] = dest
         elif dest.exists() or dest.is_symlink():
             if dest.is_symlink() or dest.is_file():
                 dest.unlink()
@@ -671,8 +677,11 @@ def link_skills(
     return installed
 
 
-def _remove_section(path: Path, skill_name: str) -> None:
-    """Remove a skill's section from a shared instructions file (Copilot, Gemini)."""
+def _remove_section(path: Path, skill_name: str) -> bool:
+    """Remove a skill's section from a shared instructions file (Copilot, Gemini).
+
+    Returns whether there was a section to remove.
+    """
     marker = f"<!-- skill:{skill_name} -->"
     end_marker = f"<!-- /skill:{skill_name} -->"
     content = path.read_text()
@@ -682,3 +691,5 @@ def _remove_section(path: Path, skill_name: str) -> None:
         content = content[:start] + content[end:]
         content = content.strip() + "\n" if content.strip() else ""
         path.write_text(content)
+        return True
+    return False

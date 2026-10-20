@@ -221,3 +221,24 @@ def test_appending_never_writes_through_a_symlink(tmp_path):
             project_dir=project, store=store,
         )
     assert result == {} and (project / 'AGENTS.md').read_text() == '# canonical\n'
+
+
+def test_uninstall_never_edits_or_deletes_a_symlinked_shared_file(tmp_path):
+    from skill.install import uninstall
+
+    store, project = _setup_store_and_project(tmp_path)
+    canonical = '# c\n<!-- skill:greet -->\nx\n<!-- /skill:greet -->\n'
+    (project / 'AGENTS.md').write_text(canonical)
+    (project / 'GEMINI.md').symlink_to('AGENTS.md')
+    kw = dict(agent_targets=['gemini'], scope='project', project_dir=project, store=store)
+    with pytest.warns(UserWarning, match='symlink'):
+        assert uninstall('alice/greet', **kw) == {}
+    assert (project / 'AGENTS.md').read_text() == canonical
+    (project / 'GEMINI.md').unlink()
+    (project / 'GEMINI.md').symlink_to('NOPE.md')  # dangling
+    with pytest.warns(UserWarning, match='symlink'):
+        uninstall('alice/greet', **kw)
+    assert (project / 'GEMINI.md').is_symlink()
+    (project / 'GEMINI.md').unlink()
+    (project / 'GEMINI.md').write_text('# mine\n')
+    assert uninstall('alice/greet', **kw) == {}  # no section: nothing removed
