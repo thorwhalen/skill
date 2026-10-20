@@ -181,6 +181,11 @@
 </span><span id="line-6"><span class="go">'*.py'</span>
 </span></code></pre></div>
 </div>
+<p>Globs as Cursor itself writes them (unquoted, not valid YAML) are kept verbatim:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="gp">&gt;&gt;&gt; </span><span class="n">from_mdc</span><span class="p">(</span><span class="s2">"---</span><span class="se">\n</span><span class="s2">globs: **/*.py, **/*.ts</span><span class="se">\n</span><span class="s2">---</span><span class="se">\n</span><span class="s2">x"</span><span class="p">)</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">'cursor.globs'</span><span class="p">]</span>
+</span><span id="line-2"><span class="go">'**/*.py, **/*.ts'</span>
+</span></code></pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="skill.base.html#skill.base.Skill" title="skill.base.Skill"><code class="xref py py-class docutils literal notranslate"><span class="pre">Skill</span></code></a></span></p>
@@ -364,7 +369,7 @@ portability check) read it without translating anything.</p>
 </div>
 </footer>
 </div>
-<script src="../_static/documentation_options.js?v=9969ed3f"></script>
+<script src="../_static/documentation_options.js?v=3d116926"></script>
 <script src="../_static/doctools.js?v=fd6eb6e6"></script>
 <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="../_static/clipboard.min.js?v=a7894cd8"></script>

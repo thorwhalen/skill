@@ -33,6 +33,13 @@ Import a Cursor `.mdc` file as a Skill.
 '*.py'
 ```
 
+Globs as Cursor itself writes them (unquoted, not valid YAML) are kept verbatim:
+
+```pycon
+>>> from_mdc("---\nglobs: **/*.py, **/*.ts\n---\nx").meta.metadata['cursor.globs']
+'**/*.py, **/*.ts'
+```
+
 * **Return type:**
   [`Skill`](skill.base.html.md#skill.base.Skill)
 

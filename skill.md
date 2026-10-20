@@ -1,4 +1,4 @@
-> built 2026-10-20 19:46 UTC from 96203f5 (master) · skill 0.1.18. Details: build_info.json
+> built 2026-10-20 19:51 UTC from 4e0cdb0 (master) · skill 0.1.19. Details: build_info.json
 
 # index.html.md
 
@@ -1233,6 +1233,13 @@ Import a Cursor `.mdc` file as a Skill.
 '*.py'
 ```
 
+Globs as Cursor itself writes them (unquoted, not valid YAML) are kept verbatim:
+
+```pycon
+>>> from_mdc("---\nglobs: **/*.py, **/*.ts\n---\nx").meta.metadata['cursor.globs']
+'**/*.py, **/*.ts'
+```
+
 * **Return type:**
   [`Skill`](_autosummary/skill.base.html.md#skill.base.Skill)
 
@@ -1483,18 +1490,16 @@ Resolve `$VAR` and `${VAR}` references from environment variables.
 
 # About this build
 
-This documentation was built on **2026-10-20 19:46 UTC** from commit <a href="https://github.com/thorwhalen/skill/commit/96203f5456d904c4a1766a462f2b571330651d1b"><code>96203f5</code></a> on branch <code>master</code>, for **skill 0.1.18** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 19:51 UTC** from commit <a href="https://github.com/thorwhalen/skill/commit/4e0cdb0f215a4ed259b97a4c16f7915387dfb809"><code>4e0cdb0</code></a> on branch <code>master</code>, for **skill 0.1.19** (from <code>pyproject.toml</code>).
 
-#### WARNING
-The documentation and the package may be misaligned:
-
-- The documented version (0.1.18) is ahead of the latest release on PyPI (0.1.17): these docs describe unreleased code.
+#### NOTE
+Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/skill/commit/96203f5456d904c4a1766a462f2b571330651d1b"><code>96203f5456d904c4a1766a462f2b571330651d1b</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/skill/commit/4e0cdb0f215a4ed259b97a4c16f7915387dfb809"><code>4e0cdb0f215a4ed259b97a4c16f7915387dfb809</code></a> |
 | Branch              | <code>master</code>                                                                                                                                     |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -1505,9 +1510,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/skill</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/skill/actions/runs/39486072577">39486072577</a>     |
+| Run          | <a href="https://github.com/thorwhalen/skill/actions/runs/39486724642">39486724642</a>     |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>96203f5456d904c4a1766a462f2b571330651d1b</code> (in the history of the built commit) |
+| Event commit | <code>4e0cdb0f215a4ed259b97a4c16f7915387dfb809</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -1532,13 +1537,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/skill/0.1.17/">0.1.17</a>, older than the documented version (0.1.18).
+Latest release: <a href="https://pypi.org/project/skill/0.1.19/">0.1.19</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/skill && cd skill
-git checkout 96203f5456d904c4a1766a462f2b571330651d1b
+git checkout 4e0cdb0f215a4ed259b97a4c16f7915387dfb809
 pip install "epythet==0.2.22"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
