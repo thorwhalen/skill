@@ -67,6 +67,18 @@ agent_targets.register(
         format="skill.md",
     ),
 )
+# Codex reads SKILL.md folders natively (``.agents/skills`` from cwd up to the repo
+# root, and ``~/.agents/skills``) and follows symlinks: a lossless target like
+# claude-code. https://developers.openai.com/codex/skills
+agent_targets.register(
+    "codex",
+    AgentTarget(
+        name="codex",
+        global_path="{home}/.agents/skills/{name}",
+        project_path="{project}/.agents/skills/{name}",
+        format="skill.md",
+    ),
+)
 agent_targets.register(
     "cursor",
     AgentTarget(
