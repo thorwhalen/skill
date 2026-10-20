@@ -54,6 +54,23 @@ class TestFromMdc:
         assert s.meta.metadata['cursor.globs'] == '*.py'
         assert '# Rules' in s.body
 
+    def test_cursor_native_unquoted_globs(self):
+        content = "---\ndescription: Py rules\nglobs: **/*.py, **/*.ts\nalwaysApply: false\n---\n# Rules"
+        s = from_mdc(content)
+        assert s.meta.metadata['cursor.globs'] == '**/*.py, **/*.ts'
+        assert s.meta.metadata['cursor.alwaysApply'] == 'False'
+        assert s.meta.description == 'Py rules'
+
+    def test_globs_block_list(self):
+        content = "---\ndescription: d\nglobs:\n  - '*.ts'\n  - '*.tsx'\n---\nbody"
+        assert from_mdc(content).meta.metadata['cursor.globs'] == '*.ts, *.tsx'
+
+    def test_globs_line_in_body_is_ignored(self):
+        content = "---\ndescription: d\n---\nglobs: **/*.py\n"
+        s = from_mdc(content)
+        assert 'cursor.globs' not in s.meta.metadata
+        assert 'globs: **/*.py' in s.body
+
     def test_derives_name(self):
         content = "---\ndescription: React best practices\n---\nbody"
         s = from_mdc(content)
@@ -67,6 +84,11 @@ class TestMdcRoundTrip:
         imported = from_mdc(mdc)
         assert imported.meta.description == original.meta.description
         assert imported.meta.metadata.get('cursor.globs') == 'src/**/*.ts'
+
+    def test_roundtrip_globs_starting_with_star(self):
+        original = _make_skill(metadata={'cursor.globs': ['**/*.py', '**/*.ts']})
+        imported = from_mdc(to_mdc(original))
+        assert imported.meta.metadata['cursor.globs'] == '**/*.py, **/*.ts'
 
 
 class TestToCopilotInstructions:
