@@ -85,6 +85,23 @@ def _warn_lossy(skill: Skill, *, target_format: str, label: str) -> None:
 # ---------------------------------------------------------------------------
 
 
+def _mdc_globs(globs: object) -> str:
+    """*globs* as Cursor writes them: one line, comma-separated, never quoted.
+
+    Cursor's ``.mdc`` frontmatter is not parsed as strict YAML for ``globs``, and
+    quoted or bracketed globs are reported not to match, so this field is left
+    unquoted (unlike ``description``) and only flattened onto one line.
+
+    >>> _mdc_globs('**/*.py'), _mdc_globs(['*.ts', '*.tsx']), _mdc_globs('*.md,\\n*.txt')
+    ('**/*.py', '*.ts, *.tsx', '*.md, *.txt')
+    """
+    if isinstance(globs, str):
+        parts = globs.replace("\n", ",").split(",")
+    else:
+        parts = [str(g) for g in globs]
+    return ", ".join(p.strip() for p in parts if p.strip())
+
+
 def to_mdc(skill: Skill) -> str:
     """Translate a Skill to Cursor ``.mdc`` format.
 
@@ -103,11 +120,11 @@ def to_mdc(skill: Skill) -> str:
 
     # Build .mdc frontmatter
     lines = ["---"]
-    lines.append(f"description: {skill.meta.description}")
+    lines.append(f"description: {_yaml_scalar(skill.meta.description)}")
     # Check for cursor-specific metadata
     globs = skill.meta.metadata.get("cursor.globs")
     if globs:
-        lines.append(f"globs: {globs}")
+        lines.append(f"globs: {_mdc_globs(globs)}")
     always_apply = skill.meta.metadata.get("cursor.alwaysApply", "false")
     lines.append(f"alwaysApply: {always_apply}")
     lines.append("---")

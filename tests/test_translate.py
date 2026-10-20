@@ -27,6 +27,15 @@ class TestToMdc:
         assert 'globs: *.py' in mdc
         assert 'alwaysApply: true' in mdc
 
+    def test_description_is_yaml_escaped(self):
+        desc = 'Lint: style rules\n> and more'
+        mdc = to_mdc(_make_skill(description=desc))
+        assert from_mdc(mdc).meta.description == desc
+
+    def test_globs_stay_unquoted_on_one_line(self):
+        s = _make_skill(metadata={'cursor.globs': ['**/*.ts', '**/*.tsx']})
+        assert 'globs: **/*.ts, **/*.tsx\n' in to_mdc(s)
+
     def test_warns_on_lossy_fields(self):
         s = _make_skill(allowed_tools=['Read'], license='MIT')
         with warnings.catch_warnings(record=True) as w:
