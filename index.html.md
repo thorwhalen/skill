@@ -28,7 +28,7 @@ results = search("react best practices", local_only=True)
 
 # Install to an agent target
 install("_local/my-skill", agent_targets=["claude-code"], scope="project")
-# built-in targets: claude-code (symlink), cursor, copilot, windsurf, cline, gemini (translated)
+# built-in targets: claude-code, codex (symlink), cursor, copilot, windsurf, cline, gemini (translated)
 ```
 
 ### Link skills from a project

@@ -1,4 +1,4 @@
-> built 2026-10-20 19:44 UTC from 1d4d698 (master) · skill 0.1.17. Details: build_info.json
+> built 2026-10-20 19:46 UTC from 96203f5 (master) · skill 0.1.18. Details: build_info.json
 
 # index.html.md
 
@@ -32,7 +32,7 @@ results = search("react best practices", local_only=True)
 
 # Install to an agent target
 install("_local/my-skill", agent_targets=["claude-code"], scope="project")
-# built-in targets: claude-code (symlink), cursor, copilot, windsurf, cline, gemini (translated)
+# built-in targets: claude-code, codex (symlink), cursor, copilot, windsurf, cline, gemini (translated)
 ```
 
 ### Link skills from a project
@@ -1483,16 +1483,18 @@ Resolve `$VAR` and `${VAR}` references from environment variables.
 
 # About this build
 
-This documentation was built on **2026-10-20 19:44 UTC** from commit <a href="https://github.com/thorwhalen/skill/commit/1d4d69815bd7d6d0bd76fdb35024992362576482"><code>1d4d698</code></a> on branch <code>master</code>, for **skill 0.1.17** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 19:46 UTC** from commit <a href="https://github.com/thorwhalen/skill/commit/96203f5456d904c4a1766a462f2b571330651d1b"><code>96203f5</code></a> on branch <code>master</code>, for **skill 0.1.18** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.1.18) is ahead of the latest release on PyPI (0.1.17): these docs describe unreleased code.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/skill/commit/1d4d69815bd7d6d0bd76fdb35024992362576482"><code>1d4d69815bd7d6d0bd76fdb35024992362576482</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/skill/commit/96203f5456d904c4a1766a462f2b571330651d1b"><code>96203f5456d904c4a1766a462f2b571330651d1b</code></a> |
 | Branch              | <code>master</code>                                                                                                                                     |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -1503,9 +1505,9 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/skill</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/skill/actions/runs/39485752524">39485752524</a>     |
+| Run          | <a href="https://github.com/thorwhalen/skill/actions/runs/39486072577">39486072577</a>     |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>1d4d69815bd7d6d0bd76fdb35024992362576482</code> (in the history of the built commit) |
+| Event commit | <code>96203f5456d904c4a1766a462f2b571330651d1b</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -1530,13 +1532,13 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/skill/0.1.17/">0.1.17</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/skill/0.1.17/">0.1.17</a>, older than the documented version (0.1.18).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/skill && cd skill
-git checkout 1d4d69815bd7d6d0bd76fdb35024992362576482
+git checkout 96203f5456d904c4a1766a462f2b571330651d1b
 pip install "epythet==0.2.22"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
