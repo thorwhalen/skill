@@ -186,3 +186,38 @@ class TestAgentTargets:
 
     def test_copilot_exists(self):
         assert 'copilot' in AGENT_TARGETS
+
+
+# -- more hosts: windsurf, cline, gemini (thorwhalen/opsward#68) --
+
+
+@pytest.mark.parametrize(
+    'target, rel, expected',
+    [
+        ('windsurf', '.windsurf/rules/greet.md', 'trigger: model_decision'),
+        ('cline', '.clinerules/greet.md', '# greet'),
+        ('gemini', 'GEMINI.md', 'skill:greet'),
+    ],
+)
+def test_install_and_uninstall_new_hosts(tmp_path, target, rel, expected):
+    from skill.install import uninstall
+
+    store, project = _setup_store_and_project(tmp_path)
+    kw = dict(agent_targets=[target], scope='project', project_dir=project, store=store)
+    result = install('alice/greet', **kw)
+    assert result[target] == project / rel
+    assert expected in (project / rel).read_text()
+    uninstall('alice/greet', **kw)
+    assert not (project / rel).exists() or 'greet' not in (project / rel).read_text()
+
+
+def test_appending_never_writes_through_a_symlink(tmp_path):
+    store, project = _setup_store_and_project(tmp_path)
+    (project / 'AGENTS.md').write_text('# canonical\n')
+    (project / 'GEMINI.md').symlink_to('AGENTS.md')
+    with pytest.warns(UserWarning, match='symlink'):
+        result = install(
+            'alice/greet', agent_targets=['gemini'], scope='project',
+            project_dir=project, store=store,
+        )
+    assert result == {} and (project / 'AGENTS.md').read_text() == '# canonical\n'

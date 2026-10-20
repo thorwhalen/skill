@@ -80,3 +80,27 @@ class TestTranslateDispatcher:
     def test_unknown_raises(self):
         with pytest.raises(ValueError, match='Unknown target format'):
             translate(_make_skill(), target_format='nonexistent')
+
+
+def test_every_translated_format_declares_its_losses():
+    from skill.install import agent_targets
+    from skill.translate import translation_losses
+
+    for target in agent_targets.values():
+        if target.needs_translation:
+            assert target.format in translation_losses, target.name
+
+
+def test_lost_fields_matches_the_warning():
+    import warnings as _w
+
+    from skill.base import Skill, SkillMeta
+    from skill.translate import lost_fields, translate
+
+    s = Skill(meta=SkillMeta(name='t', description='d', license='MIT', allowed_tools=['Bash']), body='x')
+    for fmt in ('mdc', 'windsurf_md', 'clinerules_md', 'gemini_md', 'copilot_md'):
+        with _w.catch_warnings(record=True) as caught:
+            _w.simplefilter('always')
+            translate(s, target_format=fmt)
+        lost = lost_fields(s, target_format=fmt)
+        assert lost and all(f in str(caught[0].message) for f in lost)
