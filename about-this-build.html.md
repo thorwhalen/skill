@@ -2,18 +2,16 @@
 
 # About this build
 
-This documentation was built on **2026-10-20 19:29 UTC** from commit <a href="https://github.com/thorwhalen/skill/commit/0379648ee0b2cd73a0b42efd25ac865821427855"><code>0379648</code></a> on branch <code>master</code>, for **skill 0.1.16** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 19:44 UTC** from commit <a href="https://github.com/thorwhalen/skill/commit/1d4d69815bd7d6d0bd76fdb35024992362576482"><code>1d4d698</code></a> on branch <code>master</code>, for **skill 0.1.17** (from <code>pyproject.toml</code>).
 
-#### WARNING
-The documentation and the package may be misaligned:
-
-- The documented version (0.1.16) is behind the latest release on PyPI (0.1.17): `pip install skill` gives newer code than these docs describe.
+#### NOTE
+Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/skill/commit/0379648ee0b2cd73a0b42efd25ac865821427855"><code>0379648ee0b2cd73a0b42efd25ac865821427855</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/skill/commit/1d4d69815bd7d6d0bd76fdb35024992362576482"><code>1d4d69815bd7d6d0bd76fdb35024992362576482</code></a> |
 | Branch              | <code>master</code>                                                                                                                                     |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -24,9 +22,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/skill</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/skill/actions/runs/39483616711">39483616711</a>     |
+| Run          | <a href="https://github.com/thorwhalen/skill/actions/runs/39485752524">39485752524</a>     |
 | Ref          | <code>refs/heads/master</code>                                                             |
-| Event commit | <code>0379648ee0b2cd73a0b42efd25ac865821427855</code> (in the history of the built commit) |
+| Event commit | <code>1d4d69815bd7d6d0bd76fdb35024992362576482</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -51,13 +49,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/skill/0.1.17/">0.1.17</a>, newer than the documented version (0.1.16).
+Latest release: <a href="https://pypi.org/project/skill/0.1.17/">0.1.17</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/skill && cd skill
-git checkout 0379648ee0b2cd73a0b42efd25ac865821427855
+git checkout 1d4d69815bd7d6d0bd76fdb35024992362576482
 pip install "epythet==0.2.22"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
